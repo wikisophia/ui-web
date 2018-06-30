@@ -1,0 +1,24 @@
+{
+  "env": {
+    "build": {
+      "presets": [
+        ["env", {
+          "targets": {
+            "browsers": [">0.25%"]
+          },
+          "modules": false
+        }]
+      ]
+    },
+    "test": {
+      "presets": [
+        ["env", {
+          "targets": {
+            "node": "current"
+          },
+          "modules": "commonjs"
+        }]
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "build",
+    "strict": true
+  },
+  "include": [
+    "src/**/*.ts",
+  ],
+  "exclude": [
+    "**/*.spec.ts"
+  ]
+}

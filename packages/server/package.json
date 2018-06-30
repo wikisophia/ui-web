@@ -1,0 +1,30 @@
+{
+  "name": "@wikisophia/ui-server",
+  "version": "0.1.0",
+  "description": "A UI server which powers Wikisophia",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "serve": "ts-node ./src/server.ts",
+    "lint": "tslint --project tsconfig.json --fix src/**.ts",
+    "lint-nofix": "tslint --project tsconfig.json src/**.ts"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "@types/express": "^4.16.0",
+    "express-handlebars": "^3.0.0",
+    "@types/express-handlebars": "^0.0.30"
+  },
+  "devDependencies": {
+    "typescript": "^2.9.2",
+    "tslint": "^5.10.0",
+    "tslint-config-airbnb": "^5.9.2",
+    "ts-node": "^7.0.0"
+  },
+  "keywords": [
+    "wikisophia"
+  ],
+  "author": "Dave <dave@wikisophia.net>",
+  "license": "GPL-3.0-only"
+}

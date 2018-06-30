@@ -1,0 +1,13 @@
+.no-edits {
+  display: none;
+}
+
+.edit-premise {
+  cursor: pointer;
+  text-decoration: underline;
+  color: blue;
+}
+
+.server-error {
+  color: red;
+}

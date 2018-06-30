@@ -1,0 +1,44 @@
+main {
+  text-align: center;
+}
+.title {
+  font-size: 11vh;
+  font-weight: 200;
+}
+.main-search, .dropdown {
+  margin: 0;
+  box-sizing: border-box;
+  width: 60%;
+  font-size: 4vh;
+  max-width: 19em;
+  line-height: 1.6em;
+}
+.main-search {
+  padding: 0.05em 0.2em;
+  border: 2px solid #999;
+}
+.suggestion {
+  padding: 0.05em calc(0.2em + 2px);
+}
+.main-search:focus {
+  border-color: #666;
+}
+.dropdown {
+  padding: 0;
+  border: 2px solid #999;
+  display: inline-block;
+  box-sizing: border-box;
+  border-top: 0;
+  text-align: left;
+  list-style-type: none;
+}
+.dropdown:empty {
+  display: none;
+}
+.suggestion:hover {
+  background-color: #ddd;
+}
+.suggestion a {
+  color: #000;
+  text-decoration: none;
+}

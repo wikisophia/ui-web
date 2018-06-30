@@ -1,0 +1,41 @@
+/* Global site styles */
+html {
+  font-family: Helvetica, Arial, sans-serif;
+}
+body {
+  padding: 0;
+  margin: 0;
+}
+main {
+  height: 93vh;
+  margin-top: 20vh;
+}
+
+/* navbar/header styles */
+header {
+  width: 100%;
+  background-color: #60daff;
+}
+
+.header-sizer {
+  display: flex;
+  flex-direction: row;
+  height: 7vh;
+  min-height: 47px;
+  max-height: 60px;
+  width: 20%;
+}
+
+.header-menu {
+  display: flex;
+}
+
+.nav-link {
+  text-decoration: none;
+  display: flex;
+  font-size: 29px;
+  color: black;
+  padding-left: 0.7em;
+  padding-right: 0.7em;
+  align-items: center;
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <link rel="stylesheet" href="{{resourcesRoot}}/fragments/global.css" type="text/css">
+      <link rel="stylesheet" href="{{resourcesRoot}}/homepage.css" type="text/css">
+      <title>Wikisophia</title>
+  </head>
+  <body>
+    <header>
+      {{> header }}
+    </header>
+    <main>
+      <h1 class="title">Wikisophia</h1>
+      <div>
+        <input autofocus autocomplete="off" id="search" class="main-search" type="text">
+      </div>
+      <div>
+        <ul id="suggestions" class="dropdown"></ul>
+      </div>
+      <noscript>
+        <span>Enable javascript to receive dynamic search suggestions</span>
+      </noscript>
+    </main>
+    <script src="{{resourcesRoot}}/homepage.js"></script>
+    <script>
+      wikisophia.showSuggestions({
+        inputID: 'search',
+        suggestionsID: 'suggestions'
+      });
+    </script>
+  </body>
+</html>

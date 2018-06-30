@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <link rel="stylesheet" href="{{resourcesRoot}}/fragments/global.css" type="text/css">
+      <link rel="stylesheet" href="{{resourcesRoot}}/argument.css" type="text/css">
+      <title>{{ argument.conclusion }} - Wikisophia</title>
+  </head>
+  <body>
+    <header>
+      {{> header }}
+    </header>
+    <main>
+      <section class="premises">
+        <h1>Premises</h1>
+        <ul id="premise-list">
+          {{#each argument.premises }}
+            <li class="premise"><a class="premise-text" href="/arguments?conclusion={{this}}&limit=1">{{ this }}</a> <span class="edit-premise" tabindex="0">(edit)</span></li>
+          {{/each}}
+        </ul>
+      </section>
+      <section class="conclusion">
+        <h1>Conclusion</h1>
+        <p class="conclusion-text">{{ argument.conclusion }}</p>
+        <p>Not convinced? <a href="/search/arguments?conclusion={{argument.conclusion}}">See other arguments</a></p>
+      </section>
+      <button type="button" id="submit" class="no-edits">Save</button>
+    </main>
+    <script src="{{ resourcesRoot }}/argument.js"></script>
+    <script>
+      wikisophia.makePremisesEditable({
+        apiAuthority: '{{apiAuthority}}',
+        argumentId: '{{id}}',
+        premiseListId: "premise-list",
+        premisesClass: 'premise-text',
+        saverId: 'submit'
+      });
+    </script>
+  </body>
+</html>

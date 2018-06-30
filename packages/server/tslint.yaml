@@ -1,0 +1,2 @@
+defaultSeverity: "error"
+extends: "tslint-config-airbnb"
