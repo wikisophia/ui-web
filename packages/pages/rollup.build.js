@@ -5,8 +5,7 @@ const fs = require('fs-extra');
 const uglify = require('rollup-plugin-uglify');
 const rollup = require('rollup').rollup;
 
-
-const shouldMinify = process.argv.indexOf('-min') !== -1
+const shouldMinify = process.argv.indexOf('-min') !== -1;
 
 const defaultConfig = {
   format: 'iife',
@@ -15,7 +14,9 @@ const defaultConfig = {
 };
 
 function input(input) {
-  const plugins = [babel(babelrc())];
+  const plugins = [babel(babelrc({
+    path: `${__dirname}/.babelrc`
+  }))];
   if (shouldMinify) {
     plugins.push(uglify());
   }
@@ -70,10 +71,10 @@ function outputCSS(file) {
   }
 }
 
-fs.readFile('./src/fragments/global.css').then(outputCSS('./dist/fragments/global.css')).catch(printErr);
+fs.readFile(`${__dirname}/src/fragments/global.css`).then(outputCSS(`${__dirname}/dist/fragments/global.css`)).catch(printErr);
 
-rollup(input('./src/homepage/index.js')).then(outputJS('./dist/homepage.js')).catch(printErr);
-fs.readFile('./src/homepage/index.css').then(outputCSS('./dist/homepage.css')).catch(printErr);
+rollup(input(`${__dirname}/src/homepage/index.js`)).then(outputJS(`${__dirname}/dist/homepage.js`)).catch(printErr);
+fs.readFile(`${__dirname}/src/homepage/index.css`).then(outputCSS(`${__dirname}/dist/homepage.css`)).catch(printErr);
 
-rollup(input('./src/argument/index.js')).then(outputJS('./dist/argument.js')).catch(printErr);
-fs.readFile('./src/argument/index.css').then(outputCSS('./dist/argument.css')).catch(printErr);
+rollup(input(`${__dirname}/src/argument/index.js`)).then(outputJS(`${__dirname}/dist/argument.js`)).catch(printErr);
+fs.readFile(`${__dirname}/src/argument/index.css`).then(outputCSS(`${__dirname}/dist/argument.css`)).catch(printErr);

@@ -1,0 +1,34 @@
+{
+  "private": true,
+  "scripts": {
+    "build:client": "node ./packages/pages/rollup.build.js",
+    "serve": "npm run build:client && concurrently \"http-server ./packages/pages/dist\" \"ts-node ./packages/server/src/server.ts\""
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-cli": "^6.26.0",
+    "babel-jest": "^23.0.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babelrc-rollup": "^3.0.0",
+    "clean-css": "^4.1.11",
+    "concurrently": "^3.6.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "fs-extra": "^6.0.1",
+    "http-server": "^0.11.1",
+    "postcss-syntax": "^0.10.0",
+    "regenerator-runtime": "^0.11.1",
+    "rollup": "^0.59.4",
+    "rollup-plugin-babel": "^3.0.4",
+    "rollup-plugin-uglify": "^3.0.0",
+    "stylelint": "^9.2.1",
+    "stylelint-config-recommended": "^2.1.0",
+    "typescript": "^2.9.2",
+    "tslint": "^5.10.0",
+    "tslint-config-airbnb": "^5.9.2",
+    "ts-node": "^7.0.0",
+    "xhr-mock": "^2.4.0"
+  }
+}
