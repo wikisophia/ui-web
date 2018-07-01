@@ -1,8 +1,8 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-import setRoutes from './routes';
+import { setRoutes } from './routes';
 import * as exphbs from 'express-handlebars';
-import {join} from 'path';
+import { join } from 'path';
 
 const app = express();
 app.engine('handlebars', exphbs({
