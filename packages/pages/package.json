@@ -11,7 +11,7 @@
     "dev": "BABEL_ENV=build rollup -c -w",
     "lint": "eslint src test --fix && stylelint \"src/**/*.css\" && documentation lint src",
     "lint-nofix": "eslint src test && stylelint \"src/**/*.css\" && documentation lint src",
-    "serve": "node rollup.build.js && http-server ./dist",
+    "serve": "node rollup.build.js && http-server -p 4041 ./dist",
     "test": "BABEL_ENV=test jest",
     "test-coverage": "BABEL_ENV=test jest -c jest.config.coverage.js"
   },

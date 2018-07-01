@@ -5,6 +5,7 @@ import { cancelRequest, listUpdater, makeRequest } from './helpers';
  *
  * @property {string} inputID The ID of the element where the user inputs search terms.
  * @property {string} suggestionsID The ID of the "ul" element where suggestions should be shown.
+ * @property {string} suggestionAPIAuthority The Authority of the UI where the Suggestions API lives.
  */
 
 function logErr(msg) {
@@ -14,11 +15,11 @@ function logErr(msg) {
 }
 
 
-function suggestionUpdater(inputNode, suggestionsNode) {
+function suggestionUpdater(suggestionAPIAuthority, inputNode, suggestionsNode) {
   let xhr;
   return () => {
     cancelRequest(xhr);
-    xhr = makeRequest(inputNode.value, listUpdater(suggestionsNode));
+    xhr = makeRequest(suggestionAPIAuthority, inputNode.value, listUpdater(suggestionsNode));
   };
 }
 
@@ -40,5 +41,5 @@ export function showSuggestions(cfg) {
     return;
   }
 
-  inputNode.addEventListener('input', suggestionUpdater(inputNode, suggestionsNode));
+  inputNode.addEventListener('input', suggestionUpdater(cfg.suggestionAPIAuthority, inputNode, suggestionsNode));
 }

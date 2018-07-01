@@ -1,4 +1,4 @@
-import {apiAuthority, resourcesRoot} from '../environment';
+import {apiAuthority, resourcesRoot} from '../config';
 import {Request, Response} from 'express';
 
 const numRegex = /^[1-9]\d*$/

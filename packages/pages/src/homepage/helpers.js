@@ -2,7 +2,7 @@
 // This file exports some functions so that they can be testable,
 // but not public in the final bundle.
 
-export function listUpdater(suggestionsNode) {
+export function listUpdater( suggestionsNode) {
   return (suggestions) => {
     suggestionsNode.innerHTML = '';
 
@@ -18,9 +18,9 @@ export function listUpdater(suggestionsNode) {
   };
 }
 
-export function makeRequest(query, onSuccess) {
+export function makeRequest(suggestionAPIAuthority, query, onSuccess) {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', `/suggestions?q=${encodeURIComponent(query)}`);
+  xhr.open('GET', `//${suggestionAPIAuthority}/suggestions?q=${encodeURIComponent(query)}`);
   xhr.onreadystatechange = () => {
     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
       onSuccess(JSON.parse(xhr.responseText));
