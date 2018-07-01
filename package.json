@@ -1,13 +1,13 @@
 {
   "private": true,
   "scripts": {
-    "build:client": "cd packages/pages && npm run build",
+    "build:cdn": "cd packages/cdn && npm run build",
     "build:server": "cd packages/server && npm run build",
-    "build": "concurrently \"npm run build:client\" \"npm run build:server\"",
-    "install:client": "cd packages/pages && npm install",
+    "build": "concurrently \"npm run build:cdn\" \"npm run build:server\"",
+    "install:cdn": "cd packages/cdn && npm install",
     "install:server": "cd packages/server && npm install",
-    "install": "concurrently \"npm run install:client\" \"npm run install:server\"",
-    "serve": "concurrently \"cd packages/pages && npm run serve\" \"cd packages/server && npm run serve\""
+    "install": "concurrently \"npm run install:cdn\" \"npm run install:server\"",
+    "serve": "concurrently \"cd packages/cdn && npm run serve\" \"cd packages/server && npm run serve\""
   },
   "devDependencies": {
     "concurrently": "^3.6.0"

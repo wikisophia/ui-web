@@ -2,8 +2,8 @@
 
 This monorepo powers the web front-end for [Wikisophia](www.wikisophia.net).
 
-The code is divided up into [server](./packages/server) and [pages](./packages/pages) so
-that [JsDelivr](https://www.jsdelivr.com/) can be used as a CDN.
+The code is divided up into [server](./packages/server) and [cdn](./packages/pages) so
+that the CDN content can be packaged for [JsDelivr](https://www.jsdelivr.com/).
 
 ## Installation
 
@@ -13,7 +13,6 @@ From the project root, run:
 
 ```sh
 npm install
-npm run install
 ```
 
 Start the server with:
@@ -25,7 +24,7 @@ npm run serve
 Open a browser and go to `http://localhost:4040` for the homepage.
 The full API can be found [in the code](./packages/server/src/routes.ts).
 
-## Running the API Servers
+## Running API Servers
 
 Wikisophia is run by microservices. The UI generally works, but you'll also
 need to run the API servers if you want to run the site as a whole.
