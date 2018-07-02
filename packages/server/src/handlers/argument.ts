@@ -1,19 +1,30 @@
 import {apiAuthority, resourcesRoot} from '../config';
 import {getArgument, Argument, FailureType} from '../api-clients/arguments';
 import {Request, Response} from 'express';
+import {checkSchema, validationResult} from 'express-validator/check';
 import axios, { AxiosResponse } from 'axios';
 
-const numRegex = /^[1-9]\d*$/
+const paramValidation =checkSchema({
+  id: {
+    in: ['params'],
+    isInt: true,
+  },
+  version: {
+    in: ['params'],
+    optional: true,
+    isInt: true,
+  }
+});
 
-export default function handler(req: Request, res: Response): void {
+function handler(req: Request, res: Response): void {
   const id = req.params.id;
-  if (!numRegex.test(id)) {
-    res.status(404);
-    res.contentType('text/plain');
-    res.send(`argument with id=${req.params.id} does not exist`);
+  const version = req.params.version;
+  if (!validationResult(req).isEmpty()) {
+    res.status(404).contentType('text/plain').send(makeErrorMessage(id, version));
     return;
   }
-  getArgument(id).then((arg: Argument) => {
+
+  getArgument(id, version).then((arg: Argument) => {
     res.render('argument', {
       resourcesRoot,
       apiAuthority,
@@ -23,10 +34,22 @@ export default function handler(req: Request, res: Response): void {
   }).catch((err) => {
     if (err === FailureType.NotFound) {
       res.status(404);
-      res.send(`Argument with id=${id} does not exist.`);
+      res.send(makeErrorMessage(id, version));
     } else {
       res.status(503);
       res.send(`Failed fetch from arguments service.`);
     }
   });
 }
+
+function makeErrorMessage(id: any, version?: any) {
+  if (version) {
+    return `version ${version} of argument ${id} does not exist`
+  }
+  return `argument ${id} does not exist`;
+}
+
+export default [
+  paramValidation,
+  handler,
+];

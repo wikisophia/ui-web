@@ -3,15 +3,9 @@ import {apiAuthority} from '../config';
 
 export function getArgument(id: number, version?: number): Promise<Argument> {
   if (version) {
-    return axios.get(`http://${apiAuthority}/argument/${id}/version/${version}`, {
-      validateStatus: (status) => isSuccess(status) || isBadRequest(status)
-    }).
-    then(handleGetResponse);
+    return axios.get(`http://${apiAuthority}/argument/${id}/version/${version}`, axiosStatuses).then(handleGetResponse);
   } else {
-    return axios.get(`http://${apiAuthority}/argument/${id}`, {
-      validateStatus: (status) => isSuccess(status) || isBadRequest(status)
-    }).
-    then(handleGetResponse);
+    return axios.get(`http://${apiAuthority}/argument/${id}`, axiosStatuses).then(handleGetResponse);
   }
 }
 
@@ -35,6 +29,10 @@ export enum FailureType {
   NotFound,
   ServerFailure,
 }
+
+const axiosStatuses = {
+  validateStatus: (status: number) => isSuccess(status) || isBadRequest(status)
+};
 
 function isSuccess(status: number) {
   return status >= 200 && status < 300;
