@@ -8,7 +8,9 @@
     "install:server": "cd packages/server && npm install",
     "install": "concurrently \"npm run install:cdn\" \"npm run install:server\"",
     "lint": "concurrently \"cd packages/cdn && npm run lint\" \"cd packages/server && npm run lint\"",
-    "serve": "concurrently \"cd packages/cdn && npm run serve\" \"cd packages/server && npm run serve\""
+    "serve": "concurrently \"cd packages/cdn && npm run serve\" \"cd packages/server && npm run serve\"",
+    "test": "cd packages/cdn && npm run test",
+    "test-coverage": "cd packages/cdn && npm run test-coverage"
   },
   "devDependencies": {
     "concurrently": "^3.6.0"
