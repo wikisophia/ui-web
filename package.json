@@ -7,6 +7,7 @@
     "install:cdn": "cd packages/cdn && npm install",
     "install:server": "cd packages/server && npm install",
     "install": "concurrently \"npm run install:cdn\" \"npm run install:server\"",
+    "lint": "concurrently \"cd packages/cdn && npm run lint\" \"cd packages/server && npm run lint\"",
     "serve": "concurrently \"cd packages/cdn && npm run serve\" \"cd packages/server && npm run serve\""
   },
   "devDependencies": {

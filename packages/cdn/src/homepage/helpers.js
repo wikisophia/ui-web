@@ -2,7 +2,7 @@
 // This file exports some functions so that they can be testable,
 // but not public in the final bundle.
 
-export function listUpdater( suggestionsNode) {
+export function listUpdater(suggestionsNode) {
   return (suggestions) => {
     suggestionsNode.innerHTML = '';
 
