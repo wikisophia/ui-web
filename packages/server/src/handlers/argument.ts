@@ -4,7 +4,7 @@ import {Request, Response} from 'express';
 import {checkSchema, validationResult} from 'express-validator/check';
 import axios, { AxiosResponse } from 'axios';
 
-const paramValidation =checkSchema({
+const paramValidation = checkSchema({
   id: {
     in: ['params'],
     isInt: true,
