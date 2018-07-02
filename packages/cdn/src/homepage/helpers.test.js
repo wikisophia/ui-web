@@ -32,16 +32,17 @@ describe('makeRequest()', () => {
 
   test('calls the right endpoint', (done) => {
     const query = 'soc';
+    const apiAuthority = 'api.wikisophia.net';
 
     xhrmock.use((req, resp) => {
       expect(req.method()).toBe('GET');
-      expect(req.url().path).toBe('/suggestions');
+      expect(req.url().path).toBe('//api.wikisophia.net/suggestions');
       expect(req.url().query.q).toBe(query);
       done();
       return resp.status(404);
     });
 
-    makeRequest(query, () => {});
+    makeRequest(apiAuthority, query, () => {});
   });
 
   test('runs the callback with the response payload', (done) => {
@@ -55,7 +56,7 @@ describe('makeRequest()', () => {
       done();
     });
 
-    makeRequest('soc', callback);
+    makeRequest('whatever', 'soc', callback);
   });
 });
 

@@ -5,7 +5,7 @@ import { cancelRequest, listUpdater, makeRequest } from './helpers';
  *
  * @property {string} inputID The ID of the element where the user inputs search terms.
  * @property {string} suggestionsID The ID of the "ul" element where suggestions should be shown.
- * @property {string} suggestionAPIAuthority The Authority of the UI where the Suggestions API lives.
+ * @property {string} suggestionAPIAuthority The URI Authority where /suggestions lives.
  */
 
 function logErr(msg) {
