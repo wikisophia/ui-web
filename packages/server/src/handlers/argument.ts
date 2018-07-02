@@ -2,7 +2,6 @@ import {apiAuthority, resourcesRoot} from '../config';
 import {getArgument, Argument, FailureType} from '../api-clients/arguments';
 import {Request, Response} from 'express';
 import {checkSchema, validationResult} from 'express-validator/check';
-import axios, { AxiosResponse } from 'axios';
 
 const paramValidation = checkSchema({
   id: {
@@ -25,7 +24,7 @@ function handler(req: Request, res: Response): void {
   }
 
   getArgument(id, version).then((arg: Argument) => {
-    res.render('argument', {
+    res.contentType('text/html').render('argument', {
       resourcesRoot,
       apiAuthority,
       id,
@@ -33,11 +32,9 @@ function handler(req: Request, res: Response): void {
     });
   }).catch((err) => {
     if (err === FailureType.NotFound) {
-      res.status(404);
-      res.send(makeErrorMessage(id, version));
+      res.status(404).contentType('text/plain').send(makeErrorMessage(id, version));
     } else {
-      res.status(503);
-      res.send(`Failed fetch from arguments service.`);
+      res.status(503).contentType('text/plain').send(`Failed fetch from arguments service.`);
     }
   });
 }

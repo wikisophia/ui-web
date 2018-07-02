@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <link rel="stylesheet" href="{{resourcesRoot}}/fragments/global.css" type="text/css">
+      <link rel="stylesheet" href="{{resourcesRoot}}/arguments.css" type="text/css">
+      <title>{{ conclusion }} - Wikisophia</title>
+      <style>
+        .argument {
+          border: 1px solid black;
+          border-radius: 10px;
+          display: inline-block;
+          list-style-type: none;
+          padding: 10px 0;
+          margin-bottom: 20px;
+        }
+        .argument.default {
+          background-color:bisque;
+        }
+        .premise-element {
+          list-style-type: disc;
+        }
+        .premise {
+          padding: 5px 20px;
+        }
+      </style>
+  </head>
+  <body>
+    <header>
+      {{> header }}
+    </header>
+    <main>
+      <section class="premises">
+        {{#if args}}
+          <h1>Arguments supporting "{{conclusion}}"</h1>
+          <ul id="argument-list">
+            {{#each args }}
+            {{#if this.isDefault }}
+              <li class="argument default">
+            {{else}}
+              <li class="argument">
+            {{/if}}
+              {{#each this.premises }}
+                <ul class="premise">
+                  <li class="premise-element">
+                    {{ this }}
+                  </li>
+                </ul>
+              {{/each}}
+              </li>
+              <br>
+            {{/each}}
+          </ul>
+        {{else}}
+          <p>Uh oh! No arguments support this conclusion yet. Come be the first to <a href="/add-argument?conclusion={{conclusion}}">add one</a>!</p>
+        {{/if}}
+      </section>
+    </main>
+  </body>
+</html>
