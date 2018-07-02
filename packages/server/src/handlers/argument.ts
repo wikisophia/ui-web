@@ -50,6 +50,6 @@ function makeErrorMessage(id: any, version?: any) {
 }
 
 export default [
-  paramValidation,
+  ...paramValidation,
   handler,
 ];
