@@ -9,6 +9,10 @@ export function getArgument(id: number, version?: number): Promise<Argument> {
   }
 }
 
+export function getByConclusion(conclusion: string): Promise<Argument[]> {
+  return axios.get(`http://${apiAuthority}/all-arguments?conclusion=${conclusion}`, axiosStatuses).then(handleGetResponse);
+}
+
 function handleGetResponse(resp: any) {
   if (isSuccess(resp.status)) {
     return resp.data;
@@ -23,6 +27,7 @@ function handleGetResponse(resp: any) {
 export interface Argument {
   premises: string[];
   conclusion: string;
+  isDefault?: boolean;
 }
 
 export enum FailureType {

@@ -2,7 +2,7 @@ import {apiAuthority, resourcesRoot} from '../config';
 import {Request, Response} from 'express';
 
 function handler(req: Request, res: Response): void {
-  res.render('homepage', {
+  res.contentType('text/html').render('homepage', {
     apiAuthority,
     resourcesRoot,
   });

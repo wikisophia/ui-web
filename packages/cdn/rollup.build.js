@@ -78,3 +78,5 @@ fs.readFile(`${__dirname}/src/homepage/index.css`).then(outputCSS(`${__dirname}/
 
 rollup(input(`${__dirname}/src/argument/index.js`)).then(outputJS(`${__dirname}/dist/argument.js`)).catch(printErr);
 fs.readFile(`${__dirname}/src/argument/index.css`).then(outputCSS(`${__dirname}/dist/argument.css`)).catch(printErr);
+
+fs.readFile(`${__dirname}/src/arguments/index.css`).then(outputCSS(`${__dirname}/dist/arguments.css`)).catch(printErr);

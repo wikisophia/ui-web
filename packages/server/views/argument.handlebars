@@ -21,7 +21,10 @@
       <section class="conclusion">
         <h1>Conclusion</h1>
         <p class="conclusion-text">{{ argument.conclusion }}</p>
-        <p>Not convinced? <a href="/search/arguments?conclusion={{argument.conclusion}}">See other arguments</a></p>
+        <p>
+          Not convincing? See <a href="/arguments?conclusion={{argument.conclusion}}">all the arguments</a> supporting this conclusion,
+          or <a href="/add-argument?conclusion={{argument.conclusion}}">contribute your own</a>.
+        </p>
       </section>
       <button type="button" id="submit" class="no-edits">Save</button>
     </main>
