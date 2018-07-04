@@ -22,7 +22,7 @@ function handler(req: Request, res: Response): void {
       conclusion,
     });
   }).catch((err) => {
-      res.status(503).send(`Failed fetch from arguments service.`);
+    res.status(503).send(`Failed fetch from arguments service.`);
   });
 }
 

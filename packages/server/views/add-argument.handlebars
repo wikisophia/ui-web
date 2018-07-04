@@ -11,6 +11,9 @@
       {{> header }}
     </header>
     <main>
+      {{#if fromSearch}}
+        <p>No arguments found to support that conclusion. Contribute one using the form below.</p>
+      {{/if}}
       <section class="conclusion">
         <input id="conclusion-text" class="conclusion-entry" type="text" placeholder="Set conclusion here" value="{{conclusion}}">
         <p>because...</p>

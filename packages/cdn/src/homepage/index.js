@@ -14,12 +14,19 @@ function logErr(msg) {
   }
 }
 
-
 function suggestionUpdater(suggestionAPIAuthority, inputNode, suggestionsNode) {
   let xhr;
   return () => {
     cancelRequest(xhr);
     xhr = makeRequest(suggestionAPIAuthority, inputNode.value, listUpdater(suggestionsNode));
+  };
+}
+
+function searchHandler(inputNode) {
+  return (ev) => {
+    if (ev.keyCode === 13) {
+      window.location = `/argument?conclusion=${encodeURIComponent(inputNode.value)}`;
+    }
   };
 }
 
@@ -42,4 +49,5 @@ export function showSuggestions(cfg) {
   }
 
   inputNode.addEventListener('input', suggestionUpdater(cfg.suggestionAPIAuthority, inputNode, suggestionsNode));
+  inputNode.addEventListener('keypress', searchHandler(inputNode));
 }

@@ -9,8 +9,12 @@ export function getArgument(id: number, version?: number): Promise<Argument> {
   }
 }
 
-export function getByConclusion(conclusion: string): Promise<Argument[]> {
+export function getByConclusion(conclusion: string): Promise<ArgumentWithId[]> {
   return axios.get(`http://${apiAuthority}/all-arguments?conclusion=${conclusion}`, axiosStatuses).then(handleGetResponse);
+}
+
+export function getBestArgument(conclusion: string): Promise<ArgumentWithId> {
+  return axios.get(`http://${apiAuthority}/best-argument?conclusion=${conclusion}`, axiosStatuses).then(handleGetResponse);
 }
 
 function handleGetResponse(resp: any) {
@@ -27,7 +31,10 @@ function handleGetResponse(resp: any) {
 export interface Argument {
   premises: string[];
   conclusion: string;
-  isDefault?: boolean;
+}
+
+export interface ArgumentWithId extends Argument {
+  id: number;
 }
 
 export enum FailureType {
