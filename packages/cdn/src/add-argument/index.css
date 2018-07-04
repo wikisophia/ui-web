@@ -1,0 +1,11 @@
+.premise-list {
+  margin-bottom: 20px;
+  list-style: none;
+  padding: 0;
+}
+.conclusion-entry, .premise-list, .add-premise {
+  margin-left: 40px;
+}
+.premises {
+  margin-bottom: 40px;
+}

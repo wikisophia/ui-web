@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <link rel="stylesheet" href="{{resourcesRoot}}/fragments/global.css" type="text/css">
+      <link rel="stylesheet" href="{{resourcesRoot}}/add-argument.css" type="text/css">
+      <title>Add a new argument - Wikisophia</title>
+  </head>
+  <body>
+    <header>
+      {{> header }}
+    </header>
+    <main>
+      <section class="conclusion">
+        <input class="conclusion-entry" type="text" placeholder="Set conclusion here" value="{{conclusion}}">
+        <p>because...</p>
+      </section>
+      <section class="premises">
+        <ul class="premise-list">
+          {{#if premises}}
+            {{#each premises}}
+              <li class="premise-element">
+                <input class="premise-entry" type="text" placeholder="Add premise here" value="{{this}}">
+                <button type="button" class="delete-premise">Delete</button>
+              </li>
+            {{/each}}
+          {{else}}
+            <li class="premise-element">
+              <input class="premise-entry" type="text" placeholder="Add premise here">
+              <button type="button" class="delete-premise">Delete</button>
+            </li>
+          {{/if}}
+        </ul>
+        <button type="button" class="add-premise">New premise</button>
+      </section>
+      <button type="button" class="save-argument">Save</button>
+    </main>
+  </body>
+</html>
