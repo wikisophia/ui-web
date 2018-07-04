@@ -22,16 +22,12 @@ function suggestionUpdater(suggestionAPIAuthority, inputNode, suggestionsNode) {
   };
 }
 
-function requestMaker(inputNode) {
-  return makeRequest(suggestionAPIAuthority, inputNode.value)
-}
-
 function searchHandler(inputNode) {
   return (ev) => {
     if (ev.keyCode === 13) {
       window.location = `/argument?conclusion=${encodeURIComponent(inputNode.value)}`;
     }
-  }
+  };
 }
 
 /**
