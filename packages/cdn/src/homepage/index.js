@@ -27,6 +27,14 @@ function requestMaker(inputNode) {
   return makeRequest(suggestionAPIAuthority, inputNode.value)
 }
 
+function searchHandler(inputNode) {
+  return (ev) => {
+    if (ev.keyCode === 13) {
+      window.location = `/argument?conclusion=${encodeURIComponent(inputNode.value)}`;
+    }
+  }
+}
+
 /**
  * Listen for changes on the input element. When it changes, call the server
  * for suggestions and update the suggestion list with the results.
@@ -46,9 +54,5 @@ export function showSuggestions(cfg) {
   }
 
   inputNode.addEventListener('input', suggestionUpdater(cfg.suggestionAPIAuthority, inputNode, suggestionsNode));
-  inputNode.addEventListener('keypress', function(ev) {
-    if (ev.keyCode === 13) {
-      window.location = `/argument?conclusion=${encodeURIComponent(inputNode.value)}`;
-    }
-  });
+  inputNode.addEventListener('keypress', searchHandler(inputNode));
 }
