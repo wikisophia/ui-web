@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+      <script src="{{resourcesRoot}}/add-argument.js"></script>
       <link rel="stylesheet" href="{{resourcesRoot}}/fragments/global.css" type="text/css">
       <link rel="stylesheet" href="{{resourcesRoot}}/add-argument.css" type="text/css">
       <title>Add a new argument - Wikisophia</title>
@@ -11,11 +12,11 @@
     </header>
     <main>
       <section class="conclusion">
-        <input class="conclusion-entry" type="text" placeholder="Set conclusion here" value="{{conclusion}}">
+        <input id="conclusion-text" class="conclusion-entry" type="text" placeholder="Set conclusion here" value="{{conclusion}}">
         <p>because...</p>
       </section>
       <section class="premises">
-        <ul class="premise-list">
+        <ul id="premise-list" class="premise-list">
           {{#if premises}}
             {{#each premises}}
               <li class="premise-element">
@@ -30,9 +31,22 @@
             </li>
           {{/if}}
         </ul>
-        <button type="button" class="add-premise">New premise</button>
+        <button type="button" id="new-premise" class="add-premise">New premise</button>
       </section>
-      <button type="button" class="save-argument">Save</button>
+      <button type="button" id="save-argument" class="save-argument">Save</button>
+      <p id="save-error" class="save-error"></p>
     </main>
+    <script>
+      wikisophia.makeInteractive({
+        apiAuthority: '{{apiAuthority}}',
+        conclusionId: 'conclusion-text',
+        deletePremiseClass: 'delete-premise',
+        errNodeId: 'save-error',
+        newPremiseButtonId: 'new-premise',
+        premiseListId: 'premise-list',
+        premiseInputClass: 'premise-entry',
+        saveArgumentId: 'save-argument'
+      });
+    </script>
   </body>
 </html>

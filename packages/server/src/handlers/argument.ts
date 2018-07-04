@@ -22,7 +22,6 @@ function handler(req: Request, res: Response): void {
     res.status(404).contentType('text/plain').send(makeErrorMessage(id, version));
     return;
   }
-
   getArgument(id, version).then((arg: Argument) => {
     res.contentType('text/html').render('argument', {
       resourcesRoot,
