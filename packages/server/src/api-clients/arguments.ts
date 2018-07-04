@@ -3,9 +3,9 @@ import {apiAuthority} from '../config';
 
 export function getArgument(id: number, version?: number): Promise<Argument> {
   if (version) {
-    return axios.get(`http://${apiAuthority}/argument/${id}/version/${version}`, axiosStatuses).then(handleGetResponse);
+    return axios.get(`http://${apiAuthority}/arguments/${id}/version/${version}`, axiosStatuses).then(handleGetResponse);
   } else {
-    return axios.get(`http://${apiAuthority}/argument/${id}`, axiosStatuses).then(handleGetResponse);
+    return axios.get(`http://${apiAuthority}/arguments/${id}`, axiosStatuses).then(handleGetResponse);
   }
 }
 

@@ -6,6 +6,9 @@
 .conclusion-entry, .premise-list, .add-premise {
   margin-left: 40px;
 }
+.save-error {
+  color: red;
+}
 .premises {
   margin-bottom: 40px;
 }

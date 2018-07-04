@@ -76,6 +76,7 @@ fs.readFile(`${__dirname}/src/fragments/global.css`).then(outputCSS(`${__dirname
 rollup(input(`${__dirname}/src/homepage/index.js`)).then(outputJS(`${__dirname}/dist/homepage.js`)).catch(printErr);
 fs.readFile(`${__dirname}/src/homepage/index.css`).then(outputCSS(`${__dirname}/dist/homepage.css`)).catch(printErr);
 
+rollup(input(`${__dirname}/src/add-argument/index.js`)).then(outputJS(`${__dirname}/dist/add-argument.js`)).catch(printErr);
 fs.readFile(`${__dirname}/src/add-argument/index.css`).then(outputCSS(`${__dirname}/dist/add-argument.css`)).catch(printErr);
 
 rollup(input(`${__dirname}/src/argument/index.js`)).then(outputJS(`${__dirname}/dist/argument.js`)).catch(printErr);
