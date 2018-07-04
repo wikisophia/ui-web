@@ -21,9 +21,9 @@ describe('The list updaters', () => {
 
     expect(suggestionsNode.childElementCount).toBe(2);
     expect(suggestionsNode.firstChild.firstChild.innerHTML).toBe(first);
-    expect(suggestionsNode.firstChild.firstChild.href).toBe('/arguments?socrates%20is%20a%20man');
+    expect(suggestionsNode.firstChild.firstChild.href).toBe('/argument?conclusion=socrates%20is%20a%20man');
     expect(suggestionsNode.lastChild.firstChild.innerHTML).toBe(second);
-    expect(suggestionsNode.lastChild.firstChild.href).toBe('/arguments?socrates%20is%20mortal');
+    expect(suggestionsNode.lastChild.firstChild.href).toBe('/argument?conclusion=socrates%20is%20mortal');
   });
 });
 
