@@ -3,7 +3,7 @@ import { param } from 'express-validator/check';
 
 import addArgument from './handlers/add-argument';
 import argument from './handlers/argument';
-import argumentsByConclusion from './handlers/arguments';
+import arguments from './handlers/arguments';
 import contact from './handlers/contact';
 import homepage from './handlers/homepage';
 
