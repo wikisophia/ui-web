@@ -14,7 +14,6 @@ function logErr(msg) {
   }
 }
 
-
 function suggestionUpdater(suggestionAPIAuthority, inputNode, suggestionsNode) {
   let xhr;
   return () => {
