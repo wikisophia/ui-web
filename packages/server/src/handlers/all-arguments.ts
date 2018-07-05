@@ -1,5 +1,5 @@
 import {apiAuthority, resourcesRoot} from '../config';
-import {getByConclusion, Argument} from '../api-clients/arguments';
+import {getByConclusion, ArgumentFromConclusion} from '../api-clients/arguments';
 import {Request, Response} from 'express';
 import {query, validationResult} from 'express-validator/check';
 
@@ -14,15 +14,24 @@ function handler(req: Request, res: Response): void {
     return;
   }
 
-  getByConclusion(conclusion).then((args: Argument[]) => {
-    res.contentType('text/html').render('arguments', {
-      resourcesRoot,
-      apiAuthority,
-      args,
-      conclusion,
-    });
+  getByConclusion(conclusion).then((args: ArgumentFromConclusion[]) => {
+    if (args.length > 0) {
+      res.contentType('text/html').render('all-arguments', {
+        resourcesRoot,
+        apiAuthority,
+        args,
+        conclusion,
+      });
+    } else {
+      res.contentType('text/html').render('add-argument', {
+        fromSearch: true,
+        resourcesRoot,
+        apiAuthority,
+        conclusion: conclusion,
+      });
+    }
   }).catch((err) => {
-    res.status(503).send(`Failed fetch from arguments service.`);
+    res.status(503).contentType('text/plain').send(`Failed fetch from arguments service.`);
   });
 }
 

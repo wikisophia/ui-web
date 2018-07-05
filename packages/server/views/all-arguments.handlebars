@@ -11,29 +11,25 @@
     </header>
     <main>
       <section class="premises">
-        {{#if args}}
-          <h1>Arguments supporting "{{conclusion}}"</h1>
-          <ul id="argument-list">
-            {{#each args }}
-            {{#if this.isDefault }}
-              <li class="argument default">
-            {{else}}
-              <li class="argument">
-            {{/if}}
-              {{#each this.premises }}
-                <ul class="premise">
-                  <li class="premise-element">
-                    {{ this }}
-                  </li>
-                </ul>
-              {{/each}}
-              </li>
-              <br>
+        <h1>Arguments supporting "{{conclusion}}"</h1>
+        <ul id="argument-list">
+          {{#each args }}
+          {{#if this.isDefault }}
+            <li class="argument default">
+          {{else}}
+            <li class="argument">
+          {{/if}}
+            {{#each this.premises }}
+              <ul class="premise">
+                <li class="premise-element">
+                  {{ this }}
+                </li>
+              </ul>
             {{/each}}
-          </ul>
-        {{else}}
-          <p>Uh oh! No arguments support this conclusion yet. Come be the first to <a href="/add-argument?conclusion={{conclusion}}">add one</a>!</p>
-        {{/if}}
+            </li>
+            <br>
+          {{/each}}
+        </ul>
       </section>
     </main>
   </body>

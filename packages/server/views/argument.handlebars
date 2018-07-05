@@ -14,7 +14,7 @@
         <h1>Premises</h1>
         <ul id="premise-list">
           {{#each argument.premises }}
-            <li class="premise"><a class="premise-text" href="/arguments?conclusion={{this}}&limit=1">{{ this }}</a> <span class="edit-premise" tabindex="0">(edit)</span></li>
+            <li class="premise"><a class="premise-text" href="/argument?conclusion={{this}}">{{ this }}</a> <span class="edit-premise" tabindex="0">(edit)</span></li>
           {{/each}}
         </ul>
       </section>
