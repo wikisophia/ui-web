@@ -1,5 +1,5 @@
 import {apiAuthority, resourcesRoot} from '../config';
-import {getByConclusion, ArgumentFromConclusion, FailureType} from '../api-clients/arguments';
+import {getByConclusion, ArgumentFromConclusion} from '../api-clients/arguments';
 import {Request, Response} from 'express';
 import {query, validationResult} from 'express-validator/check';
 
