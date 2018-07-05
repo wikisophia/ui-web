@@ -93,7 +93,7 @@ function premiseSaver(getCurrentPremiseNodes, apiAuthority, argumentId, callback
         callback(null, new Error(`Could not save argument. Server responded with ${ev.target.status}. Try again later. If this problem persists, please report it.`));
       }
     });
-    ajax.open('PATCH', `${apiAuthority}/arguments/${argumentId}`);
+    ajax.open('PATCH', `//${apiAuthority}/arguments/${argumentId}`);
     ajax.send(JSON.stringify({
       premises,
     }));
