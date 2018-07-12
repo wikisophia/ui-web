@@ -1,5 +1,5 @@
 import {apiAuthority, resourcesRoot} from '../config';
-import {getBestArgument, ArgumentWithId, FailureType} from '../api-clients/arguments';
+import {getBestArgument, ArgumentFromConclusion, FailureType} from '../api-clients/arguments';
 import {Request, Response} from 'express';
 import {validationResult, query} from 'express-validator/check';
 
@@ -14,7 +14,7 @@ function handler(req: Request, res: Response): void {
     return;
   }
 
-  getBestArgument(conclusion).then((bestArgument: ArgumentWithId) => {
+  getBestArgument(conclusion).then((bestArgument: ArgumentFromConclusion) => {
     res.contentType('text/html').render('argument', {
       resourcesRoot,
       apiAuthority,
