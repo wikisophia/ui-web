@@ -5,15 +5,15 @@
   "description": "Wikisophia API javascript client",
   "scripts": {
     "clean": "rm -rf dist",
-    "build:release": "rollup -c prod.rollup.config.js",
-    "build:dev": "rollup -c dev.rollup.config.js",
+    "build:release": "rollup -c rollup.config.prod.js",
+    "build:dev": "rollup -c rollup.config.dev.js",
     "lint": "eslint src test --fix && stylelint \"src/**/*.css\"",
     "lint-nofix": "eslint src test && stylelint \"src/**/*.css\"",
     "serve": "npm run build:dev && http-server -p 4041 ./dist",
     "serve-dev": "npm run build:dev && concurrently \"npm run watch\" \"http-server -p 4041 ./dist\"",
     "test": "BABEL_ENV=test jest",
     "test-coverage": "BABEL_ENV=test jest -c jest.config.coverage.js",
-    "watch": "nodemon -e js,css --watch src -x \"npm run build:dev\""
+    "watch": "rollup -c rollup.config.dev.js -w"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
