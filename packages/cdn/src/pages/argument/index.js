@@ -1,10 +1,11 @@
-import ArgumentEditor from '../../components/ArgumentEditor';
+import ArgumentEditor, {ManageArgumentState} from '../../components/ArgumentEditor';
 
 export class ViewArgument extends React.Component {
   // props.apiAuthority: string
   // props.argumentId: string
   // props.conclusion: string
   // props.premises: string[]
+  // props.afterSave: function(argument)
   constructor(props) {
     super(props);
 
@@ -21,7 +22,10 @@ export class ViewArgument extends React.Component {
       const ajax = new XMLHttpRequest();
       ajax.addEventListener('load', (ev) => {
         if (ev.target.status >= 200 && ev.target.status < 300) {
-          window.location.reload(true);
+          this.setState({
+            editing: false
+          });
+          this.props.afterSave(argument);
         } else if (ev.target.status >= 400 && ev.target.status < 500) {
           throw new Error(`Could not save argument. Server responded with ${ev.target.status}. Please report this bug.`)
         } else {
@@ -37,6 +41,9 @@ export class ViewArgument extends React.Component {
       const ajax = new XMLHttpRequest();
       ajax.addEventListener('load', (ev) => {
         if (ev.target.status >= 200 && ev.target.status < 300) {
+          this.setState({
+            editing: false
+          });
           window.location = ajax.getResponseHeader('Location');
         } else if (ev.target.status >= 400 && ev.target.status < 500) {
           throw new Error(`Could not save argument. Server responded with ${ev.target.status}. Please report this bug.`)

@@ -35,18 +35,25 @@
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
     <script src="{{resourcesRoot}}/argument.js"></script>
     <script>
-      ReactDOM.render(
-        React.createElement(wikisophia.ViewArgument, {
-          apiAuthority: '{{apiAuthority}}',
-          argumentId: '{{id}}',
-          conclusion: '{{argument.conclusion}}',
-          premises: [
-            {{#each argument.premises}}
-              '{{this}}',
-            {{/each}}
-          ]
-        }),
+      function doRender(argument) {
+        ReactDOM.render(
+          React.createElement(wikisophia.ViewArgument, {
+            afterSave: doRender,
+            apiAuthority: '{{apiAuthority}}',
+            argumentId: '{{id}}',
+            conclusion: argument.conclusion,
+            premises: argument.premises
+          }),
         document.getElementById("view-argument-anchor"));
+      }
+      doRender({
+        conclusion: '{{argument.conclusion}}',
+        premises: [
+          {{#each argument.premises}}
+            '{{this}}',
+          {{/each}}
+        ]
+      })
     </script>
   </body>
 </html>

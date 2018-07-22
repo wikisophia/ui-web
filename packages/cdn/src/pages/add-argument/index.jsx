@@ -1,15 +1,11 @@
-import ArgumentEditor from '../../components/ArgumentEditor';
+import ArgumentEditor, { ManageArgumentState } from '../../components/ArgumentEditor';
 
-export class NewArgument extends React.Component {
-  // props.apiAuthority: string
-  // props.conclusion: string
-  // props.premises: string[]
-  constructor(props) {
-    super(props);
-    this.save = this.save.bind(this);
-  }
-
-  save(argument) {
+// props.apiAuthority: string
+// props.conclusion: string
+// props.premises: string[]
+export const NewArgument = ManageArgumentState(
+  ArgumentEditor,
+  (component, argument) => {
     const ajax = new XMLHttpRequest();
     ajax.timeout = 1000;
     ajax.addEventListener('readystatechange', () => {
@@ -23,18 +19,8 @@ export class NewArgument extends React.Component {
         }
       }
     });
-    ajax.open('POST', `//${this.props.apiAuthority}/arguments`, true);
+    ajax.open('POST', `//${component.props.apiAuthority}/arguments`, true);
     ajax.setRequestHeader('Content-Type', 'application/json');
     ajax.send(JSON.stringify(argument));
   }
-
-  render() {
-    return (
-      <ArgumentEditor
-        conclusion={this.props.conclusion}
-        premises={this.props.premises}
-        onSave={this.save}
-      />
-    );
-  }
-}
+)
