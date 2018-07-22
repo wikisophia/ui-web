@@ -13,17 +13,18 @@ export class NewArgument extends React.Component {
       premises: premisesToState(props.premises),
     };
 
-    this.deletePremise = this.deletePremise.bind(this);
     this.addPremise = this.addPremise.bind(this);
+    this.deletePremise = this.deletePremise.bind(this);
     this.handlePremiseChange = this.handlePremiseChange.bind(this);
     this.handleConclusionChange = this.handleConclusionChange.bind(this);
+    this.save = this.save.bind(this);
   }
 
   deletePremise(index) {
     this.setState((prevState) => {
       let newPremises = prevState.premises.slice(0, index).concat(prevState.premises.slice(index+1))
       if (newPremises.length < 1) {
-        newPremises = [newPremise("")];
+        newPremises = [newPremise(""), newPremise("")];
       }
       return {
         premises: newPremises
@@ -72,8 +73,8 @@ export class NewArgument extends React.Component {
     ajax.open('POST', `//${this.props.apiAuthority}/arguments`, true);
     ajax.setRequestHeader('Content-Type', 'application/json');
     ajax.send(JSON.stringify({
-      conclusion,
-      premises,
+      conclusion: this.state.conclusion,
+      premises: this.state.premises.map((premise) => premise.text),
     }));
   }
 
@@ -100,7 +101,7 @@ function newPremise(premiseText) {
 
 function premisesToState(premisesProps) {
   if (!premisesProps || premisesProps.length < 1) {
-    return [newPremise("")];
+    return [newPremise(""), newPremise("")];
   }
   return premisesProps.map(newPremise);
 }
