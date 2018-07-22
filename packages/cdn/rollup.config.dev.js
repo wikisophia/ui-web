@@ -1,6 +1,5 @@
 import babelrc from 'babelrc-rollup';
 import babel from 'rollup-plugin-babel';
-import css from 'rollup-plugin-css-only';
 import uglify from 'rollup-plugin-uglify';
 import importResolution from 'rollup-plugin-node-resolve';
 import fs from 'fs';
@@ -19,8 +18,7 @@ function plugins(input) {
     })),
     importResolution({
       extensions: ['', '.js', '.jsx']
-    }),
-    css({ output: `${input}.css` })
+    })
   ];
 }
 
