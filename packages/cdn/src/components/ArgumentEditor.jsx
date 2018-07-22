@@ -1,8 +1,5 @@
-import Conclusion from './conclusion';
-import PremiseList from './premiseList';
-
-export class NewArgument extends React.Component {
-  // props.apiAuthority: string
+export default class ArgumentEditor extends React.Component {
+  // props.onSave: function(argument), where argument has a conclusion and an array with at least 2 premise strings
   // props.conclusion: string
   // props.premises: string[]
   constructor(props) {
@@ -17,7 +14,6 @@ export class NewArgument extends React.Component {
     this.deletePremise = this.deletePremise.bind(this);
     this.handlePremiseChange = this.handlePremiseChange.bind(this);
     this.handleConclusionChange = this.handleConclusionChange.bind(this);
-    this.save = this.save.bind(this);
   }
 
   deletePremise(index) {
@@ -56,38 +52,76 @@ export class NewArgument extends React.Component {
     });
   }
 
-  save() {
-    const ajax = new XMLHttpRequest();
-    ajax.timeout = 1000;
-    ajax.addEventListener('readystatechange', () => {
-      if (ajax.readyState === 2) {
-        if (ajax.status >= 200 && ajax.status < 300) {
-          window.location = ajax.getResponseHeader('Location');
-        } else if (ajax.status >= 400 && ajax.status < 500) {
-          this.setState({saveError: `Could not save argument. Server responded with ${ajax.status}. Please report this bug.`});
-        } else {
-          this.setState({saveError: `Could not save argument. Server responded with ${ajax.status}. Try again later. If this problem persists, please report it.`});
-        }
-      }
-    });
-    ajax.open('POST', `//${this.props.apiAuthority}/arguments`, true);
-    ajax.setRequestHeader('Content-Type', 'application/json');
-    ajax.send(JSON.stringify({
+  render() {
+    const argument = {
       conclusion: this.state.conclusion,
       premises: this.state.premises.map((premise) => premise.text),
-    }));
-  }
-
-  render() {
+    }
     return (
       <div>
         <Conclusion conclusion={this.state.conclusion} onChange={this.handleConclusionChange} />
         <p>because...</p>
         <PremiseList premises={this.state.premises} onAdd={this.addPremise} onDelete={this.deletePremise} onChange={this.handlePremiseChange}/>
-        <button type="button" className="save-argument" onClick={this.save}>Save</button>
+        <button type="button" className="save-argument" onClick={this.props.onSave.bind(null, argument)}>Save</button>
         <p id="save-error" className="save-error"></p>
       </div>
     );
+  }
+}
+
+class Conclusion extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(ev) {
+    this.props.onChange(ev.target.value);
+  }
+
+  render() {
+    return <section className="conclusion">
+      <input className="conclusion-entry" type="text" placeholder="Set conclusion here" onChange={this.handleChange} value={this.props.conclusion} />
+    </section>;
+  }
+}
+
+class Premise extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(ev) {
+    this.props.onChange(ev.target.value);
+  }
+
+  render() {
+    return <li className="premise-element">
+      <input className="premise-entry" type="text" placeholder="Add premise here" onChange={this.handleChange} value={this.props.premise} />
+      <button type="button" className="delete-premise" onClick={this.props.onDelete}>Delete</button>
+    </li>;
+  }
+}
+
+class PremiseList extends React.Component {
+  render() {
+    let premiseElements = this.props.premises.map((premise, i) =>
+      <Premise key={premise.id}
+               premise={premise.text}
+               onChange={this.props.onChange.bind(null, i)}
+               onDelete={this.props.onDelete.bind(null, i)}
+      />);
+    if (premiseElements.length === 0) {
+      premiseElements = [<Premise key="0" remove={function() { }} />];
+    }
+    return <section className="premises">
+      <ul className="premise-list">
+        {premiseElements}
+      </ul>
+      <button type="button" className="add-premise" onClick={this.props.onAdd}>New premise</button>
+    </section>;
   }
 }
 

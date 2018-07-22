@@ -10,6 +10,8 @@
       {{> header }}
     </header>
     <main>
+      <section id="view-argument-anchor"></section>
+      <!-- TODO: Put this behind a noscript tag, probably>
       <section class="premises">
         <h1>Premises</h1>
         <ul id="premise-list">
@@ -27,16 +29,24 @@
         </p>
       </section>
       <button type="button" id="submit" class="no-edits">Save</button>
+      < -->
     </main>
-    <script src="{{ resourcesRoot }}/argument.js"></script>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="{{resourcesRoot}}/argument.js"></script>
     <script>
-      wikisophia.makePremisesEditable({
-        apiAuthority: '{{apiAuthority}}',
-        argumentId: '{{id}}',
-        premiseListId: "premise-list",
-        premisesClass: 'premise-text',
-        saverId: 'submit'
-      });
+      ReactDOM.render(
+        React.createElement(wikisophia.ViewArgument, {
+          apiAuthority: '{{apiAuthority}}',
+          argumentId: '{{id}}',
+          conclusion: '{{argument.conclusion}}',
+          premises: [
+            {{#each argument.premises}}
+              '{{this}}',
+            {{/each}}
+          ]
+        }),
+        document.getElementById("view-argument-anchor"));
     </script>
   </body>
 </html>

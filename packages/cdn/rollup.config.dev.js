@@ -23,10 +23,10 @@ function plugins(input) {
 }
 
 function resolveInputFile(input) {
-  if (fs.existsSync(`src/${input}/index.jsx`)) {
-    return `src/${input}/index.jsx`
+  if (fs.existsSync(`src/pages/${input}/index.jsx`)) {
+    return `src/pages/${input}/index.jsx`
   } else {
-    return `src/${input}/index.js`;
+    return `src/pages/${input}/index.js`;
   }
 }
 

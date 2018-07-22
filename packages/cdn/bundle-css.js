@@ -41,7 +41,7 @@ function outputCSS(file) {
 }
 
 fs.readFile(`${__dirname}/src/fragments/global.css`).then(outputCSS(`${__dirname}/dist/fragments/global.css`)).catch(printErr);
-fs.readFile(`${__dirname}/src/homepage/index.css`).then(outputCSS(`${__dirname}/dist/homepage.css`)).catch(printErr);
-fs.readFile(`${__dirname}/src/add-argument/index.css`).then(outputCSS(`${__dirname}/dist/add-argument.css`)).catch(printErr);
-fs.readFile(`${__dirname}/src/argument/index.css`).then(outputCSS(`${__dirname}/dist/argument.css`)).catch(printErr);
-fs.readFile(`${__dirname}/src/arguments/index.css`).then(outputCSS(`${__dirname}/dist/arguments.css`)).catch(printErr);
+fs.readFile(`${__dirname}/src/pages/homepage/index.css`).then(outputCSS(`${__dirname}/dist/homepage.css`)).catch(printErr);
+fs.readFile(`${__dirname}/src/pages/add-argument/index.css`).then(outputCSS(`${__dirname}/dist/add-argument.css`)).catch(printErr);
+fs.readFile(`${__dirname}/src/pages/argument/index.css`).then(outputCSS(`${__dirname}/dist/argument.css`)).catch(printErr);
+fs.readFile(`${__dirname}/src/pages/arguments/index.css`).then(outputCSS(`${__dirname}/dist/arguments.css`)).catch(printErr);
