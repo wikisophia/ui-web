@@ -11,6 +11,9 @@ class Argument extends React.Component {
       </li>;
     });
 
+    // Careful! When updating this component, make sure to keep
+    // #view-argument-anchor in server/views/argument.handlebars in sync.
+    // This makes sure the site works properly when javascript is disabled.
     return (
       <div>
         <section className="conclusion">
