@@ -1,6 +1,6 @@
 
 export default function update(apiAuthority, argumentId, premises, callback) {
-  premises = premises.filter((premise) => typeof premise === 'string' && premise.length > 0);
+  premises = premises.filter(premise => typeof premise === 'string' && premise.length > 0);
   if (premises.length < 2) {
     callback(null, new Error(`An argument requires at least two premises. Yours was: ${JSON.stringify(premises)}`));
     return;
@@ -18,7 +18,7 @@ export default function update(apiAuthority, argumentId, premises, callback) {
     }
   });
   ajax.addEventListener('timeout', () => {
-    callback(null, new Error(`The server is under heavy load. Try again later.`));
+    callback(null, new Error('The server is under heavy load. Try again later.'));
   });
   ajax.open('PATCH', `//${apiAuthority}/arguments/${argumentId}`);
   ajax.send(JSON.stringify({
