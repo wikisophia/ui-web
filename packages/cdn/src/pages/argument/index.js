@@ -1,4 +1,6 @@
 import ArgumentEditor, {ManageArgumentState} from '../../components/ArgumentEditor';
+import save from '../../api/save-argument';
+import update from '../../api/update-argument';
 
 class Argument extends React.Component {
   render() {
@@ -74,39 +76,24 @@ export class StatefulEditableArgument extends React.Component {
   onSave(argument) {
     const component = this;
     if (argument.conclusion === component.props.conclusion) {
-      const ajax = new XMLHttpRequest();
-      ajax.addEventListener('load', (ev) => {
-        if (ev.target.status >= 200 && ev.target.status < 300) {
-          component.setState({
-            editing: false
-          });
-        } else if (ev.target.status >= 400 && ev.target.status < 500) {
-          throw new Error(`Could not save argument. Server responded with ${ev.target.status}. Please report this bug.`)
-        } else {
-          throw new Error(`Could not save argument. Server responded with ${ev.target.status}. Try again later. If this problem persists, please report it.`);
+      update(this.props.apiAuthority, this.props.argumentId, argument.premises, function(value, err) {
+        if (err) {
+          throw err;
         }
+        component.setState({
+          editing: false
+        });
       });
-      ajax.open('PATCH', `//${component.props.apiAuthority}/arguments/${component.props.argumentId}`);
-      ajax.send(JSON.stringify({
-        premises: argument.premises
-      }));
     }
     else {
-      const ajax = new XMLHttpRequest();
-      ajax.addEventListener('load', (ev) => {
-        if (ev.target.status >= 200 && ev.target.status < 300) {
-          component.setState({
-            editing: false
-          });
-          window.location = ajax.getResponseHeader('Location');
-        } else if (ev.target.status >= 400 && ev.target.status < 500) {
-          throw new Error(`Could not save argument. Server responded with ${ev.target.status}. Please report this bug.`)
-        } else {
-          throw new Error(`Could not save argument. Server responded with ${ev.target.status}. Try again later. If this problem persists, please report it.`);
+      save(this.props.apiAuthority, argument, function(url, err) {
+        if (err) {
+          throw err;
         }
-      });
-      ajax.open('POST', `//${component.props.apiAuthority}/arguments`);
-      ajax.send(JSON.stringify(argument));
+        component.setState({
+          editing: false
+        });
+      })
     }
   }
 
