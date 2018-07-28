@@ -10,7 +10,30 @@
       {{> header }}
     </header>
     <main>
-      <section id="view-argument-anchor"></section>
+      <!-- If javascript is enabled, React will purge view-argument-anchor and make things editable. -->
+      <section id="view-argument-anchor">
+        <div>
+          <div>
+            <section class="conclusion">
+              <p class="conclusion-text">{{argument.conclusion}}</p>
+            </section>
+            <p>because...</p>
+            <section class="premises">
+              <ul>
+                {{#each argument.premises}}
+                  <li class="premise">
+                    <a class="premise-text" href="/argument?conclusion={{this}}">{{this}}</a>
+                  </li>
+                {{/each}}
+              </ul>
+            </section>
+          </div>
+          <p>
+            Not convincing? See <a href="/arguments?conclusion={{argument.conclusion}}">all the arguments</a>
+            supporting this conclusion, or <a href="/add-argument?conclusion={{argument.conclusion}}">contribute your own</a>.
+          </p>
+        </div>
+      </section>
     </main>
     {{> react }}
     <script src="{{resourcesRoot}}/argument.js"></script>
