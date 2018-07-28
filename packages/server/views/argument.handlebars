@@ -11,28 +11,8 @@
     </header>
     <main>
       <section id="view-argument-anchor"></section>
-      <!-- TODO: Put this behind a noscript tag, probably>
-      <section class="premises">
-        <h1>Premises</h1>
-        <ul id="premise-list">
-          {{#each argument.premises }}
-            <li class="premise"><a class="premise-text" href="/argument?conclusion={{this}}">{{ this }}</a> <span class="edit-premise" tabindex="0">(edit)</span></li>
-          {{/each}}
-        </ul>
-      </section>
-      <section class="conclusion">
-        <h1>Conclusion</h1>
-        <p class="conclusion-text">{{ argument.conclusion }}</p>
-        <p>
-          Not convincing? See <a href="/arguments?conclusion={{argument.conclusion}}">all the arguments</a> supporting this conclusion,
-          or <a href="/add-argument?conclusion={{argument.conclusion}}">contribute your own</a>.
-        </p>
-      </section>
-      <button type="button" id="submit" class="no-edits">Save</button>
-      < -->
     </main>
-    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    {{> react }}
     <script src="{{resourcesRoot}}/argument.js"></script>
     <script>
       ReactDOM.render(
