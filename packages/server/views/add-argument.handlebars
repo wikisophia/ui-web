@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <script src="{{resourcesRoot}}/add-argument.js"></script>
       <link rel="stylesheet" href="{{resourcesRoot}}/fragments/global.css" type="text/css">
       <link rel="stylesheet" href="{{resourcesRoot}}/add-argument.css" type="text/css">
       <title>Add a new argument - Wikisophia</title>
@@ -14,42 +13,22 @@
       {{#if fromSearch}}
         <p>No arguments found to support that conclusion. Contribute one using the form below.</p>
       {{/if}}
-      <section class="conclusion">
-        <input id="conclusion-text" class="conclusion-entry" type="text" placeholder="Set conclusion here" value="{{conclusion}}">
-        <p>because...</p>
-      </section>
-      <section class="premises">
-        <ul id="premise-list" class="premise-list">
-          {{#if premises}}
-            {{#each premises}}
-              <li class="premise-element">
-                <input class="premise-entry" type="text" placeholder="Add premise here" value="{{this}}">
-                <button type="button" class="delete-premise">Delete</button>
-              </li>
-            {{/each}}
-          {{else}}
-            <li class="premise-element">
-              <input class="premise-entry" type="text" placeholder="Add premise here">
-              <button type="button" class="delete-premise">Delete</button>
-            </li>
-          {{/if}}
-        </ul>
-        <button type="button" id="new-premise" class="add-premise">New premise</button>
-      </section>
-      <button type="button" id="save-argument" class="save-argument">Save</button>
-      <p id="save-error" class="save-error"></p>
+      <section id="new-argument-anchor"></section>
     </main>
+    {{> react }}
+    <script src="{{resourcesRoot}}/add-argument.js"></script>
     <script>
-      wikisophia.makeInteractive({
-        apiAuthority: '{{apiAuthority}}',
-        conclusionId: 'conclusion-text',
-        deletePremiseClass: 'delete-premise',
-        errNodeId: 'save-error',
-        newPremiseButtonId: 'new-premise',
-        premiseListId: 'premise-list',
-        premiseInputClass: 'premise-entry',
-        saveArgumentId: 'save-argument'
-      });
+      ReactDOM.render(
+        React.createElement(wikisophia.NewArgument, {
+          apiAuthority: '{{apiAuthority}}',
+          conclusion: '{{conclusion}}',
+          premises: [
+            {{#each premises}}
+              '{{this}}',
+            {{/each}}
+          ]
+        }),
+        document.getElementById("new-argument-anchor"));
     </script>
   </body>
 </html>

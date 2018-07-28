@@ -1,24 +1,6 @@
 {
-  "env": {
-    "build": {
-      "presets": [
-        ["env", {
-          "targets": {
-            "browsers": [">0.25%"]
-          },
-          "modules": false
-        }]
-      ]
-    },
-    "test": {
-      "presets": [
-        ["env", {
-          "targets": {
-            "node": "current"
-          },
-          "modules": "commonjs"
-        }]
-      ]
-    }
-  }
+  "presets": ["env", "react"],
+  "plugins": [
+    ["transform-object-rest-spread", {"useBuiltIns": true}]
+  ]
 }

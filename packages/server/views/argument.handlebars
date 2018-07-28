@@ -10,33 +10,46 @@
       {{> header }}
     </header>
     <main>
-      <section class="premises">
-        <h1>Premises</h1>
-        <ul id="premise-list">
-          {{#each argument.premises }}
-            <li class="premise"><a class="premise-text" href="/argument?conclusion={{this}}">{{ this }}</a> <span class="edit-premise" tabindex="0">(edit)</span></li>
-          {{/each}}
-        </ul>
+      <!-- If javascript is enabled, React will purge view-argument-anchor and make things editable. -->
+      <section id="view-argument-anchor">
+        <div>
+          <div>
+            <section class="conclusion">
+              <p class="conclusion-text">{{argument.conclusion}}</p>
+            </section>
+            <p>because...</p>
+            <section class="premises">
+              <ul>
+                {{#each argument.premises}}
+                  <li class="premise">
+                    <a class="premise-text" href="/argument?conclusion={{this}}">{{this}}</a>
+                  </li>
+                {{/each}}
+              </ul>
+            </section>
+          </div>
+          <p>
+            Not convincing? See <a href="/arguments?conclusion={{argument.conclusion}}">all the arguments</a>
+            supporting this conclusion, or <a href="/add-argument?conclusion={{argument.conclusion}}">contribute your own</a>.
+          </p>
+        </div>
       </section>
-      <section class="conclusion">
-        <h1>Conclusion</h1>
-        <p class="conclusion-text">{{ argument.conclusion }}</p>
-        <p>
-          Not convincing? See <a href="/arguments?conclusion={{argument.conclusion}}">all the arguments</a> supporting this conclusion,
-          or <a href="/add-argument?conclusion={{argument.conclusion}}">contribute your own</a>.
-        </p>
-      </section>
-      <button type="button" id="submit" class="no-edits">Save</button>
     </main>
-    <script src="{{ resourcesRoot }}/argument.js"></script>
+    {{> react }}
+    <script src="{{resourcesRoot}}/argument.js"></script>
     <script>
-      wikisophia.makePremisesEditable({
-        apiAuthority: '{{apiAuthority}}',
-        argumentId: '{{id}}',
-        premiseListId: "premise-list",
-        premisesClass: 'premise-text',
-        saverId: 'submit'
-      });
+      ReactDOM.render(
+        React.createElement(wikisophia.StatefulEditableArgument, {
+          apiAuthority: '{{apiAuthority}}',
+          argumentId: '{{id}}',
+          conclusion: '{{argument.conclusion}}',
+          premises: [
+            {{#each argument.premises}}
+              '{{this}}',
+            {{/each}}
+          ]
+        }),
+        document.getElementById("view-argument-anchor"));
     </script>
   </body>
 </html>
