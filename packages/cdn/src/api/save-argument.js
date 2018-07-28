@@ -8,7 +8,7 @@ export default function save(apiAuthority, argument, callback) {
   }
   argument.premises = argument.premises.filter(premise => typeof premise === 'string' && premise.length > 0);
   if (argument.premises.length < 2) {
-    callback(null, new Error(`An argument requires at least two premises. Yours were: ${JSON.stringify(argument.premises)}`));
+    callback(null, new Error(`An argument requires at least two premises.`));
     return;
   }
 

@@ -34,6 +34,7 @@ class EditableArgument extends React.Component {
         <ArgumentEditor
           conclusion={this.props.conclusion}
           premises={this.props.premises}
+          error={this.props.error}
           onConclusionChange={this.props.onConclusionChange}
           onPremiseAdd={this.props.onPremiseAdd}
           onPremiseDelete={this.props.onPremiseDelete}
@@ -61,6 +62,7 @@ export class StatefulEditableArgument extends React.Component {
     super(props);
     this.state = {
       editing: false,
+      error: ""
     }
 
     this.onEditStart = this.onEditStart.bind(this);
@@ -78,26 +80,39 @@ export class StatefulEditableArgument extends React.Component {
     if (argument.conclusion === component.props.conclusion) {
       update(this.props.apiAuthority, this.props.argumentId, argument.premises, function(value, err) {
         if (err) {
-          throw err;
+          component.setState({
+            error: err.message
+          });
+        } else {
+          component.setState({
+            editing: false
+          });
         }
-        component.setState({
-          editing: false
-        });
       });
     }
     else {
       save(this.props.apiAuthority, argument, function(url, err) {
         if (err) {
-          throw err;
+          component.setState({
+            error: err.message
+          });
+        } else {
+          component.setState({
+            editing: false
+          });
         }
-        component.setState({
-          editing: false
-        });
       })
     }
   }
 
   render() {
-    return <StateManagedArgument onSave={this.onSave} onEditStart={this.onEditStart} editing={this.state.editing} {...this.props} />
+    return <StateManagedArgument
+      error={this.state.error}
+      editing={this.state.editing}
+      onSave={this.onSave}
+      onEditStart={this.onEditStart}
+      premises={this.props.premises}
+      conclusion={this.props.conclusion}
+    />
   }
 }

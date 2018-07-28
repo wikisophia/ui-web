@@ -10,19 +10,32 @@ export class NewArgument extends React.Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      error: ""
+    }
+
     this.onSave = this.onSave.bind(this)
   }
 
   onSave(argument) {
+    const component = this;
     save(this.props.apiAuthority, argument, function(url, err) {
       if (err) {
-        throw err;
+        component.setState({
+          error: err.message
+        });
+      } else {
+        window.location = url;
       }
-      window.location = url;
     });
   }
 
   render() {
-    return <StateManagedArgument onSave={this.onSave} {...this.props} />
+    return <StateManagedArgument
+      error={this.state.error}
+      onSave={this.onSave}
+      premises={this.props.premises}
+      conclusion={this.props.conclusion}
+    />
   }
 }

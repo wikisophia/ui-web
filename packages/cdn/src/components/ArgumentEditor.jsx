@@ -109,7 +109,7 @@ export default class ArgumentEditor extends React.Component {
         <p>because...</p>
         <PremiseList premises={this.props.premises} onAdd={this.props.onPremiseAdd} onDelete={this.props.onPremiseDelete} onChange={this.props.onPremiseChange}/>
         <button type="button" className="save-argument" onClick={this.props.onSave}>Save</button>
-        <p id="save-error" className="save-error"></p>
+        <p id="save-error" className="save-error">{this.props.error}</p>
       </div>
     );
   }
