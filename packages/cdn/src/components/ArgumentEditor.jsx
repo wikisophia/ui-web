@@ -8,10 +8,11 @@ function newPremise(premiseText) {
 }
 
 function premisesToState(premisesProps) {
-  if (!premisesProps || premisesProps.length < 1) {
-    return [newPremise(""), newPremise("")];
+  const state = premisesProps.map(newPremise);
+  while (state.length < 2) {
+    state.push(newPremise(""));
   }
-  return premisesProps.map(newPremise);
+  return state;
 }
 
 export function ManageArgumentState(Wrapped, saver) {
@@ -76,12 +77,7 @@ export function ManageArgumentState(Wrapped, saver) {
     }
 
     render() {
-      const copy = Object.assign({}, this.props);
-      if (!copy.premises || copy.premises.length === 0) {
-        copy.premises = [newPremise(""), newPremise("")];
-      } else if (copy.premises.length === 1) {
-        copy.premises = [copy.premises[0], newPremise("")];
-      }
+      const { premises, conclusion, ...otherProps } = this.props;
       return (
         <Wrapped onPremiseChange={this.handlePremiseChange}
                  onPremiseDelete={this.deletePremise}
@@ -90,6 +86,7 @@ export function ManageArgumentState(Wrapped, saver) {
                  onSave={this.handleSave}
                  premises={this.state.premises}
                  conclusion={this.state.conclusion}
+                 {...otherProps}
          />
       );
     }

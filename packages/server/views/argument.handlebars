@@ -37,7 +37,7 @@
     <script>
       function doRender(argument) {
         ReactDOM.render(
-          React.createElement(wikisophia.ViewArgument, {
+          React.createElement(wikisophia.EditableArgument, {
             afterSave: doRender,
             apiAuthority: '{{apiAuthority}}',
             argumentId: '{{id}}',
