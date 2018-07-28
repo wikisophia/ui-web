@@ -15,7 +15,7 @@ function premisesToState(premisesProps) {
   return state;
 }
 
-export function ManageArgumentState(Wrapped, saver) {
+export function ManageArgumentState(Wrapped) {
   return class extends React.Component {
     constructor(props) {
       super(props);
@@ -29,8 +29,6 @@ export function ManageArgumentState(Wrapped, saver) {
       this.addPremise = this.addPremise.bind(this);
       this.handlePremiseChange = this.handlePremiseChange.bind(this);
       this.handleConclusionChange = this.handleConclusionChange.bind(this);
-      this.onSave = saver.bind(null, this);
-      this.handleSave = this.handleSave.bind(this);
     }
 
     deletePremise(index) {
@@ -69,21 +67,31 @@ export function ManageArgumentState(Wrapped, saver) {
       });
     }
 
-    handleSave() {
-      this.onSave({
-        conclusion: this.state.conclusion,
-        premises: this.state.premises.map((premise) => premise.text)
-      });
-    }
-
     render() {
-      const { premises, conclusion, ...otherProps } = this.props;
+      const {
+        onPremiseChange,
+        onPremiseDelete,
+        onPremiseAdd,
+        onConclusionChange,
+        onSave,
+        premises,
+        conclusion,
+        ...otherProps
+      } = this.props;
+
+      const state = this.state
+      function saveHandler() {
+        onSave({
+          conclusion: state.conclusion,
+          premises: state.premises.map((premise) => premise.text)
+        })
+      }
       return (
         <Wrapped onPremiseChange={this.handlePremiseChange}
                  onPremiseDelete={this.deletePremise}
                  onPremiseAdd={this.addPremise}
                  onConclusionChange={this.handleConclusionChange}
-                 onSave={this.handleSave}
+                 onSave={saveHandler}
                  premises={this.state.premises}
                  conclusion={this.state.conclusion}
                  {...otherProps}

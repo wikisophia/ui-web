@@ -3,9 +3,16 @@ import ArgumentEditor, { ManageArgumentState } from '../../components/ArgumentEd
 // props.apiAuthority: string
 // props.conclusion: string
 // props.premises: string[]
-export const NewArgument = ManageArgumentState(
-  ArgumentEditor,
-  (component, argument) => {
+const StateManagedArgument = ManageArgumentState(ArgumentEditor)
+
+export class NewArgument extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.onSave = this.onSave.bind(this)
+  }
+
+  onSave(argument) {
     const ajax = new XMLHttpRequest();
     ajax.timeout = 1000;
     ajax.addEventListener('readystatechange', () => {
@@ -19,8 +26,12 @@ export const NewArgument = ManageArgumentState(
         }
       }
     });
-    ajax.open('POST', `//${component.props.apiAuthority}/arguments`, true);
+    ajax.open('POST', `//${this.props.apiAuthority}/arguments`, true);
     ajax.setRequestHeader('Content-Type', 'application/json');
     ajax.send(JSON.stringify(argument));
   }
-)
+
+  render() {
+    return <StateManagedArgument onSave={this.onSave} {...this.props} />
+  }
+}

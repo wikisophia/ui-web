@@ -1,62 +1,78 @@
 import ArgumentEditor, {ManageArgumentState} from '../../components/ArgumentEditor';
 
-class ViewArgument extends React.Component {
-  // props.apiAuthority: string
-  // props.argumentId: string
-  // props.conclusion: string
-  // props.premises: string[]
-  // props.afterSave: function(argument)
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      editing: false
-    };
-
-    this.startEditing = this.startEditing.bind(this);
-  }
-
-  startEditing() {
-    this.setState({
-      editing: true,
-    });
-  }
-
+class Argument extends React.Component {
   render() {
-    if (this.state.editing) {
+    const premiseNodes = this.props.premises.map((premise) => {
+      const href = `/argument?conclusion=${encodeURIComponent(premise)}`;
+      return <li className="premise" key={premise.id}>
+        <a className="premise-text" href={href}>{premise.text}</a>
+      </li>;
+    });
+
+    return (
+      <div>
+        <section className="conclusion">
+          <p className="conclusion-text">{this.props.conclusion}</p>
+        </section>
+        <p>because...</p>
+        <section className="premises">
+          <ul id="premise-list">
+            {premiseNodes}
+          </ul>
+        </section>
+      </div>
+    )
+  }
+}
+
+class EditableArgument extends React.Component {
+  render() {
+    if (this.props.editing) {
       return (
-        <ArgumentEditor {...this.props} />
+        <ArgumentEditor
+          conclusion={this.props.conclusion}
+          premises={this.props.premises}
+          onConclusionChange={this.props.onConclusionChange}
+          onPremiseAdd={this.props.onPremiseAdd}
+          onPremiseDelete={this.props.onPremiseDelete}
+          onPremiseChange={this.props.onPremiseChange}
+          onSave={this.props.onSave}
+        />
       );
     }
     else {
-      const premiseNodes = this.props.premises.map((premise) => {
-        const href = `/argument?conclusion=${encodeURIComponent(premise)}`;
-        return <li className="premise" key={premise.id}>
-          <a className="premise-text" href={href}>{premise.text}</a>
-        </li>;
-      });
       return (
         <div>
-          <button type="button" onClick={this.startEditing}>Edit this argument</button>
-          <section className="conclusion">
-            <p className="conclusion-text">{this.props.conclusion}</p>
-          </section>
-          <p>because...</p>
-          <section className="premises">
-            <h1>Premises</h1>
-            <ul id="premise-list">
-              {premiseNodes}
-            </ul>
-          </section>
+          <button type="button" onClick={this.props.onEditStart}>Edit this argument</button>
+          <Argument premises={this.props.premises} conclusion={this.props.conclusion} />
         </div>
       );
     }
   }
 }
 
-export const EditableArgument = ManageArgumentState(
-  ViewArgument,
-  (component, argument) => {
+const StateManagedArgument = ManageArgumentState(EditableArgument)
+
+export class StatefulEditableArgument extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      editing: false,
+    }
+
+    this.onEditStart = this.onEditStart.bind(this);
+    this.onSave = this.onSave.bind(this);
+  }
+
+  onEditStart() {
+    this.setState({
+      editing: true
+    })
+  }
+
+  onSave(argument) {
+    const component = this;
     if (argument.conclusion === component.props.conclusion) {
       const ajax = new XMLHttpRequest();
       ajax.addEventListener('load', (ev) => {
@@ -93,5 +109,8 @@ export const EditableArgument = ManageArgumentState(
       ajax.send(JSON.stringify(argument));
     }
   }
-)
 
+  render() {
+    return <StateManagedArgument onSave={this.onSave} onEditStart={this.onEditStart} editing={this.state.editing} {...this.props} />
+  }
+}
