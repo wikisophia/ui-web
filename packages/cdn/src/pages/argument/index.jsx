@@ -52,8 +52,7 @@ class EditableArgument extends React.Component {
           <button type="button" onClick={this.props.onEditStart}>Edit this argument</button>
           <Argument premises={this.props.premises} conclusion={this.props.conclusion} />
           <p>
-            Not convincing? See <a href={`/arguments?conclusion=${this.props.conclusion}`}>all the arguments</a> supporting this conclusion,
-            or <a href={`/add-argument?conclusion=${this.props.conclusion}`}>contribute your own</a>.
+            Not convincing? <a href={`/new-argument?conclusion=${this.props.conclusion}`}>Contribute your own</a>.
           </p>
         </div>
       );

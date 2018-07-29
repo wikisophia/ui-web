@@ -5,7 +5,7 @@ import importResolution from 'rollup-plugin-node-resolve';
 import fs from 'fs';
 
 const inputs = [
-  'add-argument',
+  'new-argument',
   'argument',
   'homepage',
 ]

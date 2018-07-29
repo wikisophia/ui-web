@@ -15,15 +15,22 @@ function handler(req: Request, res: Response): void {
   }
 
   getByConclusion(conclusion).then((args: ArgumentFromConclusion[]) => {
-    if (args.length > 0) {
+    if (args.length > 1) {
       res.contentType('text/html').render('all-arguments', {
         resourcesRoot,
         apiAuthority,
         args,
         conclusion,
       });
+    } else if (args.length === 1) {
+      res.contentType('text/html').render('argument', {
+        resourcesRoot,
+        apiAuthority,
+        id: args[0].id,
+        argument: args[0],
+      });
     } else {
-      res.contentType('text/html').render('add-argument', {
+      res.contentType('text/html').render('new-argument', {
         fromSearch: true,
         resourcesRoot,
         apiAuthority,
