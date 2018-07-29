@@ -1,13 +1,14 @@
 {
   "private": true,
   "scripts": {
-    "build:cdn": "cd packages/cdn && npm run build",
+    "build:cdn": "cd packages/cdn && npm run build:dev",
     "build:server": "cd packages/server && npm run build",
     "build": "concurrently \"npm run build:cdn\" \"npm run build:server\"",
     "install:cdn": "cd packages/cdn && npm install",
     "install:server": "cd packages/server && npm install",
     "install": "concurrently \"npm run install:cdn\" \"npm run install:server\"",
     "lint": "concurrently \"cd packages/cdn && npm run lint\" \"cd packages/server && npm run lint\"",
+    "lint:nofix": "concurrently \"cd packages/cdn && npm run lint:nofix\" \"cd packages/server && npm run lint:nofix\"",
     "serve:release": "concurrently \"cd packages/cdn && npm run serve:release\" \"cd packages/server && npm run serve\"",
     "serve:dev": "concurrently \"cd packages/cdn && npm run serve:dev\" \"cd packages/server && npm run serve:dev\"",
     "test": "cd packages/cdn && npm run test",

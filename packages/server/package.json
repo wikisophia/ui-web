@@ -8,7 +8,7 @@
     "serve": "ts-node ./src/server.ts",
     "serve:dev": "nodemon --watch src -e ts --exec 'ts-node' ./src/server.ts",
     "lint": "tslint --project tsconfig.json --fix src/**.ts",
-    "lint-nofix": "tslint --project tsconfig.json src/**.ts"
+    "lint:nofix": "tslint --project tsconfig.json src/**.ts"
   },
   "dependencies": {
     "axios": "^0.18.0",
