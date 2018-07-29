@@ -13,10 +13,6 @@ export function getByConclusion(conclusion: string): Promise<ArgumentFromConclus
   return axios.get(`http://${apiAuthority}/arguments?conclusion=${conclusion}`, axiosStatuses).then(handleGetResponse);
 }
 
-export function getBestArgument(conclusion: string): Promise<ArgumentFromConclusion> {
-  return axios.get(`http://${apiAuthority}/best-argument?conclusion=${conclusion}`, axiosStatuses).then(handleGetResponse);
-}
-
 function handleGetResponse(resp: any) {
   if (isSuccess(resp.status)) {
     return resp.data;

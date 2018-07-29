@@ -15,6 +15,7 @@ function handler(req: Request, res: Response): void {
   }
 
   getByConclusion(conclusion).then((args: ArgumentFromConclusion[]) => {
+    console.log(args);
     if (args.length > 1) {
       res.contentType('text/html').render('all-arguments', {
         resourcesRoot,

@@ -8,7 +8,7 @@ export function listUpdater(suggestionsNode) {
 
     suggestions.forEach((suggestion) => {
       const link = document.createElement('a');
-      link.href = `/argument?conclusion=${encodeURIComponent(suggestion)}`;
+      link.href = `/arguments?conclusion=${encodeURIComponent(suggestion)}`;
       link.textContent = suggestion;
       const item = document.createElement('li');
       item.className = 'suggestion';
