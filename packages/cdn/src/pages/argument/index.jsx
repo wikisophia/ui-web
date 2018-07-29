@@ -5,7 +5,7 @@ import update from '../../api/update-argument';
 class Argument extends React.Component {
   render() {
     const premiseNodes = this.props.premises.map((premise) => {
-      const href = `/argument?conclusion=${encodeURIComponent(premise.text)}`;
+      const href = `/arguments?conclusion=${encodeURIComponent(premise.text)}`;
       return <li className="premise" key={premise.id}>
         <a className="premise-text" href={href}>{premise.text}</a>
       </li>;
