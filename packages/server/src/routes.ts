@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { param } from 'express-validator/check';
 
-import addArgument from './handlers/new-argument';
+import newArgument from './handlers/new-argument';
 import argument from './handlers/argument';
 import allArguments from './handlers/all-arguments';
 import contact from './handlers/contact';
