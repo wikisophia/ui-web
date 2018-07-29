@@ -10,7 +10,7 @@ import bestArgument from './handlers/best-argument';
 
 export function setRoutes(router: Router): void {
   router.get('/', homepage);
-  router.get('/new-argument', addArgument);
+  router.get('/new-argument', newArgument);
   router.get('/argument', bestArgument);
   router.get('/arguments', allArguments);
   router.get('/arguments/:id', argument);

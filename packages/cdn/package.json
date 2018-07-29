@@ -9,7 +9,7 @@
     "build:dev": "concurrently \"rollup -c rollup.config.dev.js\" \"npm run build:css\"",
     "build:release": "rollup -c rollup.config.prod.js",
     "lint": "eslint src test --fix && stylelint \"src/**/*.css\"",
-    "lint-nofix": "eslint src test && stylelint \"src/**/*.css\"",
+    "lint:nofix": "eslint src test && stylelint \"src/**/*.css\"",
     "serve:dev": "concurrently \"npm run watch:dev\" \"http-server -p 4041 ./dist\"",
     "serve:release": "concurrently \"npm run watch:release\" \"http-server -p 4041 ./dist\"",
     "test": "BABEL_ENV=test jest",
