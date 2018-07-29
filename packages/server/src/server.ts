@@ -1,7 +1,6 @@
 import app from './app';
+import { serverPort, serverHost } from './config';
 
-const port = 4040;
-
-app.listen(port, () => {
-  console.log('Server listening on port ' + port);
+app.listen(serverPort, serverHost, () => {
+  console.log(`Server listening on port ${serverPort}`);
 });
