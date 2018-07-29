@@ -7,7 +7,7 @@ const paramValidation = [
 ];
 
 function handler(req: Request, res: Response): void {
-  res.contentType('text/html').render('add-argument', {
+  res.contentType('text/html').render('new-argument', {
     resourcesRoot,
     apiAuthority,
     conclusion: req.query.conclusion,

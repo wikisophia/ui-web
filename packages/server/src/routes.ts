@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { param } from 'express-validator/check';
 
-import addArgument from './handlers/add-argument';
+import addArgument from './handlers/new-argument';
 import argument from './handlers/argument';
 import allArguments from './handlers/all-arguments';
 import contact from './handlers/contact';
@@ -10,7 +10,7 @@ import bestArgument from './handlers/best-argument';
 
 export function setRoutes(router: Router): void {
   router.get('/', homepage);
-  router.get('/add-argument', addArgument);
+  router.get('/new-argument', addArgument);
   router.get('/argument', bestArgument);
   router.get('/arguments', allArguments);
   router.get('/arguments/:id', argument);

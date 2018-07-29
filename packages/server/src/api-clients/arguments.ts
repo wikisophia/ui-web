@@ -10,7 +10,7 @@ export function getArgument(id: number, version?: number): Promise<Argument> {
 }
 
 export function getByConclusion(conclusion: string): Promise<ArgumentFromConclusion[]> {
-  return axios.get(`http://${apiAuthority}/all-arguments?conclusion=${conclusion}`, axiosStatuses).then(handleGetResponse);
+  return axios.get(`http://${apiAuthority}/arguments?conclusion=${conclusion}`, axiosStatuses).then(handleGetResponse);
 }
 
 export function getBestArgument(conclusion: string): Promise<ArgumentFromConclusion> {
@@ -35,8 +35,6 @@ export interface Argument {
 
 export interface ArgumentFromConclusion extends Argument {
   id: number;
-  premises: string[];
-  isDefault?: boolean;
 }
 
 export enum FailureType {

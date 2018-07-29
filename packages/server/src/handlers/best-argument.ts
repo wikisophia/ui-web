@@ -23,7 +23,7 @@ function handler(req: Request, res: Response): void {
     });
   }).catch((reason) => {
     if (reason === FailureType.NotFound) {
-      res.contentType('text/html').render('add-argument', {
+      res.contentType('text/html').render('new-argument', {
         fromSearch: true,
         resourcesRoot,
         apiAuthority,
