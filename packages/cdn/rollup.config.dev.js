@@ -1,6 +1,5 @@
 import babelrc from 'babelrc-rollup';
 import babel from 'rollup-plugin-babel';
-import uglify from 'rollup-plugin-uglify';
 import importResolution from 'rollup-plugin-node-resolve';
 import fs from 'fs';
 
@@ -14,7 +13,8 @@ function plugins(input) {
   return [
     babel(babelrc({
       path: `${__dirname}/browser.babelrc`,
-      addModuleOptions: false
+      addModuleOptions: false,
+      addExternalHelpersPlugin: false,
     })),
     importResolution({
       extensions: ['', '.js', '.jsx']
