@@ -1,15 +1,14 @@
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "browsers": [">0.25%"]
       },
       "modules": false
     }],
-    "react"
+    "@babel/react"
   ],
   "plugins": [
-    ["transform-object-rest-spread", {"useBuiltIns": true}],
-    "external-helpers"
+    ["@babel/proposal-object-rest-spread", {"useBuiltIns": true}]
   ]
 }
