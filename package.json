@@ -1,4 +1,5 @@
 {
+  "name": "@wikisophia/ui-monorepo",
   "private": true,
   "scripts": {
     "build:cdn": "cd packages/cdn && npm run build:dev",
