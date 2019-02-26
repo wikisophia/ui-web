@@ -1,6 +1,6 @@
 # Wikisophia UI
 
-This monorepo powers the web front-end for [Wikisophia](www.wikisophia.net).
+This monorepo powers the web front-end for Wikisophia.
 
 The code is divided up into [server](./packages/server) and [cdn](./packages/pages) so
 that the CDN content can be packaged for [JsDelivr](https://www.jsdelivr.com/).
