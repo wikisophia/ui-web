@@ -9,7 +9,7 @@ export function getArgument(id: number, version?: number): Promise<Argument> {
   }
 }
 
-export function getByConclusion(conclusion: string): Promise<ArgumentFromConclusion[]> {
+export function getByConclusion(conclusion: string): Promise<ArgumentListResponse> {
   return axios.get(`http://${apiAuthority}/arguments?conclusion=${conclusion}`, axiosStatuses).then(handleGetResponse);
 }
 
@@ -25,12 +25,13 @@ function handleGetResponse(resp: any) {
 }
 
 export interface Argument {
+  id: number;
   premises: string[];
   conclusion: string;
 }
 
-export interface ArgumentFromConclusion extends Argument {
-  id: number;
+export interface ArgumentListResponse {
+  arguments: Argument[];
 }
 
 export enum FailureType {
