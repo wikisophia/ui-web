@@ -1,5 +1,5 @@
 import {apiAuthority, resourcesRoot} from '../config';
-import {getByConclusion, ArgumentFromConclusion} from '../api-clients/arguments';
+import { getByConclusion, ArgumentListResponse } from '../api-clients/arguments';
 import {Request, Response} from 'express';
 import {query, validationResult} from 'express-validator/check';
 
@@ -14,20 +14,20 @@ function handler(req: Request, res: Response): void {
     return;
   }
 
-  getByConclusion(conclusion).then((args: ArgumentFromConclusion[]) => {
-    if (args.length > 1) {
+  getByConclusion(conclusion).then((args: ArgumentListResponse) => {
+    if (args.arguments.length > 1) {
       res.contentType('text/html').render('all-arguments', {
         resourcesRoot,
         apiAuthority,
-        args,
+        args: args.arguments,
         conclusion,
       });
-    } else if (args.length === 1) {
+    } else if (args.arguments.length === 1) {
       res.contentType('text/html').render('argument', {
         resourcesRoot,
         apiAuthority,
-        id: args[0].id,
-        argument: args[0],
+        id: args.arguments[0].id,
+        argument: args.arguments[0],
       });
     } else {
       res.contentType('text/html').render('new-argument', {
