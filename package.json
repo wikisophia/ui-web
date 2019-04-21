@@ -10,8 +10,8 @@
     "install": "concurrently \"npm run install:cdn\" \"npm run install:server\"",
     "lint": "concurrently \"cd packages/cdn && npm run lint\" \"cd packages/server && npm run lint\"",
     "lint:nofix": "concurrently \"cd packages/cdn && npm run lint:nofix\" \"cd packages/server && npm run lint:nofix\"",
-    "serve:release": "concurrently \"cd packages/cdn && npm run serve:release\" \"cd packages/server && npm run serve\"",
-    "serve:dev": "concurrently \"cd packages/cdn && npm run serve:dev\" \"cd packages/server && npm run serve:dev\"",
+    "serve:release": "concurrently \"cd packages/cdn && npm run serve:release\" \"cd packages/server && npm start\"",
+    "serve:dev": "concurrently \"cd packages/cdn && npm run serve:dev\" \"cd packages/server && npm run dev\"",
     "test": "cd packages/cdn && npm run test",
     "test-coverage": "cd packages/cdn && npm run test-coverage"
   },
