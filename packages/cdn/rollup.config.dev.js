@@ -1,6 +1,7 @@
 import babelrc from 'babelrc-rollup';
 import babel from 'rollup-plugin-babel';
 import importResolution from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
 import fs from 'fs';
 
 const inputs = [
@@ -18,7 +19,8 @@ function plugins(input) {
     })),
     importResolution({
       extensions: ['', '.js', '.jsx']
-    })
+    }),
+    commonjs(),
   ];
 }
 

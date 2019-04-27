@@ -19,14 +19,15 @@ function newHandler(config) {
       return;
     }
     argumentsClient.getAll(`${config.api.scheme}://${config.api.authority}`, conclusion).then((args) => {
-      if (args.length > 1) {
+      console.log(args);
+      if (args.arguments.length > 1) {
         res.contentType('text/html').render('all-arguments', {
           resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,
           apiAuthority: config.api.authority,
           args: args.arguments,
           conclusion,
         });
-      } else if (args.length === 1) {
+      } else if (args.arguments.length === 1) {
         res.contentType('text/html').render('argument', {
           resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,
           apiAuthority: config.api.authority,
