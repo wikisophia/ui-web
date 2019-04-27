@@ -1,6 +1,5 @@
 import ArgumentEditor, {ManageArgumentState} from '../../components/ArgumentEditor';
-import save from '../../api/save-argument';
-import update from '../../api/update-argument';
+import newClient from '@wikisophia/api-arguments-client';
 
 class Argument extends React.Component {
   render() {
@@ -73,6 +72,10 @@ export class StatefulEditableArgument extends React.Component {
 
     this.onEditStart = this.onEditStart.bind(this);
     this.onSave = this.onSave.bind(this);
+    this.client = newClient({
+      url: `http://${props.apiAuthority}`,
+      fetch: fetch
+    });
   }
 
   onEditStart() {
@@ -83,32 +86,21 @@ export class StatefulEditableArgument extends React.Component {
 
   onSave(argument) {
     const component = this;
-    if (argument.conclusion === component.props.conclusion) {
-      update(this.props.apiAuthority, this.props.argumentId, argument.premises, function(value, err) {
-        if (err) {
-          component.setState({
-            error: err.message
-          });
-        } else {
-          component.setState({
-            editing: false
-          });
-        }
+    let remoteCall;
+    if (this.props.argumentId) {
+      remoteCall = this.client.update(this.props.argumentId, argument)
+    } else {
+      remoteCall = this.client.save(argument)
+    }
+    remoteCall.then(function () {
+      component.setState({
+        editing: false
       });
-    }
-    else {
-      save(this.props.apiAuthority, argument, function(url, err) {
-        if (err) {
-          component.setState({
-            error: err.message
-          });
-        } else {
-          component.setState({
-            editing: false
-          });
-        }
-      })
-    }
+    }).catch(function (err) {
+      component.setState({
+        error: err.message
+      });
+    });
   }
 
   render() {

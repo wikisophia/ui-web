@@ -1,5 +1,5 @@
 import ArgumentEditor, { ManageArgumentState } from '../../components/ArgumentEditor';
-import save from '../../api/save-argument';
+import newClient from '@wikisophia/api-arguments-client';
 
 const StateManagedArgument = ManageArgumentState(ArgumentEditor)
 
@@ -15,18 +15,20 @@ export class NewArgument extends React.Component {
     }
 
     this.onSave = this.onSave.bind(this)
+    this.client = newClient({
+      url: `http://${props.apiAuthority}`,
+      fetch: fetch
+    });
   }
 
   onSave(argument) {
     const component = this;
-    save(this.props.apiAuthority, argument, function(url, err) {
-      if (err) {
-        component.setState({
-          error: err.message
-        });
-      } else {
-        window.location = url;
-      }
+    this.client.save(argument).then(function(response) {
+      window.location = response.location;
+    }).catch(function(err) {
+      component.setState({
+        error: err.message
+      });
     });
   }
 
