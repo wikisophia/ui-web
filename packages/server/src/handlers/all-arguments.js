@@ -19,7 +19,6 @@ function newHandler(config) {
       return;
     }
     argumentsClient.getAll(`${config.api.scheme}://${config.api.authority}`, conclusion).then((args) => {
-      console.log(args);
       if (args.arguments.length > 1) {
         res.contentType('text/html').render('all-arguments', {
           resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,
