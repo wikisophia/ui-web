@@ -10,27 +10,30 @@
       {{> header }}
     </header>
     <main>
-      <!-- If javascript is enabled, React will purge view-argument-anchor and make things editable. -->
-      <section id="view-argument-anchor">
+      <!--
+        This section must be kept in sync with the React component at
+        <project-root>/cdn/src/components/Argument.jsx
+
+        If javascript is enabled, React will purge the view-argument-anchor
+        to make things editable.
+      -->
+      <section id="view-argument-anchor" class="main-content">
         <div>
-          <div>
-            <section class="conclusion">
-              <p class="conclusion-text">{{argument.conclusion}}</p>
-            </section>
-            <p>because...</p>
-            <section class="premises">
-              <ul>
-                {{#each argument.premises}}
-                  <li class="premise">
-                    <a class="premise-text" href="/arguments?conclusion={{this}}">{{this}}</a>
-                  </li>
-                {{/each}}
-              </ul>
-            </section>
-          </div>
-          <p>
-            Not convincing? <a href={`/new-argument?conclusion=${this.props.conclusion}`}>Contribute your own</a>.
-          </p>
+          <h1>If</h1>
+          <section class="premises">
+            <ul>
+              {{#each argument.premises}}
+              <li class="premise">
+                <span class="premise-text">{{this}}</span>
+                <a href="/arguments?conclusion={{this}}">Prove it</a>
+              </li>
+              {{/each}}
+            </ul>
+          </section>
+          <h1>Then</h1>
+          <section class="conclusion">
+            <p class="conclusion-text">{{argument.conclusion}}</p>
+          </section>
         </div>
       </section>
     </main>
@@ -38,7 +41,7 @@
     <script src="{{resourcesRoot}}/argument.js"></script>
     <script>
       ReactDOM.render(
-        React.createElement(wikisophia.StatefulEditableArgument, {
+        React.createElement(wikisophia.Argument, {
           apiAuthority: '{{apiAuthority}}',
           argumentId: '{{id}}',
           conclusion: '{{argument.conclusion}}',

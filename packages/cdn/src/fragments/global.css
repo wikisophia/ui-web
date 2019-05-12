@@ -1,11 +1,21 @@
 /* Global site styles */
-html {
-  font-family: Helvetica, Arial, sans-serif;
+html, html button {
+  font: 24px/1.5 Cambria, Georgia, Times, 'Times New Roman', serif;
 }
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+h1 {
+  font: 32px/1.5 Futura, 'Trebuchet MS', Helvetica, Arial, sans-serif;
+}
+
 body {
   padding: 0;
   margin: 0;
 }
+
 main {
   height: 93vh;
   margin-top: 20vh;
@@ -38,4 +48,10 @@ header {
   padding-left: 0.7em;
   padding-right: 0.7em;
   align-items: center;
+}
+
+.main-content {
+  max-width: 40rem;
+  margin-left: auto;
+  margin-right: auto;
 }
