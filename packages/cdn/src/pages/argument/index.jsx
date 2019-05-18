@@ -115,4 +115,4 @@ export class StatefulEditableArgument extends React.Component {
   }
 }
 
-export { default as Argument } from '../../components/Argument';
+export { Argument } from '../../containers/Argument';

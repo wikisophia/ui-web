@@ -1,3 +1,5 @@
+// TODO: Delete this
+
 
 let premiseCounter = 0;
 function newPremise(premiseText) {

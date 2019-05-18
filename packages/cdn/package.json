@@ -7,16 +7,19 @@
     "clean": "rm -rf dist",
     "build:css": "node bundle-css.js",
     "build:dev": "concurrently \"rollup -c rollup.config.dev.js\" \"npm run build:css\"",
-    "build:release": "rollup -c rollup.config.prod.js",
+    "build:release": "NODE_ENV=production rollup -c rollup.config.prod.js",
     "lint": "eslint src --fix && stylelint \"src/**/*.css\"",
     "lint:nofix": "eslint src && stylelint \"src/**/*.css\"",
     "serve:dev": "concurrently \"npm run watch:dev\" \"http-server -p 4041 ./dist\"",
-    "serve:release": "concurrently \"npm run watch:release\" \"http-server -p 4041 ./dist\"",
+    "serve:release": "concurrently \"NODE_ENV=production npm run watch:release\" \"http-server -p 4041 ./dist\"",
     "test": "BABEL_ENV=test jest",
     "test-coverage": "BABEL_ENV=test jest -c jest.config.coverage.js",
     "watch:css": "nodemon -e css --watch src -x \"npm run build:css\"",
     "watch:dev": "concurrently \"rollup -c rollup.config.dev.js -w\" \"npm run watch:css\"",
-    "watch:release": "concurrently \"rollup -c rollup.config.prod.js -w\" \"npm run watch:css\""
+    "watch:release": "concurrently \"NODE_ENV=production rollup -c rollup.config.prod.js -w\" \"npm run watch:css\""
+  },
+  "dependencies": {
+    "prop-types": "^15.7.2"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
@@ -37,6 +40,7 @@
     "jest": "^24.1.0",
     "nodemon": "^1.18.10",
     "postcss-syntax": "^0.36.2",
+    "react": "^16.8.6",
     "regenerator-runtime": "^0.13.1",
     "rollup": "^1.10.1",
     "rollup-plugin-babel": "^4.3.2",
