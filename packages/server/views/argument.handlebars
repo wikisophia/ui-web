@@ -12,29 +12,24 @@
     <main>
       <!--
         This section must be kept in sync with the React component at
-        <project-root>/cdn/src/components/Argument.jsx
+        <project-root>/packages/cdn/src/components/StaticArgument.jsx
 
         If javascript is enabled, React will purge the view-argument-anchor
         to make things editable.
       -->
       <section id="view-argument-anchor" class="main-content">
-        <div>
-          <h1>If</h1>
-          <section class="premises">
-            <ul>
-              {{#each argument.premises}}
-              <li class="premise">
-                <span class="premise-text">{{this}}</span>
-                <a href="/arguments?conclusion={{this}}">Prove it</a>
-              </li>
-              {{/each}}
-            </ul>
-          </section>
-          <h1>Then</h1>
-          <section class="conclusion">
-            <p class="conclusion-text">{{argument.conclusion}}</p>
-          </section>
-        </div>
+        <div class="argument-area">
+          <h1 class="suppose">If you agree that</h1>
+          <ul class="premises">
+            {{#each argument.premises}}
+              <div tabIndex="0" class="search control">s</div>
+              <p class="premise">{{this}}</p>
+            {{/each}}
+            <div class="control spacer">s</div>
+          </ul>
+          <h1 class="then">Then you should believe that</h1>
+          <p class="conclusion">{{argument.conclusion}}</p>
+        </div >
       </section>
     </main>
     {{> react }}

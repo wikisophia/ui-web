@@ -31,7 +31,7 @@ export class StaticArgument extends React.Component {
         <h1 className="then">Then you should believe that</h1>
         {next}
         <p className="conclusion">{this.props.conclusion}</p>
-        <button className="new control footer" type="button" onClick={this.props.onNew}>edit</button>
+        <button className="new control footer" type="button" onClick={this.props.onNew}>new</button>
         <button className="edit control footer" type="button" onClick={this.props.onEdit}>edit</button>
       </div >
     )
@@ -45,7 +45,7 @@ export class StaticArgument extends React.Component {
       } else if (premise.hasSupport === false) {
         return (<div key={index + '-new'} tabIndex="0" className="new control" onClick={premise.onClick}>n</div>);
       } else {
-        return <div key={index + '-spacer'} tabIndex="0" className="control spacer">s</div>
+        return <div key={index + '-spacer'} className="control spacer">s</div>
       }
     });
     const nodes = premises.map((premise, index) => (
