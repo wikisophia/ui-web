@@ -1,13 +1,21 @@
 /**
  * An EditableArgument shows an argument in the process of being edited.
- * 
+ *
  * For the "static" view, see StaticArgument.jsx.
  */
 export class EditableArgument extends React.Component {
   render() {
     const undoConclusion = this.props.onRevertConclusion
       ? (<div tabIndex="0" className="undo control conclusion" onClick={this.props.onRevertConclusion}>undo</div>)
-      : (<div className="spacer control conclusion">s</div>) ;
+      : (<div className="spacer control conclusion">s</div>);
+
+    const deleteNode = this.props.onDelete
+      ? (<button className="delete control footer" type="button" onClick={this.props.onDelete}>delete</button>)
+      : null;
+
+    const cancelNode = this.props.onCancel
+      ? (<button className="cancel control footer" type="button" onClick={this.props.onCancel}>cancel</button>)
+      : null;
 
     return (
       <div className="argument-area">
@@ -20,8 +28,8 @@ export class EditableArgument extends React.Component {
         {undoConclusion}
         <input value={this.props.conclusion} onChange={extractValueThen(this.props.onChangeConclusion)} className="conclusion" />
         <button className="save control footer" type="button" onClick={this.props.onSave}>save</button>
-        <button className="cancel control footer" type="button" onClick={this.props.onCancel}>cancel</button>
-        <button className="delete control footer" type="button" onClick={this.props.onDelete}>delete</button>
+        {cancelNode}
+        {deleteNode}
       </div>
     )
   }
@@ -42,13 +50,13 @@ export class EditableArgument extends React.Component {
       } else if (premises.length > 2) {
         return (<div key={index + '-revert'} tabIndex="0" className="delete control" onClick={premise.onDelete}>d</div>)
       } else {
-        return (<div key={index + '-spacer'} tabIndex="0" className="spacer control">s</div>) 
+        return (<div key={index + '-spacer'} className="spacer control">s</div>)
       }
     });
 
     return revertButtons.map((revertNode, index) => {
       return [revertNode, nodes[index]];
-    }).reduce((prev, current) => prev.concat(current));
+    }).reduce((prev, current) => prev.concat(current), []);
   }
 }
 
@@ -91,11 +99,12 @@ EditableArgument.propTypes = {
   onSave: PropTypes.func.isRequired,
 
   // onCancel will be called if the user wants to cancel all their edits
-  // without saving them.
-  onCancel: PropTypes.func.isRequired,
+  // without saving them. If undefined, the user won't be able to cancel this edit.
+  onCancel: PropTypes.func,
 
   // onDelete will be called if the user wants to delete this argument completely.
-  onDelete: PropTypes.func.isRequired,
+  // If undefined, the user won't be able to delete this argument.
+  onDelete: PropTypes.func,
 }
 
 // transform a "string" callback into an "event payload" one.

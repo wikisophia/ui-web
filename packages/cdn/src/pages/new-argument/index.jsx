@@ -41,3 +41,5 @@ export class NewArgument extends React.Component {
     />
   }
 }
+
+export { Argument } from '../../containers/Argument';

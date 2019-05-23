@@ -115,12 +115,14 @@ ArgumentEditor.propTypes = {
     conclusion: PropTypes.string.isRequired
   }),
   // onSave will be called when the user saves.
-  // It will be passed an object like { "premises": ["p1", "p2"], "conclusion": "c" }. 
+  // It will be passed an object like { "premises": ["p1", "p2"], "conclusion": "c" }.
   onSave: PropTypes.func.isRequired,
   // onCancel will be called if the user cancels their edits without saving.
-  onCancel: PropTypes.func.isRequired,
+  // If undefined, the user won't be able to cancel these edits.
+  onCancel: PropTypes.func,
   // onDelete will be called if the user wants to delete this argument completely.
-  onDelete: PropTypes.func.isRequired,
+  // If undefined, the user won't be able to delete this argument.
+  onDelete: PropTypes.func,
 };
 
 function copyWithElement(arr, index, elm) {

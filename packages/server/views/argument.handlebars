@@ -43,15 +43,14 @@
       ReactDOM.render(
         React.createElement(wikisophia.Argument, {
           apiAuthority: '{{apiAuthority}}',
-          argumentId: '{{id}}',
           initialArgument: {
+            id: {{id}},
             conclusion: '{{argument.conclusion}}',
             premises: [
               {{#each argument.premises }}
-                { text: '{{this}}', hasSupport: true   },
+                '{{this}}',
               {{/each}}
-            ],
-            hasNext: true
+            ]
           }
         }),
         document.getElementById("view-argument-anchor"));

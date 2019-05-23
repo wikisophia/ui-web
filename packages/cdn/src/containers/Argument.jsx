@@ -1,9 +1,10 @@
 import { ArgumentEditor } from './ArgumentEditor';
 import { StaticArgument } from '../components/StaticArgument';
+import newClient from '@wikisophia/api-arguments-client';
 
 /**
  * The Argument renders the main content section of the /arguments pages.
- * 
+ *
  * This works like a very simple single-page application. The Argument
  * is seeded with some premises, a conclusion, and information about what
  * related arguments exist. (is a particular premise supported?
@@ -15,18 +16,36 @@ export class Argument extends React.Component {
   constructor(props) {
     super(props);
 
+    const premises = props.initialArgument.premises.map(premise => ({
+      conclusion: premise,
+    }));
+
+    while (premises.length < 2) {
+      premises.push({ conclusion: '' });
+    }
+
     this.state = {
-      editing: false,
+      editing: props.initialArgument.id ? false : true,
       deleted: false,
       argument: {
-        premises: props.initialArgument.premises.map(premise => ({
-          hasSupport: premise.hasSupport,
-          conclusion: premise.text
-        })),
+        id: props.initialArgument.id,
+        premises: premises,
         conclusion: props.initialArgument.conclusion,
-        hasNext: props.initialArgument.hasNext,
       }
     }
+  }
+
+  componentDidMount() {
+    this.api = newClient({
+      url: `http://${this.props.apiAuthority}`,
+      fetch: fetch
+    });
+
+    const self = this;
+    history.replaceState(this.state, 'Wikisophia', window.location);
+    window.addEventListener('popstate', function(event) {
+      self.setState(event.state)
+    })
   }
 
   render() {
@@ -49,19 +68,45 @@ export class Argument extends React.Component {
   }
 
   argumentEditorProps() {
-    const component = this;
-
     return {
       initialArgument: {
         premises: this.state.argument.premises.map(premise => premise.conclusion),
         conclusion: this.state.argument.conclusion
       },
-      onSave: function() {
-
-      },
-      onCancel: this.onCancel.bind(this),
-      onDelete: this.onDelete.bind(this),
+      onSave: this.onSave.bind(this),
+      onCancel: this.state.argument.id ? this.onCancel.bind(this) : null,
+      onDelete: this.state.argument.id ? this.onDelete.bind(this) : null,
     };
+  }
+
+  onSave(argument) {
+    const call = this.state.argument.id
+      ? this.api.update(this.state.argument.id, argument)
+      : this.api.save(argument);
+
+    call.then(this.syncWithSaveResponse.bind(this))
+        .catch(this.onError.bind(this));
+  }
+
+  onError(err) {
+    this.setState({ error: err });
+  }
+
+  syncWithSaveResponse(response) {
+    const newState = {
+      editing: false,
+      argument: {
+        id: response.argument.id,
+        premises: response.argument.premises.map(premise => ({
+          conclusion: premise
+        })),
+        conclusion: response.argument.conclusion,
+      }
+    };
+    const self = this;
+    this.setState(newState, () => {
+      history.pushState(self.state, 'Wikisophia', response.location);
+    })
   }
 
   onCancel() {
@@ -69,7 +114,6 @@ export class Argument extends React.Component {
       editing: false,
       argument: {
         premises: this.props.initialArgument.premises.map(premise => ({
-          hasSupport: premise.hasSupport,
           conclusion: premise.text
         })),
         conclusion: this.props.initialArgument.conclusion,
@@ -115,28 +159,28 @@ export class Argument extends React.Component {
 
 Argument.propTypes = {
   // The authority of the URL where the API is listening.
-  // Something like "api.arguments.wikisophia.net" or "localhost:8001". 
+  // Something like "api.arguments.wikisophia.net" or "localhost:8001".
   apiAuthority: PropTypes.string.isRequired,
+
   // This is the argument the user will see initially.
+  // If undefined, it will start as a blank form in edit mode.
   initialArgument: PropTypes.shape({
-    premises: PropTypes.arrayOf(PropTypes.shape({
-      text: PropTypes.string.isRequired,
-      // hasSupport should be true iff at least one argument exists
-      // which supports this premise.
-      hasSupport: PropTypes.bool.isRequired,
-    })).isRequired,
+    // This argument's ID. Can be undefined if it doesn't exist yet
+    // (for example, "I want to make a new argument with conclusion X,
+    // but need the user to fill out the premises")
+    id: PropTypes.number,
+
+    // This argument's premises
+    premises: PropTypes.arrayOf(PropTypes.string).isRequired,
 
     // The argument's conclusion
     conclusion: PropTypes.string.isRequired,
-    
-    // True if there's another argument for this conclusion, and false otherwise.
-    hasNext: PropTypes.bool.isRequired,
-  })
+  }).isRequired
 }
 
 /**
  * A fully formed state object for this component looks like:
- * 
+ *
  * {
  *   "editing": false,
  *   "argument": {

@@ -13,22 +13,24 @@
       {{#if fromSearch}}
         <p>No arguments found to support that conclusion. Contribute one using the form below.</p>
       {{/if}}
-      <section id="new-argument-anchor"></section>
+      <section id="new-argument-anchor" class="main-content"></section>
     </main>
     {{> react }}
     <script src="{{resourcesRoot}}/new-argument.js"></script>
     <script>
-      ReactDOM.render(
-        React.createElement(wikisophia.NewArgument, {
-          apiAuthority: '{{apiAuthority}}',
+    ReactDOM.render(
+      React.createElement(wikisophia.Argument, {
+        apiAuthority: '{{apiAuthority}}',
+        initialArgument: {
           conclusion: '{{conclusion}}',
           premises: [
-            {{#each premises}}
+            {{#each premises }}
               '{{this}}',
             {{/each}}
           ]
-        }),
-        document.getElementById("new-argument-anchor"));
+        }
+      }),
+      document.getElementById("new-argument-anchor"));
     </script>
   </body>
 </html>
