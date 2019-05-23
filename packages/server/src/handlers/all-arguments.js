@@ -18,7 +18,7 @@ function newHandler(config) {
       res.status(400).contentType('text/plain').send('request missing required query parameter: conclusion');
       return;
     }
-    argumentsClient.getAll(`${config.api.scheme}://${config.api.authority}`, conclusion).then((args) => {
+    argumentsClient.getAll(conclusion).then((args) => {
       if (args.arguments.length > 1) {
         res.contentType('text/html').render('all-arguments', {
           resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,

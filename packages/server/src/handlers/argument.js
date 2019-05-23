@@ -32,7 +32,7 @@ function newHandler(config) {
           resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,
           apiAuthority: config.api.authority,
           id,
-          argument: arg,
+          argument: arg.argument,
         });
       } else {
         res.status(404).contentType('text/plain').send(makeErrorMessage(id, version));
