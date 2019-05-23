@@ -1,4 +1,4 @@
-import { EditableArgument } from '../components/EditableArgument';
+import { EditingArgument } from '../components/EditingArgument';
 
 /**
  * The ArgumentEditor tracks all the changes the user makes
@@ -16,7 +16,7 @@ export class ArgumentEditor extends React.Component {
   }
 
   render() {
-    return <EditableArgument {...this.editableArgumentProps()} />;
+    return <EditingArgument {...this.editableArgumentProps()} />;
   }
 
   editableArgumentProps() {

@@ -1,9 +1,9 @@
 /**
- * An EditableArgument shows an argument in the process of being edited.
+ * An EditingArgument shows an argument in the process of being edited.
  *
  * For the "static" view, see StaticArgument.jsx.
  */
-export class EditableArgument extends React.Component {
+export class EditingArgument extends React.Component {
   render() {
     const undoConclusion = this.props.onRevertConclusion
       ? (<div tabIndex="0" className="undo control conclusion" onClick={this.props.onRevertConclusion}>undo</div>)
@@ -60,7 +60,7 @@ export class EditableArgument extends React.Component {
   }
 }
 
-EditableArgument.propTypes = {
+EditingArgument.propTypes = {
   // premises make an argument for the conclusion
   premises: PropTypes.arrayOf(PropTypes.shape({
     // text is the premise itself
