@@ -3,12 +3,18 @@
   <head>
       <link rel="stylesheet" href="{{resourcesRoot}}/fragments/global.css" type="text/css">
       <link rel="stylesheet" href="{{resourcesRoot}}/homepage.css" type="text/css">
+      <script src="{{resourcesRoot}}/homepage.js" defer></script>
+      <script id="homepage-props" type="application/json">
+        {
+          "apiAuthority": "{{apiAuthority}}",
+          "inputId": "search",
+          "suggestionsId": "suggestions"
+        }
+      </script>
       <title>Wikisophia</title>
   </head>
   <body>
-    <header>
-      {{> header }}
-    </header>
+    {{> header }}
     <main>
       <h1 class="title">Wikisophia</h1>
       <div>
@@ -21,13 +27,5 @@
         <span>Enable javascript to receive dynamic search suggestions</span>
       </noscript>
     </main>
-    <script src="{{resourcesRoot}}/homepage.js"></script>
-    <script>
-      wikisophia.showSuggestions({
-        suggestionAPIAuthority: '{{apiAuthority}}',
-        inputID: 'search',
-        suggestionsID: 'suggestions'
-      });
-    </script>
   </body>
 </html>

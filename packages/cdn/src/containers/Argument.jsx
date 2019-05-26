@@ -1,6 +1,9 @@
+import newClient from '@wikisophia/api-arguments-client';
+import React from 'react';
+import PropTypes from 'prop-types';
+
 import { ArgumentEditor } from './ArgumentEditor';
 import { StaticArgument } from '../components/StaticArgument';
-import newClient from '@wikisophia/api-arguments-client';
 
 /**
  * The Argument renders the main content section of the /arguments pages.
@@ -112,12 +115,6 @@ export class Argument extends React.Component {
   onCancel() {
     this.setState({
       editing: false,
-      argument: {
-        premises: this.props.initialArgument.premises.map(premise => ({
-          conclusion: premise.text
-        })),
-        conclusion: this.props.initialArgument.conclusion,
-      }
     })
   }
 

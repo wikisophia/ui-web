@@ -3,6 +3,10 @@
   <head>
       <link rel="stylesheet" href="{{resourcesRoot}}/fragments/global.css" type="text/css">
       <link rel="stylesheet" href="{{resourcesRoot}}/new-argument.css" type="text/css">
+      <script src="{{resourcesRoot}}/new-argument.js" defer></script>
+      <script id="new-argument-props" type="application/json">
+        {{{ componentProps }}}
+      </script>
       <title>Add a new argument - Wikisophia</title>
   </head>
   <body>
@@ -15,22 +19,5 @@
       {{/if}}
       <section id="new-argument-anchor" class="main-content"></section>
     </main>
-    {{> react }}
-    <script src="{{resourcesRoot}}/new-argument.js"></script>
-    <script>
-    ReactDOM.render(
-      React.createElement(wikisophia.Argument, {
-        apiAuthority: '{{apiAuthority}}',
-        initialArgument: {
-          conclusion: '{{conclusion}}',
-          premises: [
-            {{#each premises }}
-              '{{this}}',
-            {{/each}}
-          ]
-        }
-      }),
-      document.getElementById("new-argument-anchor"));
-    </script>
   </body>
 </html>

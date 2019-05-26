@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
 /**
  * A StaticArgument renders the premises and conclusion as static text.
  *

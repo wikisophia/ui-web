@@ -8,12 +8,6 @@ import { cancelRequest, listUpdater, makeRequest } from './helpers';
  * @property {string} suggestionAPIAuthority The URI Authority where /suggestions lives.
  */
 
-function logErr(msg) {
-  if (console && console.error) {
-    console.error(msg);
-  }
-}
-
 function suggestionUpdater(suggestionAPIAuthority, inputNode, suggestionsNode) {
   let xhr;
   return () => {
@@ -30,24 +24,11 @@ function searchHandler(inputNode) {
   };
 }
 
-/**
- * Listen for changes on the input element. When it changes, call the server
- * for suggestions and update the suggestion list with the results.
- *
- * @param {SuggestionsConfig} cfg Inputs with the page IDs and server to call.
- */
-export function showSuggestions(cfg) {
-  const inputNode = document.getElementById(cfg.inputID);
-  const suggestionsNode = document.getElementById(cfg.suggestionsID);
-  if (!inputNode) {
-    logErr(`No HTML node found with id="${cfg.inputID}". Dynamic suggestions will not be shown.`);
-    return;
-  }
-  if (!suggestionsNode) {
-    logErr(`No HTML node found with id="${cfg.suggestionsID}". Dynamic suggestions will not be shown.`);
-    return;
-  }
 
-  inputNode.addEventListener('input', suggestionUpdater(cfg.suggestionAPIAuthority, inputNode, suggestionsNode));
-  inputNode.addEventListener('keypress', searchHandler(inputNode));
-}
+// Listen for changes on the input element. When it changes, call the server
+// for suggestions and update the suggestion list with the results.
+const { inputId, suggestionsId, apiAuthority } = JSON.parse(document.getElementById('homepage-props').innerHTML);
+const inputNode = document.getElementById(inputId);
+const suggestionsNode = document.getElementById(suggestionsId);
+inputNode.addEventListener('input', suggestionUpdater(apiAuthority, inputNode, suggestionsNode));
+inputNode.addEventListener('keypress', searchHandler(inputNode));

@@ -1,3 +1,4 @@
+const path = require('path');
 
 module.exports = {
   entry: {
@@ -20,5 +21,11 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx'],
+  },
+  devServer: {
+    inline: true,
+    contentBase: path.join(__dirname, 'dist'),
+    host: 'localhost',
+    port: 4041,
   },
 };

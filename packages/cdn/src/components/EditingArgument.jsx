@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
 /**
  * An EditingArgument shows an argument in the process of being edited.
  *

@@ -11,11 +11,17 @@ export default function newNewArgument(config) {
   return [
     ...paramValidation,
     function handler(req, res) {
-      res.contentType('text/html').render('new-argument', {
-        resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,
+      const componentProps = {
         apiAuthority: config.api.authority,
-        conclusion: req.query.conclusion,
-        premises: req.query.premise,
+        initialArgument: {
+          conclusion: req.query.conclusion,
+          premises: req.query.premise,
+        },
+      };
+
+      res.contentType('text/html').render('new-argument', {
+        componentProps: JSON.stringify(componentProps),
+        resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,
       });
     },
   ];

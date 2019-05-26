@@ -7,17 +7,19 @@
     "clean": "rm -rf dist",
     "build:css": "node bundle-css.js",
     "build:dev": "webpack --config=./webpack.dev.js",
-    "build:release": "webpack --config=./webpack.prod.js",
+    "build:prod": "webpack --config=./webpack.prod.js",
     "lint": "eslint src --fix && stylelint \"src/**/*.css\"",
     "lint:nofix": "eslint src && stylelint \"src/**/*.css\"",
     "serve:dev": "concurrently \"webpack-dev-server --config=./webpack.dev.js\" \"npm run watch:css\"",
-    "serve:release": "concurrently \"webpack-dev-server --config=./webpack.prod.js\" \"npm run watch:css\"",
+    "serve:prod": "concurrently \"webpack-dev-server --config=./webpack.prod.server.js\" \"npm run watch:css\"",
     "test": "BABEL_ENV=test jest",
     "test-coverage": "BABEL_ENV=test jest -c jest.config.coverage.js",
     "watch:css": "nodemon -e css --watch src -x \"npm run build:css\""
   },
   "dependencies": {
-    "prop-types": "^15.7.2"
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
@@ -37,7 +39,6 @@
     "jest": "^24.1.0",
     "nodemon": "^1.18.10",
     "postcss-syntax": "^0.36.2",
-    "react": "^16.8.6",
     "regenerator-runtime": "^0.13.1",
     "stylelint": "^9.10.1",
     "stylelint-config-recommended": "^2.1.0",
