@@ -3,6 +3,10 @@
   <head>
       <link rel="stylesheet" href="{{resourcesRoot}}/fragments/global.css" type="text/css">
       <link rel="stylesheet" href="{{resourcesRoot}}/argument.css" type="text/css">
+      <script src="{{resourcesRoot}}/argument.js" defer></script>
+      <script id="view-argument-props" type="application/json">
+        {{{ componentProps }}}
+      </script>
       <title>{{ argument.conclusion }} - Wikisophia</title>
   </head>
   <body>
@@ -32,23 +36,5 @@
         </div >
       </section>
     </main>
-    {{> react }}
-    <script src="{{resourcesRoot}}/argument.js"></script>
-    <script>
-      ReactDOM.render(
-        React.createElement(wikisophia.Argument, {
-          apiAuthority: '{{apiAuthority}}',
-          initialArgument: {
-            id: {{id}},
-            conclusion: '{{argument.conclusion}}',
-            premises: [
-              {{#each argument.premises }}
-                '{{this}}',
-              {{/each}}
-            ]
-          }
-        }),
-        document.getElementById("view-argument-anchor"));
-    </script>
   </body>
 </html>

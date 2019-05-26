@@ -36,18 +36,8 @@ function searchHandler(inputNode) {
  *
  * @param {SuggestionsConfig} cfg Inputs with the page IDs and server to call.
  */
-export function showSuggestions(cfg) {
-  const inputNode = document.getElementById(cfg.inputID);
-  const suggestionsNode = document.getElementById(cfg.suggestionsID);
-  if (!inputNode) {
-    logErr(`No HTML node found with id="${cfg.inputID}". Dynamic suggestions will not be shown.`);
-    return;
-  }
-  if (!suggestionsNode) {
-    logErr(`No HTML node found with id="${cfg.suggestionsID}". Dynamic suggestions will not be shown.`);
-    return;
-  }
-
-  inputNode.addEventListener('input', suggestionUpdater(cfg.suggestionAPIAuthority, inputNode, suggestionsNode));
-  inputNode.addEventListener('keypress', searchHandler(inputNode));
-}
+const { inputId, suggestionsId, apiAuthority } = JSON.parse(document.getElementById('homepage-props').innerHTML);
+const inputNode = document.getElementById(inputId);
+const suggestionsNode = document.getElementById(suggestionsId);
+inputNode.addEventListener('input', suggestionUpdater(apiAuthority, inputNode, suggestionsNode));
+inputNode.addEventListener('keypress', searchHandler(inputNode));

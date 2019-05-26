@@ -34,11 +34,18 @@ function newHandler(config) {
           argument: args.arguments[0],
         });
       } else {
+        const componentProps = {
+          apiAuthority: config.api.authority,
+          initialArgument: {
+            conclusion,
+            premises: [],
+          }
+        };
+
         res.contentType('text/html').render('new-argument', {
+          componentProps: JSON.stringify(componentProps),
           fromSearch: true,
           resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,
-          apiAuthority: config.api.authority,
-          conclusion,
         });
       }
     }).catch((err) => {

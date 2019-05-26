@@ -28,10 +28,17 @@ function newHandler(config) {
     }
     argumentsClient.getOne(id, version).then((arg) => {
       if (arg) {
-        res.contentType('text/html').render('argument', {
-          resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,
+        const componentProps = {
           apiAuthority: config.api.authority,
-          id,
+          initialArgument: {
+            id,
+            conclusion: arg.argument.conclusion,
+            premises: arg.argument.premises,
+          }
+        };
+        res.contentType('text/html').render('argument', {
+          componentProps: JSON.stringify(componentProps),
+          resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,
           argument: arg.argument,
         });
       } else {

@@ -4,8 +4,8 @@
   "description": "A UI server which powers Wikisophia",
   "scripts": {
     "build": "babel src -d build",
-    "dev": "nodemon --exec babel-node src/server.js",
-    "start": "node build/server.js",
+    "serve:dev": "nodemon --exec babel-node src/server.js",
+    "serve:prod": "npm run build && node build/server.js",
     "lint": "eslint src --fix",
     "lint:nofix": "eslint src"
   },
