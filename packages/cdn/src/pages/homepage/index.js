@@ -8,12 +8,6 @@ import { cancelRequest, listUpdater, makeRequest } from './helpers';
  * @property {string} suggestionAPIAuthority The URI Authority where /suggestions lives.
  */
 
-function logErr(msg) {
-  if (console && console.error) {
-    console.error(msg);
-  }
-}
-
 function suggestionUpdater(suggestionAPIAuthority, inputNode, suggestionsNode) {
   let xhr;
   return () => {
@@ -30,12 +24,9 @@ function searchHandler(inputNode) {
   };
 }
 
-/**
- * Listen for changes on the input element. When it changes, call the server
- * for suggestions and update the suggestion list with the results.
- *
- * @param {SuggestionsConfig} cfg Inputs with the page IDs and server to call.
- */
+
+// Listen for changes on the input element. When it changes, call the server
+// for suggestions and update the suggestion list with the results.
 const { inputId, suggestionsId, apiAuthority } = JSON.parse(document.getElementById('homepage-props').innerHTML);
 const inputNode = document.getElementById(inputId);
 const suggestionsNode = document.getElementById(suggestionsId);

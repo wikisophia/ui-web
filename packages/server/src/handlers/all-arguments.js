@@ -39,7 +39,7 @@ function newHandler(config) {
           initialArgument: {
             conclusion,
             premises: [],
-          }
+          },
         };
 
         res.contentType('text/html').render('new-argument', {

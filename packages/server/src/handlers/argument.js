@@ -34,7 +34,7 @@ function newHandler(config) {
             id,
             conclusion: arg.argument.conclusion,
             premises: arg.argument.premises,
-          }
+          },
         };
         res.contentType('text/html').render('argument', {
           componentProps: JSON.stringify(componentProps),

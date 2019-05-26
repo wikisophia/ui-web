@@ -16,7 +16,7 @@ export default function newNewArgument(config) {
         initialArgument: {
           conclusion: req.query.conclusion,
           premises: req.query.premise,
-        }
+        },
       };
 
       res.contentType('text/html').render('new-argument', {
