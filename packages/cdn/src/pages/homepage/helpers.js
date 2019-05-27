@@ -8,7 +8,7 @@ export function listUpdater(suggestionsNode) {
 
     suggestions.forEach((suggestion) => {
       const link = document.createElement('a');
-      link.href = `/arguments?conclusion=${encodeURIComponent(suggestion)}`;
+      link.href = `/arguments?search=${encodeURIComponent(suggestion)}`;
       link.textContent = suggestion;
       const item = document.createElement('li');
       item.className = 'suggestion';
@@ -20,7 +20,7 @@ export function listUpdater(suggestionsNode) {
 
 export function makeRequest(suggestionAPIAuthority, query, onSuccess) {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', `//${suggestionAPIAuthority}/suggestions?q=${encodeURIComponent(query)}`);
+  xhr.open('GET', `//${suggestionAPIAuthority}/arguments?search=${encodeURIComponent(query)}&count=5`);
   xhr.onreadystatechange = () => {
     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
       onSuccess(JSON.parse(xhr.responseText));

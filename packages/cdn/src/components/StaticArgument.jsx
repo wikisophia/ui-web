@@ -25,13 +25,13 @@ export class StaticArgument extends React.Component {
 
     return (
       <div className="argument-area">
-        <h1 className="suppose">If you agree that</h1>
+        <h1 className="suppose">If you believe that</h1>
         <ul className="premises">
           {this.renderPremises()}
           {/* This dummy node adds space where the "add new premise" button appears in edit mode. */}
           <div key={'add-new-premise-spacer'} tabIndex="0" className="control spacer">s</div>
         </ul>
-        <h1 className="then">Then you should believe that</h1>
+        <h1 className="then">Then you should agree that</h1>
         {next}
         <p className="conclusion">{this.props.conclusion}</p>
         <button className="new control footer" type="button" onClick={this.props.onNew}>new</button>

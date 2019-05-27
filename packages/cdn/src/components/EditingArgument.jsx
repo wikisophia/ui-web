@@ -22,12 +22,12 @@ export class EditingArgument extends React.Component {
 
     return (
       <div className="argument-area">
-        <h1 className="suppose">If you agree that</h1>
+        <h1 className="suppose">If someone believes that</h1>
         <ul className="premises">
           {this.renderPremises()}
           <div tabIndex="0" className="new control premise" onClick={this.props.onNewPremise}>new</div>
         </ul>
-        <h1 className="then">Then you should believe that</h1>
+        <h1 className="then">Then they should agree that</h1>
         {undoConclusion}
         <input value={this.props.conclusion} onChange={extractValueThen(this.props.onChangeConclusion)} className="conclusion" />
         <button className="save control footer" type="button" onClick={this.props.onSave}>save</button>

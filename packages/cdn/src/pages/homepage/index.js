@@ -19,7 +19,7 @@ function suggestionUpdater(suggestionAPIAuthority, inputNode, suggestionsNode) {
 function searchHandler(inputNode) {
   return (ev) => {
     if (ev.keyCode === 13) {
-      window.location = `/arguments?conclusion=${encodeURIComponent(inputNode.value)}`;
+      window.location = `/arguments?search=${encodeURIComponent(inputNode.value)}`;
     }
   };
 }

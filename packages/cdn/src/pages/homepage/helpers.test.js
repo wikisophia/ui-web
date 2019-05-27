@@ -21,9 +21,9 @@ describe('The list updaters', () => {
 
     expect(suggestionsNode.childElementCount).toBe(2);
     expect(suggestionsNode.firstChild.firstChild.innerHTML).toBe(first);
-    expect(suggestionsNode.firstChild.firstChild.href).toBe('http://localhost/arguments?conclusion=socrates%20is%20a%20man');
+    expect(suggestionsNode.firstChild.firstChild.href).toBe('http://localhost/arguments?search=socrates%20is%20a%20man');
     expect(suggestionsNode.lastChild.firstChild.innerHTML).toBe(second);
-    expect(suggestionsNode.lastChild.firstChild.href).toBe('http://localhost/arguments?conclusion=socrates%20is%20mortal');
+    expect(suggestionsNode.lastChild.firstChild.href).toBe('http://localhost/arguments?search=socrates%20is%20mortal');
   });
 });
 
@@ -36,8 +36,8 @@ describe('makeRequest()', () => {
 
     xhrmock.use((req, resp) => {
       expect(req.method()).toBe('GET');
-      expect(req.url().path).toBe('//api.wikisophia.net/suggestions');
-      expect(req.url().query.q).toBe(query);
+      expect(req.url().path).toBe('//api.wikisophia.net/arguments');
+      expect(req.url().query.search).toBe(query);
       done();
       return resp.status(404);
     });

@@ -44,4 +44,4 @@ fs.readFile(`${__dirname}/src/fragments/global.css`).then(outputCSS(`${__dirname
 fs.readFile(`${__dirname}/src/pages/homepage/index.css`).then(outputCSS(`${__dirname}/dist/homepage.css`)).catch(printErr);
 fs.readFile(`${__dirname}/src/pages/new-argument/index.css`).then(outputCSS(`${__dirname}/dist/new-argument.css`)).catch(printErr);
 fs.readFile(`${__dirname}/src/pages/argument/index.css`).then(outputCSS(`${__dirname}/dist/argument.css`)).catch(printErr);
-fs.readFile(`${__dirname}/src/pages/arguments/index.css`).then(outputCSS(`${__dirname}/dist/arguments.css`)).catch(printErr);
+fs.readFile(`${__dirname}/src/pages/search-arguments/index.css`).then(outputCSS(`${__dirname}/dist/search-arguments.css`)).catch(printErr);
