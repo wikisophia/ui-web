@@ -82,13 +82,34 @@ export class Argument extends React.Component {
     };
   }
 
-  onSave(argument) {
-    const call = this.state.argument.id
-      ? this.api.update(this.state.argument.id, argument)
-      : this.api.save(argument);
 
-    call.then(this.syncWithSaveResponse.bind(this))
-        .catch(this.onError.bind(this));
+  onSave(argument) {
+    const self = this;
+    function hasEdits() {
+      if (self.state.argument.conclusion !== argument.conclusion) {
+        return true;
+      }
+      if (self.state.argument.premises.length !== argument.premises.length) {
+        return true;
+      }
+      for (let i = 0; i < self.state.argument.premises.length; i++) {
+        if (self.state.argument.premises[i].conclusion !== argument.premises[i]) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    if (hasEdits()) {
+      const call = this.state.argument.id
+        ? this.api.update(this.state.argument.id, argument)
+        : this.api.save(argument);
+
+      call.then(this.syncWithSaveResponse.bind(this))
+          .catch(this.onError.bind(this));
+    } else {
+      this.setState({ editing: false });
+    }
   }
 
   onError(err) {

@@ -1,6 +1,6 @@
-import newNewArgument from './handlers/new-argument';
-import newArgument from './handlers/argument';
-import newAllArguments from './handlers/all-arguments';
+import { newArgumentValidation, newNewArgumentHandler } from './handlers/new-argument';
+import { argumentValidation, newArgumentHandler } from './handlers/argument';
+import newSearchHandler from './handlers/search-arguments';
 import newContact from './handlers/contact';
 import newHomepage from './handlers/homepage';
 
@@ -11,11 +11,11 @@ import newHomepage from './handlers/homepage';
  */
 export function setRoutes(config, router) {
   router.get('/', newHomepage(config));
-  router.get('/new-argument', newNewArgument(config));
-  router.get('/arguments', newAllArguments(config));
-  const argumentHandler = newArgument(config);
-  router.get('/arguments/:id', argumentHandler);
-  router.get('/arguments/:id/version/:version', argumentHandler);
+  router.get('/new-argument', newArgumentValidation, newNewArgumentHandler(config));
+  router.get('/arguments', newSearchHandler(config));
+  const argumentHandler = newArgumentHandler(config);
+  router.get('/arguments/:id', argumentValidation, argumentHandler);
+  router.get('/arguments/:id/version/:version', argumentValidation, argumentHandler);
   router.get('/contact', newContact(config));
 }
 

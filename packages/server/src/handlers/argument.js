@@ -1,20 +1,13 @@
-import { checkSchema, validationResult } from 'express-validator/check';
+import { check, validationResult } from 'express-validator/check';
 import fetch from 'node-fetch';
 import newClient from '@wikisophia/api-arguments-client';
 
-const paramValidation = checkSchema({
-  id: {
-    in: ['params'],
-    isInt: true,
-  },
-  version: {
-    in: ['params'],
-    optional: true,
-    isInt: true,
-  },
-});
+export const argumentValidation = [
+  check('id').isInt({ min: 1 }),
+  check('version').isInt({ min: 1 }).optional(),
+];
 
-function newHandler(config) {
+export function newArgumentHandler(config) {
   const argumentsClient = newClient({
     url: `${config.api.scheme}://${config.api.authority}`,
     fetch,
@@ -31,7 +24,7 @@ function newHandler(config) {
         const componentProps = {
           apiAuthority: config.api.authority,
           initialArgument: {
-            id,
+            id: Number(id),
             conclusion: arg.argument.conclusion,
             premises: arg.argument.premises,
           },
@@ -55,11 +48,4 @@ function makeErrorMessage(id, version) {
     return `version ${version} of argument ${id} does not exist`;
   }
   return `argument ${id} does not exist`;
-}
-
-export default function newArgument(config) {
-  return [
-    ...paramValidation,
-    newHandler(config),
-  ];
 }

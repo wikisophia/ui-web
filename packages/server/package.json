@@ -13,11 +13,12 @@
     "@wikisophia/api-arguments-client": "^0.5.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "express-handlebars": "^3.0.2",
     "express-validator": "^5.3.1",
     "node-fetch": "^2.3.0",
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "validator": "^11.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",

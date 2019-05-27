@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <link rel="stylesheet" href="{{resourcesRoot}}/fragments/global.css" type="text/css">
+      <link rel="stylesheet" href="{{resourcesRoot}}/search-arguments.css" type="text/css">
+      <title>Wikisophia - Search results - {{search}} </title>
+  </head>
+  <body>
+    <header>
+      {{> header }}
+    </header>
+    <main>
+      <section class="main-content">
+        {{#if arguments}}
+          <p class="contribute"><span>Don't see what you're looking for? Come </span><a href="/new-argument">share your own thoughts</a><span>.</span></p>
+          <h1>Show me why I might believe that...</h1>
+          <ul class="search-results">
+            {{#each arguments}}
+              <li class="conclusion"><a href="/arguments/{{id}}">{{conclusion}}</a></li>
+            {{/each}}
+        {{else}}
+          <p class="contribute">
+            <span>We don't know of any beliefs that match your search.</span><br>
+            <span>Would you like to </span><a href="/new-argument">share some</a><span>?</span></p>
+        {{/if}}
+      </section>
+    </main>
+  </body>
+</html>
