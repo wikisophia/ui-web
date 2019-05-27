@@ -2,12 +2,12 @@ import { check, validationResult } from 'express-validator/check';
 import fetch from 'node-fetch';
 import newClient from '@wikisophia/api-arguments-client';
 
-export const argumentValidation = [
+const paramValidation = [
   check('id').isInt({ min: 1 }),
   check('version').isInt({ min: 1 }).optional(),
 ];
 
-export function newArgumentHandler(config) {
+export function newHandler(config) {
   const argumentsClient = newClient({
     url: `${config.api.scheme}://${config.api.authority}`,
     fetch,
@@ -41,6 +41,13 @@ export function newArgumentHandler(config) {
       res.status(503).contentType('text/plain').send(`Failed fetch from API: ${err.message}`);
     });
   };
+}
+
+export default function newArgumentHandler(config) {
+  return [
+    ...paramValidation,
+    newHandler(config),
+  ];
 }
 
 function makeErrorMessage(id, version) {

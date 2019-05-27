@@ -1,13 +1,13 @@
 import { sanitizeQuery } from 'express-validator/filter';
 
-export const newArgumentValidation = [
+const newArgumentValidation = [
   sanitizeQuery('premise').customSanitizer(toArray),
 ];
 
 /**
  * @param {Config} config
  */
-export function newNewArgumentHandler(config) {
+function newHandler(config) {
   return function handler(req, res) {
     const componentProps = {
       apiAuthority: config.api.authority,
@@ -22,6 +22,13 @@ export function newNewArgumentHandler(config) {
       resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,
     });
   };
+}
+
+export default function newNewArgumentHandler(config) {
+  return [
+    ...newArgumentValidation,
+    newHandler(config),
+  ];
 }
 
 function toArray(value) {
