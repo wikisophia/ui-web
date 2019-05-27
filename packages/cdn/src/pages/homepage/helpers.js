@@ -20,7 +20,7 @@ export function listUpdater(suggestionsNode) {
 
 export function makeRequest(suggestionAPIAuthority, query, onSuccess) {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', `//${suggestionAPIAuthority}/arguments?search=${encodeURIComponent(query)}`);
+  xhr.open('GET', `//${suggestionAPIAuthority}/arguments?search=${encodeURIComponent(query)}&count=5`);
   xhr.onreadystatechange = () => {
     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
       onSuccess(JSON.parse(xhr.responseText));
