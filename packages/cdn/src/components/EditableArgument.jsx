@@ -2,27 +2,30 @@ import newClient from '@wikisophia/api-arguments-client';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { ArgumentEditor } from './ArgumentEditor';
-import { StaticArgument } from '../components/StaticArgument';
+import { EditingArgument } from './EditingArgument';
+import { StaticArgument } from './StaticArgument';
 
 /**
- * The Argument renders the main content section of the /arguments pages.
+ * The EditableArgument renders the main content section of the
+ * /arguments and /new-argument pages.
  *
- * This works a bit like a very simple single-page application.
+ * This operates like a mini single-page application.
  *
  * At minimum, the component must be initialized with text for a conclusion and a few premises.
- * Optionally, it can also be populated with data for related questions, like:
+ * Optionally, it can also be populated with related data, like:
  *
  *   Is there a supporting argument for each premise? What is it?
  *   Are there other arguments for this conclusion?
  *
- * For a full spec, see the PropTypes.
+ * For a full list, see the PropTypes.
  *
- * For the best UX, pass it all the optional properties up front. After mounting it will
- * fetch any missing optional data from the API, which may make certain parts of the UI
- * show up a bit later than the rest of the page.
+ * You'll get the best performance if you pass in all optional properties up front.
+ * After mounting, it will fetch any missing pieces from the API asynchronously.
+ *
+ * Since arguments are relatively small, it will pre-fetch any data it needs to serve
+ * content for the "next click" to make the UX as snappy as possible.
  */
-Argument.propTypes = {
+EditableArgument.propTypes = {
   // The authority of the URL where the API is listening.
   // Something like "api.arguments.wikisophia.net" or "localhost:8001".
   apiAuthority: PropTypes.string.isRequired,
@@ -50,7 +53,7 @@ Argument.propTypes = {
   }).isRequired
 };
 
-export function Argument(props) {
+export function EditableArgument(props) {
   const [deleted, setDeleted] = useState(props.initialArgument.deleted ? true : false);
   const [argument, setArgument] = useState(argumentPropToState(props.initialArgument));
   const [editing, setEditing] = useState(props.initialEditing);
@@ -87,16 +90,16 @@ export function Argument(props) {
     )
   } else if (editing) {
     return (
-      <ArgumentEditor { ...argumentEditorProps(api, argument, setArgument, setEditing, setError, setDeleted) } />
+      <EditingArgument { ...editingArgumentProps(api, argument, setArgument, setEditing, setError, setDeleted) } />
     );
   } else {
     return (
-      <StaticArgument {...staticArgumentProps(argument, setArgument, setEditing)} />
+      <StaticArgument {...staticArgumentProps(argument, setArgument, setEditing, setError, setDeleted)} />
     );
   }
 }
 
-function argumentEditorProps(api, argumentState, setArgument, setEditing, setError, setDeleted) {
+function editingArgumentProps(api, argumentState, setArgument, setEditing, setError, setDeleted) {
   return {
     initialArgument: {
       premises: argumentState.premises.map(premise => premise.conclusion),
@@ -113,15 +116,17 @@ function argumentEditorProps(api, argumentState, setArgument, setEditing, setErr
  * @param {ArgumentState} argumentState
  * @param {*} setEditing
  */
-function staticArgumentProps(argumentState, setArgument, setEditing) {
+function staticArgumentProps(argumentState, setArgument, setEditing, setError, setDeleted) {
   function newArgumentNavigator(conclusion) {
     return function() {
       const newArgumentState = {
         premises: [{conclusion: ''}, {conclusion: ''}],
         conclusion,
-        deleted: false,
       };
       setArgument(newArgumentState);
+      setEditing(true);
+      setDeleted(false);
+      setError(null);
       history.pushState({
         deleted: false,
         argument: newArgumentState,
