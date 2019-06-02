@@ -1,5 +1,5 @@
 import newClient from '@wikisophia/api-arguments-client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { ArgumentEditor } from './ArgumentEditor';
@@ -8,173 +8,20 @@ import { StaticArgument } from '../components/StaticArgument';
 /**
  * The Argument renders the main content section of the /arguments pages.
  *
- * This works like a very simple single-page application. The Argument
- * is seeded with some premises, a conclusion, and information about what
- * related arguments exist. (is a particular premise supported?
- * Are there other arguments for this conclusion?). Since arguments are tiny,
- * it will pre-fetch data for everything the user might click to keep the UX snappy.
+ * This works a bit like a very simple single-page application.
+ *
+ * At minimum, the component must be initialized with text for a conclusion and a few premises.
+ * Optionally, it can also be populated with data for related questions, like:
+ *
+ *   Is there a supporting argument for each premise? What is it?
+ *   Are there other arguments for this conclusion?
+ *
+ * For a full spec, see the PropTypes.
+ *
+ * For the best UX, pass it all the optional properties up front. After mounting it will
+ * fetch any missing optional data from the API, which may make certain parts of the UI
+ * show up a bit later than the rest of the page.
  */
-
-export class Argument extends React.Component {
-  constructor(props) {
-    super(props);
-
-    const premises = props.initialArgument.premises.map(premise => ({
-      conclusion: premise,
-    }));
-
-    while (premises.length < 2) {
-      premises.push({ conclusion: '' });
-    }
-
-    this.state = {
-      editing: props.initialArgument.id ? false : true,
-      deleted: false,
-      argument: {
-        id: props.initialArgument.id,
-        premises: premises,
-        conclusion: props.initialArgument.conclusion,
-      }
-    }
-  }
-
-  componentDidMount() {
-    this.api = newClient({
-      url: `http://${this.props.apiAuthority}`,
-      fetch: fetch
-    });
-
-    const self = this;
-    history.replaceState(this.state, 'Wikisophia', window.location);
-    window.addEventListener('popstate', function(event) {
-      self.setState(event.state)
-    })
-  }
-
-  render() {
-    if (this.state.deleted) {
-      return (
-        <div>
-          <div className="delete-notice">The argument has been deleted. It can be restored by clicking the button below.</div>
-          <button type="button" onClick={this.onRestore.bind(this)}>Restore it</button>
-        </div>
-      )
-    } else if (this.state.editing) {
-      return (
-        <ArgumentEditor {...this.argumentEditorProps()} />
-      );
-    } else {
-      return (
-        <StaticArgument {...this.staticArgumentProps()} />
-      );
-    }
-  }
-
-  argumentEditorProps() {
-    return {
-      initialArgument: {
-        premises: this.state.argument.premises.map(premise => premise.conclusion),
-        conclusion: this.state.argument.conclusion
-      },
-      onSave: this.onSave.bind(this),
-      onCancel: this.state.argument.id ? this.onCancel.bind(this) : null,
-      onDelete: this.state.argument.id ? this.onDelete.bind(this) : null,
-    };
-  }
-
-
-  onSave(argument) {
-    const self = this;
-    function hasEdits() {
-      if (self.state.argument.conclusion !== argument.conclusion) {
-        return true;
-      }
-      if (self.state.argument.premises.length !== argument.premises.length) {
-        return true;
-      }
-      for (let i = 0; i < self.state.argument.premises.length; i++) {
-        if (self.state.argument.premises[i].conclusion !== argument.premises[i]) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    if (hasEdits()) {
-      const call = this.state.argument.id
-        ? this.api.update(this.state.argument.id, argument)
-        : this.api.save(argument);
-
-      call.then(this.syncWithSaveResponse.bind(this))
-          .catch(this.onError.bind(this));
-    } else {
-      this.setState({ editing: false });
-    }
-  }
-
-  onError(err) {
-    this.setState({ error: err });
-  }
-
-  syncWithSaveResponse(response) {
-    const newState = {
-      editing: false,
-      argument: {
-        id: response.argument.id,
-        premises: response.argument.premises.map(premise => ({
-          conclusion: premise
-        })),
-        conclusion: response.argument.conclusion,
-      }
-    };
-    const self = this;
-    this.setState(newState, () => {
-      history.pushState(self.state, 'Wikisophia', response.location);
-    })
-  }
-
-  onCancel() {
-    this.setState({
-      editing: false,
-    })
-  }
-
-  onDelete() {
-    this.setState({
-      deleted: true,
-    })
-  }
-
-  onRestore() {
-    this.setState({
-      deleted: false,
-    })
-  }
-
-  staticArgumentProps() {
-    const component = this;
-    return {
-      premises: this.state.argument.premises.map(premise => ({
-        text: premise.conclusion,
-        hasSupport: premise.hasSupport,
-        onClick: function() {
-          // TODO: handle clicks for searches
-        }
-      })),
-      conclusion: this.state.argument.conclusion,
-      onNew: function () {
-        // TODO: Make a new argument for this conclusion
-      },
-      onNext: function () {
-        // TODO: What happens when the user loads the next argument
-      },
-      onEdit: function () {
-        component.setState({ editing: true });
-      },
-    }
-  }
-}
-
 Argument.propTypes = {
   // The authority of the URL where the API is listening.
   // Something like "api.arguments.wikisophia.net" or "localhost:8001".
@@ -188,53 +35,276 @@ Argument.propTypes = {
     // but need the user to fill out the premises")
     id: PropTypes.number,
 
+    // The argument's version. Can be undefined if it hasn't been saved yet.
+    version: PropTypes.number,
+
     // This argument's premises
     premises: PropTypes.arrayOf(PropTypes.string).isRequired,
 
     // The argument's conclusion
     conclusion: PropTypes.string.isRequired,
+
+    // True if this argument is soft-deleted (won't show up in searches anymore),
+    // and false otherwise.
+    deleted: PropTypes.bool.isRequired,
   }).isRequired
+};
+
+export function Argument(props) {
+  const [deleted, setDeleted] = useState(props.initialArgument.deleted ? true : false);
+  const [argument, setArgument] = useState(argumentPropToState(props.initialArgument));
+  const [editing, setEditing] = useState(props.initialEditing);
+  const [error, setError] = useState(null);
+
+  // This component takes control of the browser history so that the back and forward buttons
+  // keep working as it changes the content with AJAX calls.
+  //
+  // This effect sets that up by saving the initial state and attaching the listeners
+  // that restore it on "back".
+  useEffect(() => {
+    history.replaceState({ deleted, argument, editing, error }, 'Wikisophia', window.location);
+    function listener(event) {
+      setDeleted(event.state.deleted);
+      setArgument(event.state.argument);
+      setEditing(event.state.editing);
+      setError(event.state.error);
+    }
+    window.addEventListener('popstate', listener);
+    return window.removeEventListener.bind(window, 'popstate', listener);
+  }, []);
+
+  const api = newClient({
+    url: `http://${props.apiAuthority}`,
+    fetch: fetch,
+  });
+
+  if (deleted) {
+    return (
+      <div>
+        <div className="delete-notice">The argument has been deleted. It can be restored by clicking the button below.</div>
+        <button type="button" onClick={restorer(setDeleted)}>Restore it</button>
+      </div>
+    )
+  } else if (editing) {
+    return (
+      <ArgumentEditor { ...argumentEditorProps(api, argument, setArgument, setEditing, setError, setDeleted) } />
+    );
+  } else {
+    return (
+      <StaticArgument {...staticArgumentProps(argument, setArgument, setEditing)} />
+    );
+  }
+}
+
+function argumentEditorProps(api, argumentState, setArgument, setEditing, setError, setDeleted) {
+  return {
+    initialArgument: {
+      premises: argumentState.premises.map(premise => premise.conclusion),
+      conclusion: argumentState.conclusion
+    },
+    onSave: saver(api, argumentState, setArgument, setEditing, setError),
+    onCancel: argumentState.id ? canceller(setEditing) : null,
+    onDelete: argumentState.id ? deleter(setDeleted) : null,
+  };
 }
 
 /**
- * A fully formed state object for this component looks like:
  *
- * {
- *   "editing": false,
- *   "argument": {
- *     "premises": [
- *       {
- *         "conclusion": "premise 1",
- *         "hasSupport": true,
- *         "premises": [
- *           {
- *             "text": "some thing",
- *             "hasSupport": true
- *           },
- *           {
- *             "text": "other thing",
- *             "hasSupport": false
- *           }
- *         ],
- *         "hasNext": true
- *       },
- *       {
- *         "conclusion": "premise 2",
- *         "hasSupport": false
- *       }
- *     ],
- *     "conclusion": "some string",
- *     "hasNext": true,
- *     "nextPremises": [
- *       {
- *         "conclusion": "other argument premise 1",
- *         "hasSupport": true
- *       },
- *       {
- *         "conclusion": "other argument premise 2",
- *         "hasSupport": false
- *       }
- *     ]
- *   }
- * }
+ * @param {ArgumentState} argumentState
+ * @param {*} setEditing
+ */
+function staticArgumentProps(argumentState, setArgument, setEditing) {
+  function newArgumentNavigator(conclusion) {
+    return function() {
+      const newArgumentState = {
+        premises: [{conclusion: ''}, {conclusion: ''}],
+        conclusion,
+        deleted: false,
+      };
+      setArgument(newArgumentState);
+      history.pushState({
+        deleted: false,
+        argument: newArgumentState,
+        editing: true,
+        error: null,
+      }, 'Wikisophia', `/new-argument?conclusion=${encodeURIComponent(conclusion)}`);
+    };
+  }
+
+  return {
+    premises: argumentState.premises.map(function(premise) {
+      let support;
+      if (premise.hasSupport === true) {
+        support = {
+          exists: true,
+          onClick: function() {
+            // TODO: implement navigation to the related argument
+          },
+        };
+      } else if (premise.hasSupport === false) {
+        support = {
+          exists: false,
+          onClick: newArgumentNavigator(premise.conclusion),
+        };
+      }
+
+      return {
+        text: premise.conclusion,
+        support,
+      };
+    }),
+
+    conclusion: argumentState.conclusion,
+    onNew: newArgumentNavigator(argumentState.conclusion),
+    onNext: function () {
+      // TODO: What happens when the user loads the next argument
+    },
+    onEdit: startEditor(setEditing),
+  };
+}
+
+/**
+ *
+ * @param {*} argument
+ * @return {ArgumentState}
+ */
+function argumentPropToState(argument) {
+  const premises = argument.premises.map(premise => ({
+    conclusion: premise,
+  }));
+  while (premises.length < 2) {
+    premises.push({ conclusion: '' });
+  }
+  return Object.assign({}, argument, { premises });
+}
+
+function stateSetter(setter, value) {
+  return function() {
+    setter(value)
+  }
+}
+
+/**
+ * Make a handler which deletes the argument.
+ *
+ * @param {function(boolean)} setDeleted
+ */
+function deleter(setDeleted) {
+  return function() {
+    // TODO: Do Delete once the JS client supports it.
+    setDeleted(true);
+  }}
+
+/**
+ * Make a handler which restore sthe deleted argument.
+ *
+ * @param {function(boolean)} setDeleted
+ */
+function restorer(setDeleted) {
+  return function() {
+    setDeleted(false);
+  }
+}
+
+function canceller(setEditing) {
+  return function() {
+    setEditing(false)
+  }
+}
+
+function startEditor(setEditing) {
+  return function() {
+    setEditing(true)
+  }
+}
+
+/**
+ * Make a handler which saves the argument.
+ */
+function saver(api, oldArgumentState, setArgument, setEditing, setError) {
+  return function(newArgumentData) {
+    if (hasEdits(oldArgumentState, newArgumentData)) {
+      const call = oldArgumentState.id
+        ? api.update(oldArgumentState.id, newArgumentData)
+        : api.save(newArgumentData);
+
+      call.then(saveHttpResponseHandler(oldArgumentState, setEditing, setArgument))
+          .catch(setError);
+    } else {
+      setEditing(false);
+    }
+  }
+}
+
+function hasEdits(oldArgument, newArgument) {
+  if (oldArgument.conclusion !== newArgument.conclusion) {
+    return true;
+  }
+  if (oldArgument.premises.length !== newArgument.premises.length) {
+    return true;
+  }
+  for (let i = 0; i < oldArgument.premises.length; i++) {
+    if (oldArgument.premises[i].conclusion !== newArgument.premises[i]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function saveHttpResponseHandler(oldArgument, setEditing, setArgument) {
+  return function(response) {
+    setEditing(false);
+    const newArgument = {
+      id: response.argument.id,
+      premises: response.argument.premises.map(premise => ({
+        conclusion: premise,
+      })),
+      conclusion: response.argument.conclusion,
+    };
+    setArgument(newArgument);
+    history.pushState({
+      argument: newArgument,
+      deleted: false,
+      editing: false,
+      error: null,
+    }, 'Wikisophia', response.location);
+  };
+}
+
+/**
+ * @typedef ArgumentProp
+ *
+ * @property [int] id
+ * @property [int] version
+ * @property {string[]} premises
+ * @property {string} conclusion
+ * @property {boolean} deleted
+ */
+
+/**
+ * @typedef ArgumentState
+ *
+ * @property [int] id
+ * @property [int] version
+ * @property {{conclusion: string}[]} premises
+ * @property {string} conclusion
+ * @property {boolean} deleted
+ */
+
+/**
+ * @typedef PremiseState
+ *
+ * @property {string} conclusion This text of the premise of the argument being viewed.
+ *   This is named a bit weirdly because the Component will fetch an argument which
+ *   supports this premise in the background. This name comes from the fact that the premise
+ *   of this argument is the conclusion of the argument which supports it.
+ *
+ * @property [boolean] hasSupport True if this premise has a supporting argument, false if not,
+ *   and undefined if we're not sure yet.
+ * @property [int] id The ID of the supporting argument.
+ *   This will be defined iff hasSupport is true.
+ * @property [int] version The version of the supporting argument.
+ *   This will be defined iff hasSupport is true.
+ * @property [Array<string>] premises The premises in teh supporting argument.
+ *   This will be true iff hasSupport is true.
  */

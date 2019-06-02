@@ -11,9 +11,11 @@ function newHandler(config) {
   return function handler(req, res) {
     const componentProps = {
       apiAuthority: config.api.authority,
+      initialEditing: true,
       initialArgument: {
         conclusion: req.query.conclusion || '',
         premises: req.query.premise || [],
+        deleted: false,
       },
     };
 

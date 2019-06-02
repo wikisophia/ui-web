@@ -23,10 +23,12 @@ export function newHandler(config) {
       if (arg) {
         const componentProps = {
           apiAuthority: config.api.authority,
+          initialEditing: false,
           initialArgument: {
             id: Number(id),
             conclusion: arg.argument.conclusion,
             premises: arg.argument.premises,
+            deleted: false,
           },
         };
         res.contentType('text/html').render('argument', {

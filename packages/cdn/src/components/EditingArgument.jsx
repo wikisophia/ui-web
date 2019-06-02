@@ -6,63 +6,6 @@ import PropTypes from 'prop-types';
  *
  * For the "static" view, see StaticArgument.jsx.
  */
-export class EditingArgument extends React.Component {
-  render() {
-    const undoConclusion = this.props.onRevertConclusion
-      ? (<div tabIndex="0" className="undo control conclusion" onClick={this.props.onRevertConclusion}>undo</div>)
-      : (<div className="spacer control conclusion">s</div>);
-
-    const deleteNode = this.props.onDelete
-      ? (<button className="delete control footer" type="button" onClick={this.props.onDelete}>delete</button>)
-      : null;
-
-    const cancelNode = this.props.onCancel
-      ? (<button className="cancel control footer" type="button" onClick={this.props.onCancel}>cancel</button>)
-      : null;
-
-    return (
-      <div className="argument-area">
-        <h1 className="suppose">If someone believes that</h1>
-        <ul className="premises">
-          {this.renderPremises()}
-          <div tabIndex="0" className="new control premise" onClick={this.props.onNewPremise}>new</div>
-        </ul>
-        <h1 className="then">Then they should agree that</h1>
-        {undoConclusion}
-        <input value={this.props.conclusion} onChange={extractValueThen(this.props.onChangeConclusion)} className="conclusion" />
-        <button className="save control footer" type="button" onClick={this.props.onSave}>save</button>
-        {cancelNode}
-        {deleteNode}
-      </div>
-    )
-  }
-
-  renderPremises() {
-    const premises = this.props.premises;
-    const nodes = premises.map((premise, index) => (
-      <input type="text"
-             value={premise.text}
-             onChange={extractValueThen(premise.onChange)}
-             key={index + '-text'}
-             className="premise"
-      />
-    ));
-    const revertButtons = premises.map((premise, index) => {
-      if (premise.onUndo) {
-        return (<div key={index + '-revert'} tabIndex="0" className="undo control" onClick={premise.onUndo}>u</div>);
-      } else if (premises.length > 2) {
-        return (<div key={index + '-revert'} tabIndex="0" className="delete control" onClick={premise.onDelete}>d</div>)
-      } else {
-        return (<div key={index + '-spacer'} className="spacer control">s</div>)
-      }
-    });
-
-    return revertButtons.map((revertNode, index) => {
-      return [revertNode, nodes[index]];
-    }).reduce((prev, current) => prev.concat(current), []);
-  }
-}
-
 EditingArgument.propTypes = {
   // premises make an argument for the conclusion
   premises: PropTypes.arrayOf(PropTypes.shape({
@@ -108,6 +51,61 @@ EditingArgument.propTypes = {
   // onDelete will be called if the user wants to delete this argument completely.
   // If undefined, the user won't be able to delete this argument.
   onDelete: PropTypes.func,
+};
+
+export function EditingArgument(props) {
+  const undoConclusion = props.onRevertConclusion
+    ? (<div tabIndex="0" className="undo control conclusion" onClick={props.onRevertConclusion}>undo</div>)
+    : (<div className="spacer control conclusion">s</div>);
+
+  const deleteNode = props.onDelete
+    ? (<button className="delete control footer" type="button" onClick={props.onDelete}>delete</button>)
+    : null;
+
+  const cancelNode = props.onCancel
+    ? (<button className="cancel control footer" type="button" onClick={props.onCancel}>cancel</button>)
+    : null;
+
+  return (
+    <div className="argument-area">
+      <h1 className="suppose">If someone believes that</h1>
+      <ul className="premises">
+        {renderPremises(props)}
+        <div tabIndex="0" className="new control premise" onClick={props.onNewPremise}>new</div>
+      </ul>
+      <h1 className="then">Then they should agree that</h1>
+      {undoConclusion}
+      <input value={props.conclusion} onChange={extractValueThen(props.onChangeConclusion)} className="conclusion" />
+      <button className="save control footer" type="button" onClick={props.onSave}>save</button>
+      {cancelNode}
+      {deleteNode}
+    </div>
+  )
+}
+
+function renderPremises(props) {
+  const premises = props.premises;
+  const nodes = premises.map((premise, index) => (
+    <input type="text"
+           value={premise.text}
+           onChange={extractValueThen(premise.onChange)}
+           key={index + '-text'}
+           className="premise"
+    />
+  ));
+  const revertButtons = premises.map((premise, index) => {
+    if (premise.onUndo) {
+      return (<div key={index + '-revert'} tabIndex="0" className="undo control" onClick={premise.onUndo}>u</div>);
+    } else if (premises.length > 2) {
+      return (<div key={index + '-revert'} tabIndex="0" className="delete control" onClick={premise.onDelete}>d</div>)
+    } else {
+      return (<div key={index + '-spacer'} className="spacer control">s</div>)
+    }
+  });
+
+  return revertButtons.map((revertNode, index) => {
+    return [revertNode, nodes[index]];
+  }).reduce((prev, current) => prev.concat(current), []);
 }
 
 // transform a "string" callback into an "event payload" one.
