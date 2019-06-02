@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -6,114 +6,103 @@ import PropTypes from 'prop-types';
  *
  * For the "static" view, see StaticArgument.jsx.
  */
-export class EditingArgument extends React.Component {
-  render() {
-    const undoConclusion = this.props.onRevertConclusion
-      ? (<div tabIndex="0" className="undo control conclusion" onClick={this.props.onRevertConclusion}>undo</div>)
-      : (<div className="spacer control conclusion">s</div>);
-
-    const deleteNode = this.props.onDelete
-      ? (<button className="delete control footer" type="button" onClick={this.props.onDelete}>delete</button>)
-      : null;
-
-    const cancelNode = this.props.onCancel
-      ? (<button className="cancel control footer" type="button" onClick={this.props.onCancel}>cancel</button>)
-      : null;
-
-    return (
-      <div className="argument-area">
-        <h1 className="suppose">If someone believes that</h1>
-        <ul className="premises">
-          {this.renderPremises()}
-          <div tabIndex="0" className="new control premise" onClick={this.props.onNewPremise}>new</div>
-        </ul>
-        <h1 className="then">Then they should agree that</h1>
-        {undoConclusion}
-        <input value={this.props.conclusion} onChange={extractValueThen(this.props.onChangeConclusion)} className="conclusion" />
-        <button className="save control footer" type="button" onClick={this.props.onSave}>save</button>
-        {cancelNode}
-        {deleteNode}
-      </div>
-    )
-  }
-
-  renderPremises() {
-    const premises = this.props.premises;
-    const nodes = premises.map((premise, index) => (
-      <input type="text"
-             value={premise.text}
-             onChange={extractValueThen(premise.onChange)}
-             key={index + '-text'}
-             className="premise"
-      />
-    ));
-    const revertButtons = premises.map((premise, index) => {
-      if (premise.onUndo) {
-        return (<div key={index + '-revert'} tabIndex="0" className="undo control" onClick={premise.onUndo}>u</div>);
-      } else if (premises.length > 2) {
-        return (<div key={index + '-revert'} tabIndex="0" className="delete control" onClick={premise.onDelete}>d</div>)
-      } else {
-        return (<div key={index + '-spacer'} className="spacer control">s</div>)
-      }
-    });
-
-    return revertButtons.map((revertNode, index) => {
-      return [revertNode, nodes[index]];
-    }).reduce((prev, current) => prev.concat(current), []);
-  }
-}
-
 EditingArgument.propTypes = {
-  // premises make an argument for the conclusion
-  premises: PropTypes.arrayOf(PropTypes.shape({
-    // text is the premise itself
-    text: PropTypes.string.isRequired,
-
-    // onUndo will be called if the user wants to revert this premise to
-    // its original state. This should be undefined if there's no original
-    // state to go back to (e.g. no edits made yet or the premise didn't exist originally)
-    onUndo: PropTypes.func,
-
-    // onDelete will be called if the user wants to delete this premise.
-    onDelete: PropTypes.func.isRequired,
-
-    // onChange will be called whenever the user edits this premise.
-    // The premise text will be passed as an argument.
-    onChange: PropTypes.func.isRequired,
-  })).isRequired,
-
-  // onNewPremise will be called if the user wants to add
-  // a new premise to the argument.
-  onNewPremise: PropTypes.func.isRequired,
-
-  // The argument's conclusion
-  conclusion: PropTypes.string.isRequired,
-
-  // onRevertConclusion will be called if the user wants to revert the
-  // conclusion to its original value. If undefined, the user shouldn't
-  // have edited the  conclusion yet.
-  onRevertConclusion: PropTypes.func,
-
-  // onChangeConclusion will be called whenever the user edits the conclusion.
-  // The conclusion text will be passed as an argument.
-  onChangeConclusion: PropTypes.func.isRequired,
-
-  // onSave will be called if the user wants to save this argument as is.
+  // The initial premises & conclusion in the editor.
+  initialArgument: PropTypes.shape({
+    premises: PropTypes.arrayOf(PropTypes.string).isRequired,
+    conclusion: PropTypes.string.isRequired
+  }).isRequired,
+  // onSave will be called when the user saves.
+  // It will be passed an object like { "premises": ["p1", "p2"], "conclusion": "c" }.
   onSave: PropTypes.func.isRequired,
-
-  // onCancel will be called if the user wants to cancel all their edits
-  // without saving them. If undefined, the user won't be able to cancel this edit.
+  // onCancel will be called if the user cancels their edits without saving.
+  // If undefined, the user won't be able to cancel these edits.
   onCancel: PropTypes.func,
-
   // onDelete will be called if the user wants to delete this argument completely.
   // If undefined, the user won't be able to delete this argument.
   onDelete: PropTypes.func,
 }
 
-// transform a "string" callback into an "event payload" one.
-// converts our component's onChange handlers into <input> tag ones.
-function extractValueThen(handle) {
-  return function (ev) {
-    handle(ev.target.value);
+export function EditingArgument(props) {
+  const [premises, setPremises] = useState(props.initialArgument.premises);
+  const [conclusion, setConclusion] = useState(props.initialArgument.conclusion);
+
+  const undoConclusion = props.initialArgument.conclusion !== '' && conclusion !== props.initialArgument.conclusion
+    ? (<div tabIndex="0" className="undo control conclusion" onClick={() => setConclusion(props.initialArgument.conclusion)}>undo</div>)
+    : (<div className="spacer control conclusion">s</div>);
+
+  const deleteNode = props.onDelete
+    ? (<button className="delete control footer" type="button" onClick={props.onDelete}>delete</button>)
+    : null;
+
+  const cancelNode = props.onCancel
+    ? (<button className="cancel control footer" type="button" onClick={props.onCancel}>cancel</button>)
+    : null;
+
+  return (
+    <div className="argument-area">
+      <h1 className="suppose">If someone believes that</h1>
+      <ul className="premises">
+        {renderPremises(props.initialArgument.premises, premises, setPremises)}
+        <div tabIndex="0" className="new control premise" onClick={() => setPremises(oldPremises => oldPremises.concat(['']))}>new</div>
+      </ul>
+      <h1 className="then">Then they should agree that</h1>
+      {undoConclusion}
+      <input value={conclusion} onChange={(ev) => setConclusion(ev.target.value)} className="conclusion" />
+      <button className="save control footer" type="button" onClick={() => props.onSave({ premises, conclusion })}>save</button>
+      {cancelNode}
+      {deleteNode}
+    </div>
+  )
+}
+
+function renderPremises(initialPremises, premises, setPremises) {
+  const nodes = premises.map((premise, index) => (
+    <input type="text"
+           value={premise}
+           onChange={premiseChangeHandler(index, setPremises)}
+           key={index + '-text'}
+           className="premise"
+    />
+  ));
+  const revertButtons = premises.map((premise, index) => {
+    if (index < initialPremises.length && initialPremises[index] !== '' && initialPremises[index] !== premises[index]) {
+      return (<div key={index + '-revert'} tabIndex="0" className="undo control" onClick={premiseUndoer(setPremises, index, initialPremises[index])}>u</div>);
+    } else if (premises.length > 2) {
+      return (<div key={index + '-revert'} tabIndex="0" className="delete control" onClick={premiseDeleter(setPremises, index)}>d</div>)
+    } else {
+      return (<div key={index + '-spacer'} className="spacer control">s</div>)
+    }
+  });
+
+  return revertButtons.map((revertNode, index) => {
+    return [revertNode, nodes[index]];
+  }).reduce((prev, current) => prev.concat(current), []);
+}
+
+function premiseChangeHandler(index, setPremises) {
+  return function(ev) {
+    const newPremise = ev.target.value;
+    setPremises(oldPremises => copyWithElement(oldPremises, index, newPremise));
   }
+}
+
+function premiseUndoer(setPremises, index, initialPremise) {
+  return function() {
+    setPremises(oldPremises => copyWithElement(oldPremises, index, initialPremise));
+  }
+}
+
+function premiseDeleter(setPremises, index) {
+  return function() {
+    setPremises(oldPremises => {
+      return oldPremises.slice(0, index).concat(oldPremises.slice(index+1));
+    });
+  };
+}
+
+function copyWithElement(arr, index, elm) {
+  const copy = arr.slice();
+  copy[index] = elm;
+  return copy;
 }
