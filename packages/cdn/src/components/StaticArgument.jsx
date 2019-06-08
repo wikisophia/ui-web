@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * A StaticArgument renders the premises and conclusion as static text.
+ * A StaticArgument renders the argument as plain text.
  *
- * For the "being edited" view, see EditableArgument.jsx.
+ * For an argument which is being edited, see ./EditableArgument.jsx.
  *
  * The HTML of this component must be kept in sync with
  * <project-root>/server/src/views/argument.handlebars

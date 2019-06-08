@@ -10,7 +10,7 @@
     "lint:nofix": "eslint src"
   },
   "dependencies": {
-    "@wikisophia/api-arguments-client": "^0.6.0",
+    "@wikisophia/api-arguments-client": "^0.7.0",
     "body-parser": "^1.18.3",
     "express": "^4.17.1",
     "express-handlebars": "^3.0.2",
