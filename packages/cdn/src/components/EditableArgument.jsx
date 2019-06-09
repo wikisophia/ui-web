@@ -25,218 +25,266 @@ import { StaticArgument } from './StaticArgument';
  * Since arguments are relatively small, it will pre-fetch any data it needs to serve
  * content for the "next click" to make the UX as snappy as possible.
  */
+const propTypeArgument = PropTypes.exact({
+  // This argument's ID. Can be undefined if it doesn't exist yet
+  // (for example, "I want to make a new argument with conclusion X,
+  // but need the user to fill out the premises")
+  id: PropTypes.number,
+
+  // The argument's version. Can be undefined if it hasn't been saved yet.
+  version: PropTypes.number,
+
+  // This argument's premises
+  premises: PropTypes.arrayOf(PropTypes.string).isRequired,
+
+  // The argument's conclusion
+  conclusion: PropTypes.string.isRequired,
+
+  // True if this argument is soft-deleted (won't show up in searches anymore),
+  // and false otherwise. Undefined is equivalent to false.
+  deleted: PropTypes.bool,
+});
+
 EditableArgument.propTypes = {
-  // The authority of the URL where the API is listening.
-  // Something like "api.arguments.wikisophia.net" or "localhost:8001".
-  apiAuthority: PropTypes.string.isRequired,
+  // api an object which makes calls to the Arguments API.
+  // See https://github.com/wikisophia/api-arguments/tree/master/client-js
+  api: PropTypes.shape({
+    getSome: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
+    save: PropTypes.func.isRequired,
+  }).isRequired,
 
   // This is the argument the user will see initially.
-  // If undefined, it will start as a blank form in edit mode.
-  initialArgument: PropTypes.shape({
-    // This argument's ID. Can be undefined if it doesn't exist yet
-    // (for example, "I want to make a new argument with conclusion X,
-    // but need the user to fill out the premises")
-    id: PropTypes.number,
+  initialArgument: propTypeArgument.isRequired,
 
-    // The argument's version. Can be undefined if it hasn't been saved yet.
-    version: PropTypes.number,
+  // initialArgumentsForPremises seeds the component with arguments which support each premise.
+  //
+  // This _must_ be the same length as initialArgument.premises. If you have an argument which supports
+  // each premise, include it at the same index. If not, send null.
+  //
+  // Any null values will be populated by an API call post-render.
+  initialArgumentsForPremises: PropTypes.arrayOf(PropTypes.oneOfType([propTypeArgument, PropTypes.bool])).isRequired,
 
-    // This argument's premises
-    premises: PropTypes.arrayOf(PropTypes.string).isRequired,
+  // True if this component should start out in edit mode,
+  // or false if it's just showing the static argument.
+  initialEditing: PropTypes.bool,
 
-    // The argument's conclusion
-    conclusion: PropTypes.string.isRequired,
+  // initialNextForConclusion seeds the component with another argument for the same conclusion.
+  //
+  // If you know for sure that no other supporing arguments exist, pass false.
+  // If you don't know, don't pass it.
+  //
+  // This is a performance optimization.
+  // If defined, thisavoids an API call and renders faster.
+  initialNextForConclusion: PropTypes.oneOfType([propTypeArgument, PropTypes.bool]),
 
-    // True if this argument is soft-deleted (won't show up in searches anymore),
-    // and false otherwise.
-    deleted: PropTypes.bool.isRequired,
-  }).isRequired
+  // initialSeenSoFar is an object with int keys.
+  //
+  // If defined, this component will not return arguments with these IDs as the user
+  // asks for other arguments which support this conclusion.
+  initialSeenSoFar: PropTypes.object,
+
+  // navigate will be called whenever the user does something that changes the argument or
+  // starts/stops editing.
+  // It will be given passed object like { newArgument, newEditing }, where newEditing is a bool
+  // and newArgument matches the propTypeArgument defined in this file.
+  //
+  // This lets callers make a poor-man's single-page application.
+  navigate: PropTypes.func.isRequired,
 };
 
 export function EditableArgument(props) {
-  const [deleted, setDeleted] = useState(props.initialArgument.deleted ? true : false);
-  const [argument, setArgument] = useState(argumentPropToState(props.initialArgument));
+  const [argument, setArgument] = useState(props.initialArgument);
   const [editing, setEditing] = useState(props.initialEditing);
   const [error, setError] = useState(null);
 
-  // This component takes control of the browser history so that the back and forward buttons
-  // keep working as it changes the content with AJAX calls.
-  //
-  // This effect sets that up by saving the initial state and attaching the listeners
-  // that restore it on "back".
-  useEffect(() => {
-    history.replaceState({ deleted, argument, editing, error }, 'Wikisophia', window.location);
-    function listener(event) {
-      setDeleted(event.state.deleted);
-      setArgument(event.state.argument);
-      setEditing(event.state.editing);
-      setError(event.state.error);
-    }
-    window.addEventListener('popstate', listener);
-    return window.removeEventListener.bind(window, 'popstate', listener);
-  }, []);
+  const [seenSoFar, setSeenSoFar] = useState(props.initialSeenSoFar);
+  const [nextForConclusion, setNextForConclusion] = useState(props.initialNextForConclusion)
+  const [argumentsForPremises, setArgumentsForPremises] = useState(props.initialArgumentsForPremises)
 
-  const api = newClient({
-    url: `http://${props.apiAuthority}`,
-    fetch: fetch,
-  });
+  function navigate(args) {
+    const { newArgument, newEditing, seenSoFar } = args;
+    setArgument(newArgument),
+    setArgumentsForPremises(newArgument.premises.map((premise) => null)),
+    setEditing(newEditing),
+    setNextForConclusion(null),
+    setSeenSoFar(newArgument.id ? Object.assign({}, seenSoFar, { [newArgument.id]: true }) : seenSoFar),
+    props.navigate(args)
+  }
 
-  if (deleted) {
+  // These effects fetch other arguments which support these premises or conclusion.
+  // This controls which nav elements render, but also stores them in memory so we can load them immediately.
+  useEffect(nextForConclusionFetcher(props.api, argument.conclusion, seenSoFar, nextForConclusion, setNextForConclusion, editing))
+  useEffect(searchPremiseFetcher(props.api, argument.premises, argumentsForPremises, setArgumentsForPremises, editing))
+
+  if (error) {
     return (
-      <div>
-        <div className="delete-notice">The argument has been deleted. It can be restored by clicking the button below.</div>
-        <button type="button" onClick={restorer(setDeleted)}>Restore it</button>
-      </div>
+      <div>ERROR: {error}</div>
     )
-  } else if (editing) {
+  }
+  if (editing) {
     return (
-      <EditingArgument { ...editingArgumentProps(api, argument, setArgument, setEditing, setError, setDeleted) } />
+      <EditingArgument { ...editingArgumentProps(props.api, argument, seenSoFar, setError, navigate) } />
     );
-  } else {
-    return (
-      <StaticArgument {...staticArgumentProps(argument, setArgument, setEditing, setError, setDeleted)} />
-    );
+  }
+
+  return (
+    <StaticArgument {...staticArgumentProps(argument, argumentsForPremises, seenSoFar, nextForConclusion, navigate)} />
+  );
+}
+
+function nextForConclusionFetcher(api, conclusion, seenSoFar, next, setNext, editing) {
+  return function fetchNext() {
+    if (editing || next !== undefined) {
+      return;
+    }
+
+    // render gets called a lot... so if we don't set this immediately, the page makes lots of API calls.
+    setNext({});
+    api.getSome({
+      conclusion,
+      count: 1,
+      exclude: Object.keys(seenSoFar),
+    }).then((results) => {
+      if (results.arguments.length > 0) {
+        setNext(results.arguments[0]);
+      }
+    }).catch((err) => {
+      // TODO: Log this somewhere the server can see it?
+      console.log(err);
+    })
   }
 }
 
-function editingArgumentProps(api, argumentState, setArgument, setEditing, setError, setDeleted) {
+function searchPremiseFetcher(api, premises, argumentsForPremises, setArgumentsForPremises, editing) {
+  return function fetchPremiseSupport() {
+    if (editing) {
+      return;
+    }
+    premises.forEach((premise, index) => {
+      if (argumentsForPremises[index] !== null) {
+        return;
+      }
+      // Set this immediately so we only make one API call.
+      setArgumentsForPremises((oldArguments) => {
+        const copy = oldArguments.slice();
+        copy[index] = {};
+        return copy;
+      })
+
+      api.getSome({ conclusion: premise, count: 1 })
+        .then((results) => {
+          if (results.arguments.length > 0) {
+            setArgumentsForPremises((oldArguments) => {
+              const copy = oldArguments.slice();
+              copy[index] = results.arguments[0];
+              return copy;
+            });
+          }
+        }).catch((err) => {
+          // TODO: Log this somewhere the server can see it?
+          console.log(err);
+        })
+    })
+  }
+}
+
+function editingArgumentProps(api, argument, seenSoFar, setError, navigate) {
   return {
-    initialArgument: {
-      premises: argumentState.premises.map(premise => premise.conclusion),
-      conclusion: argumentState.conclusion
-    },
-    onSave: saver(api, argumentState, setArgument, setEditing, setError),
-    onCancel: argumentState.id ? canceller(setEditing) : null,
-    onDelete: argumentState.id ? deleter(setDeleted) : null,
+    initialArgument: argument,
+    onSave: saver(api, argument, seenSoFar, setError, navigate),
+    onCancel: argument.id ? navigate.bind(null, {
+      newArgument: argument,
+      newEditing: false,
+      seenSoFar,
+    }) : null,
+    onDelete: argument.id ? function() { } : null, // TODO: Implement deletions
   };
 }
 
-/**
- *
- * @param {ArgumentState} argumentState
- * @param {*} setEditing
- */
-function staticArgumentProps(argumentState, setArgument, setEditing, setError, setDeleted) {
+function staticArgumentProps(argument, argumentsForPremises, seenSoFar, nextForConclusion, navigate) {
   function newArgumentNavigator(conclusion) {
     return function() {
-      const newArgumentState = {
-        premises: [{conclusion: ''}, {conclusion: ''}],
-        conclusion,
-      };
-      setArgument(newArgumentState);
-      setEditing(true);
-      setDeleted(false);
-      setError(null);
-      history.pushState({
-        deleted: false,
-        argument: newArgumentState,
-        editing: true,
-        error: null,
-      }, 'Wikisophia', `/new-argument?conclusion=${encodeURIComponent(conclusion)}`);
+      navigate({
+        newArgument: { premises: ['', ''], conclusion },
+        newEditing: true,
+        seenSoFar,
+      });
     };
   }
 
   return {
-    premises: argumentState.premises.map(function(premise) {
+    premises: argument.premises.map(function(premise, index) {
       let support;
-      if (premise.hasSupport === true) {
-        support = {
-          exists: true,
-          onClick: function() {
-            // TODO: implement navigation to the related argument
-          },
-        };
-      } else if (premise.hasSupport === false) {
-        support = {
-          exists: false,
-          onClick: newArgumentNavigator(premise.conclusion),
-        };
+      if (argumentsForPremises && argumentsForPremises[index] !== undefined && argumentsForPremises[index] !== null) {
+        if (argumentsForPremises[index].conclusion) {
+          return {
+            text: premise,
+            support: {
+              exists: true,
+              onClick: function() {
+                navigate({
+                  newArgument: argumentsForPremises[index],
+                  newEditing: false,
+                  seenSoFar
+                });
+              }
+            }
+          };
+        } else {
+          return {
+            text: premise,
+            support: {
+              exists: false,
+              onClick: newArgumentNavigator(premise)
+            }
+          };
+        }
       }
-
       return {
-        text: premise.conclusion,
+        text: premise,
         support,
       };
     }),
 
-    conclusion: argumentState.conclusion,
-    onNew: newArgumentNavigator(argumentState.conclusion),
-    onNext: function () {
-      // TODO: What happens when the user loads the next argument
-    },
-    onEdit: startEditor(setEditing),
+    conclusion: argument.conclusion,
+    onNew: newArgumentNavigator(argument.conclusion),
+    onNext: nextForConclusion && nextForConclusion.conclusion ? function() {
+      navigate({
+        newArgument: nextForConclusion,
+        newEditing: false,
+        seenSoFar,
+      });
+    } : null,
+    onEdit: navigate.bind(null, {
+      newArgument: argument,
+      newEditing: true,
+      seenSoFar,
+    }),
   };
-}
-
-/**
- *
- * @param {*} argument
- * @return {ArgumentState}
- */
-function argumentPropToState(argument) {
-  const premises = argument.premises.map(premise => ({
-    conclusion: premise,
-  }));
-  while (premises.length < 2) {
-    premises.push({ conclusion: '' });
-  }
-  return Object.assign({}, argument, { premises });
-}
-
-function stateSetter(setter, value) {
-  return function() {
-    setter(value)
-  }
-}
-
-/**
- * Make a handler which deletes the argument.
- *
- * @param {function(boolean)} setDeleted
- */
-function deleter(setDeleted) {
-  return function() {
-    // TODO: Do Delete once the JS client supports it.
-    setDeleted(true);
-  }}
-
-/**
- * Make a handler which restore sthe deleted argument.
- *
- * @param {function(boolean)} setDeleted
- */
-function restorer(setDeleted) {
-  return function() {
-    setDeleted(false);
-  }
-}
-
-function canceller(setEditing) {
-  return function() {
-    setEditing(false)
-  }
-}
-
-function startEditor(setEditing) {
-  return function() {
-    setEditing(true)
-  }
 }
 
 /**
  * Make a handler which saves the argument.
  */
-function saver(api, oldArgumentState, setArgument, setEditing, setError) {
+function saver(api, oldArgument, seenSoFar, setError, navigate) {
   return function(newArgumentData) {
-    if (hasEdits(oldArgumentState, newArgumentData)) {
-      const call = oldArgumentState.id
-        ? api.update(oldArgumentState.id, newArgumentData)
+    if (hasEdits(oldArgument, newArgumentData)) {
+      const call = oldArgument.id
+        ? api.update(oldArgument.id, newArgumentData)
         : api.save(newArgumentData);
 
-      call.then(saveHttpResponseHandler(oldArgumentState, setEditing, setArgument))
-          .catch(setError);
+      call.then((response) => navigate({
+        newArgument: response.argument,
+        newEditing: false,
+        seenSoFar,
+      })).catch(setError);
     } else {
-      setEditing(false);
+      navigate({
+        newArgument: oldArgument,
+        newEditing: false,
+        seenSoFar,
+      });
     }
   }
 }
@@ -249,67 +297,9 @@ function hasEdits(oldArgument, newArgument) {
     return true;
   }
   for (let i = 0; i < oldArgument.premises.length; i++) {
-    if (oldArgument.premises[i].conclusion !== newArgument.premises[i]) {
+    if (oldArgument.premises[i] !== newArgument.premises[i]) {
       return true;
     }
   }
   return false;
 }
-
-function saveHttpResponseHandler(oldArgument, setEditing, setArgument) {
-  return function(response) {
-    setEditing(false);
-    const newArgument = {
-      id: response.argument.id,
-      premises: response.argument.premises.map(premise => ({
-        conclusion: premise,
-      })),
-      conclusion: response.argument.conclusion,
-    };
-    setArgument(newArgument);
-    history.pushState({
-      argument: newArgument,
-      deleted: false,
-      editing: false,
-      error: null,
-    }, 'Wikisophia', response.location);
-  };
-}
-
-/**
- * @typedef ArgumentProp
- *
- * @property [int] id
- * @property [int] version
- * @property {string[]} premises
- * @property {string} conclusion
- * @property {boolean} deleted
- */
-
-/**
- * @typedef ArgumentState
- *
- * @property [int] id
- * @property [int] version
- * @property {{conclusion: string}[]} premises
- * @property {string} conclusion
- * @property {boolean} deleted
- */
-
-/**
- * @typedef PremiseState
- *
- * @property {string} conclusion This text of the premise of the argument being viewed.
- *   This is named a bit weirdly because the Component will fetch an argument which
- *   supports this premise in the background. This name comes from the fact that the premise
- *   of this argument is the conclusion of the argument which supports it.
- *
- * @property [boolean] hasSupport True if this premise has a supporting argument, false if not,
- *   and undefined if we're not sure yet.
- * @property [int] id The ID of the supporting argument.
- *   This will be defined iff hasSupport is true.
- * @property [int] version The version of the supporting argument.
- *   This will be defined iff hasSupport is true.
- * @property [Array<string>] premises The premises in teh supporting argument.
- *   This will be true iff hasSupport is true.
- */

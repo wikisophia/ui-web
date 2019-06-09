@@ -14,12 +14,18 @@ function newHandler(config) {
       initialEditing: true,
       initialArgument: {
         conclusion: req.query.conclusion || '',
-        premises: req.query.premise || [],
+        premises: req.query.premise || ['', ''],
         deleted: false,
       },
+      initialSeenSoFar: {},
+      initialArgumentsForPremises: [null, null],
     };
 
-    res.contentType('text/html').render('new-argument', {
+    res.contentType('text/html').render('argument', {
+      argument: {
+        premises: ['', ''],
+        conclusion: '',
+      },
       componentProps: JSON.stringify(componentProps),
       resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,
     });
