@@ -30,6 +30,8 @@ export function newHandler(config) {
             premises: arg.argument.premises,
             deleted: false,
           },
+          initialSeenSoFar: { [id]: true },
+          initialArgumentsForPremises: arg.argument.premises.map(() => null),
         };
         res.contentType('text/html').render('argument', {
           componentProps: JSON.stringify(componentProps),

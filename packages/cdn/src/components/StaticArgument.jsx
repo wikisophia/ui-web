@@ -75,9 +75,9 @@ function renderPremises(props) {
   const searches = premises.map((premise, index) => {
     if (premise.support) {
       if (premise.support.exists) {
-        return (<div key={index + '-search'} tabIndex="0" className="search control" onClick={premise.onClick}>s</div>);
+        return (<div key={index + '-search'} tabIndex="0" className="search control" onClick={premise.support.onClick}>s</div>);
       } else {
-        return (<div key={index + '-new'} tabIndex="0" className="new control" onClick={premise.onClick}>n</div>);
+        return (<div key={index + '-new'} tabIndex="0" className="new control" onClick={premise.support.onClick}>n</div>);
       }
     } else {
       return <div key={index + '-spacer'} className="control spacer">s</div>
