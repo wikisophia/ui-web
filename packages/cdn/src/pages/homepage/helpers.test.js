@@ -36,7 +36,9 @@ describe('makeRequest()', () => {
 
     xhrmock.use((req, resp) => {
       expect(req.method()).toBe('GET');
-      expect(req.url().path).toBe('https://api.wikisophia.net/arguments');
+      expect(req.url().protocol).toBe('https');
+      expect(req.url().host).toBe('api.wikisophia.net');
+      expect(req.url().path).toBe('/arguments');
       expect(req.url().query.search).toBe(query);
       done();
       return resp.status(404);
