@@ -9,7 +9,7 @@ const paramValidation = [
 
 export function newHandler(config) {
   const argumentsClient = newClient({
-    url: `${config.api.scheme}://${config.api.authority}`,
+    url: config.api.url,
     fetch,
   });
   return function handler(req, res) {
@@ -22,7 +22,7 @@ export function newHandler(config) {
     argumentsClient.getOne(id, version).then((arg) => {
       if (arg) {
         const componentProps = {
-          apiAuthority: config.api.authority,
+          apiurl: config.api.url,
           initialEditing: false,
           initialArgument: {
             id: Number(id),
@@ -35,7 +35,7 @@ export function newHandler(config) {
         };
         res.contentType('text/html').render('argument', {
           componentProps: JSON.stringify(componentProps),
-          resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,
+          resourcesRoot: config.staticResources.url,
           argument: arg.argument,
         });
       } else {

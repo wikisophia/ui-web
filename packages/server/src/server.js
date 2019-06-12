@@ -1,3 +1,5 @@
+import fs from 'fs';
+import https from 'https';
 import newApp from './app';
 import { log } from './log';
 import { load, validate } from './config';
@@ -10,6 +12,19 @@ if (!validate(config)) {
   process.exit(1);
 }
 
-newApp(config).listen(config.server.port, config.server.host, () => {
-  log(`Server listening on port ${config.server.port}.`);
-});
+const app = newApp(config);
+
+if (config.server.useSSL) {
+  const server = https.createServer({
+    key: fs.readFileSync(config.server.keyPath),
+    cert: fs.readFileSync(config.server.certPath),
+  }, app);
+
+  server.listen(config.server.port, config.server.host, () => {
+    log(`Server listening on ${config.server.host}:${config.server.port}.`);
+  });
+} else {
+  app.listen(config.server.port, config.server.host, () => {
+    log(`Server listening on ${config.server.host}:${config.server.port}.`);
+  });
+}

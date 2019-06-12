@@ -8,7 +8,7 @@ const paramValidation = [
 
 function newHandler(config) {
   const argumentsClient = newClient({
-    url: `${config.api.scheme}://${config.api.authority}`,
+    url: config.api.url,
     fetch,
   });
 
@@ -20,7 +20,7 @@ function newHandler(config) {
     }
     argumentsClient.getSome({ conclusion: search }).then((args) => {
       res.contentType('text/html').render('search-arguments', {
-        resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,
+        resourcesRoot: config.staticResources.url,
         arguments: args.arguments,
         search,
       });
