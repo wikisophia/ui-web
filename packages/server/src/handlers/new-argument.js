@@ -10,7 +10,7 @@ const newArgumentValidation = [
 function newHandler(config) {
   return function handler(req, res) {
     const componentProps = {
-      apiAuthority: config.api.authority,
+      apiUrl: config.api.url,
       initialEditing: true,
       initialArgument: {
         conclusion: req.query.conclusion || '',
@@ -27,7 +27,7 @@ function newHandler(config) {
         conclusion: '',
       },
       componentProps: JSON.stringify(componentProps),
-      resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,
+      resourcesRoot: config.staticResources.url,
     });
   };
 }

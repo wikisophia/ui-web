@@ -6,10 +6,10 @@ import { EditableArgument } from '../../components/EditableArgument';
 
 const props = JSON.parse(document.getElementById('new-argument-props').innerHTML);
 props.api = newClient({
-  url: `http://${props.apiAuthority}`,
+  url: props.apiUrl,
   fetch: fetch,
 });
-delete props.apiAuthority;
+delete props.apiUrl;
 
 ReactDOM.render(
   React.createElement(EditableArgument, props),

@@ -4,8 +4,8 @@
 function newHandler(config) {
   return function handler(req, res) {
     res.contentType('text/html').render('homepage', {
-      apiAuthority: config.api.authority,
-      resourcesRoot: `${config.staticResources.scheme}://${config.staticResources.authority}`,
+      apiUrl: config.api.url,
+      resourcesRoot: config.staticResources.url,
     });
   };
 }

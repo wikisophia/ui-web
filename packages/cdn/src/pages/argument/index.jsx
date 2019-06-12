@@ -34,9 +34,9 @@ function navigate({ newArgument, newEditing, seenSoFar }) {
 }
 
 const initialProps = function() {
-  const { apiAuthority, ...props } = JSON.parse(document.getElementById('argument-props').innerHTML);
+  const { apiUrl, ...props } = JSON.parse(document.getElementById('argument-props').innerHTML);
   props.api = newClient({
-    url: `http://${apiAuthority}`,
+    url: apiUrl,
     fetch: fetch,
   });
   props.navigate = navigate;
