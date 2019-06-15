@@ -36,6 +36,10 @@ a:hover {
   text-decoration: underline;
 }
 
+button {
+  border-radius: 7px;
+}
+
 .header-menu {
   display: flex;
   justify-content: flex-end;

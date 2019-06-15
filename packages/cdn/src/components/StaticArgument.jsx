@@ -65,7 +65,9 @@ export function StaticArgument(props) {
         <button className="new control" type="button" onClick={props.onNew}>new</button>
         <p className="conclusion">{props.conclusion}</p>
       </div>
-      <button className="edit" type="button" onClick={props.onEdit}>Edit</button>
+      <div className="control-panel">
+        <button className="edit" type="button" onClick={props.onEdit}>Edit</button>
+      </div>
     </div >
   )
 }
@@ -80,7 +82,7 @@ function renderPremises(props) {
         return (<div key={index + '-new'} tabIndex="0" className="new control" onClick={premise.support.onClick}>n</div>);
       }
     } else {
-      return <div key={index + '-spacer'} className="control spacer">s</div>
+      return null
     }
   });
   const nodes = premises.map((premise, index) => (
@@ -88,5 +90,5 @@ function renderPremises(props) {
   ));
   return searches.map((searchNode, index) => {
     return [searchNode, nodes[index]];
-  }).reduce((prev, current) => prev.concat(current), []);
+  }).reduce((prev, current) => current === null ? prev : prev.concat(current), []);
 }
