@@ -17,7 +17,6 @@ export function setRoutes(config, router) {
   router.get('/arguments/:id', argumentHandler);
   router.get('/arguments/:id/edit', argumentHandler);
   router.get('/arguments/:id/version/:version', argumentHandler);
-  router.get('/contact', newContact(config));
 }
 
 /**
