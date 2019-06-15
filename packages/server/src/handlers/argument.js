@@ -1,6 +1,7 @@
 import { check, validationResult } from 'express-validator/check';
 import fetch from 'node-fetch';
 import newClient from '@wikisophia/api-arguments-client';
+import { request } from 'http';
 
 const paramValidation = [
   check('id').isInt({ min: 1 }),
@@ -23,7 +24,7 @@ export function newHandler(config) {
       if (arg) {
         const componentProps = {
           apiUrl: config.api.url,
-          initialEditing: false,
+          initialEditing: req.path.includes('edit'),
           initialArgument: {
             id: Number(id),
             conclusion: arg.argument.conclusion,
