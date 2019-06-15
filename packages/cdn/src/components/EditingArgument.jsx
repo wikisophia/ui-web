@@ -88,12 +88,6 @@ function premiseChangeHandler(index, setPremises) {
   }
 }
 
-function premiseUndoer(setPremises, index, initialPremise) {
-  return function() {
-    setPremises(oldPremises => copyWithElement(oldPremises, index, initialPremise));
-  }
-}
-
 function premiseDeleter(setPremises, index) {
   return function() {
     setPremises(oldPremises => {
