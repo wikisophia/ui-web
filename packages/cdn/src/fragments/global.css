@@ -12,8 +12,10 @@ h1 {
 }
 
 body {
+  background-color: #fbfbfb;
+  color: #322222;
   padding: 0;
-  margin: 0;
+  margin: 0.5rem;
 }
 
 main {
@@ -23,27 +25,44 @@ main {
 /* navbar/header styles */
 header {
   width: 100%;
-  border-bottom: 1px solid black;
+}
+
+a {
+  color: #132cec;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 .header-menu {
   display: flex;
+  justify-content: flex-end;
 }
 
 .nav-link {
   text-decoration: none;
-  display: flex;
-  font-size: 29px;
-  color: black;
+  font-size: 24px;
+  color: #fff;
   padding-left: 0.7em;
   padding-right: 0.7em;
   align-items: center;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
+  border-radius: 7px;
 }
 
-.nav-link:first-child {
+a.nav-link:hover {
+  text-decoration: none;
+}
+
+.nav-link.home {
   margin-right: auto;
+  color: #000;
+}
+
+.nav-link.about {
+  color: #fff;
+  background-color: #4056f4;
 }
 
 .main-content {

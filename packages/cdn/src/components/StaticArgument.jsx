@@ -58,14 +58,14 @@ export function StaticArgument(props) {
       <h1 className="suppose">If you believe that</h1>
       <ul className="premises">
         {renderPremises(props)}
-        {/* This dummy node adds space where the "add new premise" button appears in edit mode. */}
-        <div key={'add-new-premise-spacer'} tabIndex="0" className="control spacer">s</div>
       </ul>
       <h1 className="then">Then you should agree that</h1>
       {next}
-      <p className="conclusion">{props.conclusion}</p>
-      <button className="new control footer" type="button" onClick={props.onNew}>new</button>
-      <button className="edit control footer" type="button" onClick={props.onEdit}>edit</button>
+      <div className="conclusion-area">
+        <button className="new control" type="button" onClick={props.onNew}>new</button>
+        <p className="conclusion">{props.conclusion}</p>
+      </div>
+      <button className="edit" type="button" onClick={props.onEdit}>Edit</button>
     </div >
   )
 }

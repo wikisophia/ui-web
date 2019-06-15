@@ -1,20 +1,51 @@
-.argument-area {
+.premises, .conclusion-area {
   display: grid;
-  grid-template-columns: repeat(4, 45px) auto;
+  grid-template-columns: 45px auto;
   grid-template-rows: auto;
-  grid-gap: 2rem 1rem;
+  grid-gap: 2rem 0.5rem;
+  background-color: #e1e1e6;
+  border: 1px solid #bcbcbc;
+  color: #322222;
+  border-radius: 7px;
+  padding: 2rem;
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+.premises .control, .conclusion-area .control {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+.premises .premise, .conclusion-area .conclusion {
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+
+.premise:first-child {
+  padding-top: 0;
+}
+
+.premise:last-child {
+  padding-bottom: 0;
+}
+
+.control {
+  width: 45px;
 }
 
 .suppose, .then {
   margin: 0;
 }
 
-.new {
-  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFZSURBVEhL7dVPKwZRFMfxYYHy5wWQN2BDLFlhhZ09xUoRr8Gb8Cf2isKendhYYSdKkbD3J8L3V3Pr9HRm5t4eNvKrz+aZe+7pmblzJvvPb6cb89jBMS5wiBVMoBl1pRObeMdXiVvMoBHJGcIDvI2L7KEN0RnEK7zNqhyhCZXpwiO8Td5wlbvLf/OsozIb8IrlDCG6td4a+cQACqPT9QGvWGIbyS4KswCvKEhp9IzCg7ENu1jP5NTYQkgf7LVL2FoZhpsT2IU3iM04bK1Mw8057MJ6G2mauDmAXXgPnZ6gByG6//baImytTMLNKmoXWymHQXrhRgPSKwhSGpXe9hZoQHqFktJoGaWZhVco1xjNLeW/eTSMO1CaBuzD2yCGJssYoqITpSnsbVRGTeaQFH0116AB6W1a6wnR/8RLP/RBe4HXQKdLD74dP5JWjGAKeuP1Mha+J389WfYNM50JgnpUiA0AAAAASUVORK5CYII=') 50% 50% no-repeat;
+.edit {
+  color: #fff;
+  background-color: #4056f4;
+  border-radius: 7px;
 }
 
-.edit {
-  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHySURBVEhLtdZLSxVhHMfxk6ZdQIsuZglauwisFxAYGoK7VtELkJatAqE30KpNiEYQIRJtXLXpsgncaKl0s5vS7QW0bZNQfb/2/GEYjvDMufzgs5i/zvyOM/M8x1oLcwmPMIt+B+3IVfzB3+Q7TqJl2YW9uIBfiKIoG0LT6cR9LGI/2lZ2FnHhKBstzMJn7EPleLsm0Y0xlMuKszCBSrFkGp58xwGpV3axMNM5ZMeSGXjiD5xCL3ajXtl4mvnBsmOJf0Gx5CDWsICdyobhuVnxF+8iSlwfB7CaZroBUyybd5CbDtyDJ8YiLJc8g5/+COIFeYHjyEqsk3LJSppFia9uHz7ALciy7NtlyRyixEVXLnmKKHmfZpvI3ucs8f564jdEycs0K5YcRZRsYABZseQByiXe82KJ+1uxxNV/AlnxFX2IKBlEueQJomQ9zT4h+8Gbm/DEr4iS5TTbqeQjKn/3fIEnn4ElS+k4SvbAkndp5lt2DJVyGp7sbTDX4OJ09hhR8jbNLPO4cq7DC9zaPvqf86hX8iYdN5Tn8CJ+n0Rc7S4+L+rF/flruAM0FJ/Hb7hHdTlIcdO8gngmr3AYDecyvJBuYwruvltpJt+uQ2gqsdWU/YSL17+qB03H1zQu7gN3PfkiuEu0NCPw/zIXaZtSq/0DDCazBMAIFrMAAAAASUVORK5CYII=') 50% 50% no-repeat;
+.new {
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFZSURBVEhL7dVPKwZRFMfxYYHy5wWQN2BDLFlhhZ09xUoRr8Gb8Cf2isKendhYYSdKkbD3J8L3V3Pr9HRm5t4eNvKrz+aZe+7pmblzJvvPb6cb89jBMS5wiBVMoBl1pRObeMdXiVvMoBHJGcIDvI2L7KEN0RnEK7zNqhyhCZXpwiO8Td5wlbvLf/OsozIb8IrlDCG6td4a+cQACqPT9QGvWGIbyS4KswCvKEhp9IzCg7ENu1jP5NTYQkgf7LVL2FoZhpsT2IU3iM04bK1Mw8057MJ6G2mauDmAXXgPnZ6gByG6//baImytTMLNKmoXWymHQXrhRgPSKwhSGpXe9hZoQHqFktJoGaWZhVco1xjNLeW/eTSMO1CaBuzD2yCGJssYoqITpSnsbVRGTeaQFH0116AB6W1a6wnR/8RLP/RBe4HXQKdLD74dP5JWjGAKeuP1Mha+J389WfYNM50JgnpUiA0AAAAASUVORK5CYII=') 50% 50% no-repeat;
 }
 
 .previous {
@@ -46,85 +77,7 @@
   background-size: 90%;
 }
 
-.argument-area .suppose {
-  grid-column-start: 1;
-  grid-column-end: 6;
-  grid-row-start: 1;
-  grid-row-end: 2;
-}
-
-.premises {
-  display: grid;
-  grid-column-start: 2;
-  grid-column-end: 6;
-  grid-row-start: 2;
-  grid-row-end: 3;
-  grid-template-columns: 45px auto;
-  grid-template-rows: auto;
-  grid-gap: 1rem 1rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.argument-area .then {
-  grid-column-start: 1;
-  grid-column-end: 6;
-  grid-row-start: 3;
-  grid-row-end: 4;
-}
-
-.argument-area .conclusion {
-  grid-column-start: 3;
-  grid-column-end: 6;
-  grid-row-start: 4;
-  grid-row-end: 5;
-}
-
-.argument-area .conclusion.search, .argument-area .conclusion.undo {
-  grid-column-start: 2;
-  grid-column-end: 3;
-  grid-row-start: 4;
-  grid-row-end: 5;
-}
-
-.argument-area .previous {
-  grid-column-start: 1;
-  grid-column-end: 2;
-  grid-row-start: 5;
-  grid-row-end: 6;
-}
-
-.argument-area > .new {
-  grid-column-start: 1;
-  grid-column-end: 2;
-  grid-row-start: 5;
-  grid-row-end: 6;
-}
-
-.argument-area .edit, .argument-area .save {
-  grid-column-start: 2;
-  grid-column-end: 3;
-  grid-row-start: 5;
-  grid-row-end: 6;
-}
-
-.argument-area .next, .argument-area .cancel {
-  grid-column-start: 3;
-  grid-column-end: 4;
-  grid-row-start: 5;
-  grid-row-end: 6;
-}
-
-.argument-area > .delete {
-  grid-column-start: 4;
-  grid-column-end: 5;
-  grid-row-start: 5;
-  grid-row-end: 6;
-}
-
 .argument-area .footer {
-  margin-top: 2rem;
   user-select: none;
 }
 
@@ -132,7 +85,7 @@
   margin: 0;
 }
 
-.argument-area .control {
+.new, .search {
   border: none;
   color: transparent;
   -webkit-touch-callout: none;
@@ -144,7 +97,7 @@
 }
 
 .control:not(.spacer):hover {
-    background-color: #ddd;
+  background-color: #ddd;
 }
 
 .control:not(.spacer):active {
