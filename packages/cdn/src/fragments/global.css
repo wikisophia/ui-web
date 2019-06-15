@@ -1,10 +1,10 @@
 /* Global site styles */
-html, input, html button {
-  font: 22px/1.5 'Open sans', sans-serif;
-}
-
 *, *::before, *::after {
   box-sizing: border-box;
+}
+
+html, input, html button {
+  font: 22px/1.5 'Open sans', sans-serif;
 }
 
 h1 {
@@ -17,8 +17,7 @@ body {
 }
 
 main {
-  height: 93vh;
-  margin-top: 20vh;
+  margin-top: 2rem;
 }
 
 /* navbar/header styles */
@@ -48,7 +47,7 @@ header {
 }
 
 .main-content {
-  max-width: 35rem;
+  max-width: 33rem;
   margin-left: auto;
   margin-right: auto;
 }

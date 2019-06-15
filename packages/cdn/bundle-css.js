@@ -42,6 +42,5 @@ function outputCSS(file) {
 
 fs.readFile(`${__dirname}/src/fragments/global.css`).then(outputCSS(`${__dirname}/dist/fragments/global.css`)).catch(printErr);
 fs.readFile(`${__dirname}/src/pages/homepage/index.css`).then(outputCSS(`${__dirname}/dist/homepage.css`)).catch(printErr);
-fs.readFile(`${__dirname}/src/pages/new-argument/index.css`).then(outputCSS(`${__dirname}/dist/new-argument.css`)).catch(printErr);
 fs.readFile(`${__dirname}/src/pages/argument/index.css`).then(outputCSS(`${__dirname}/dist/argument.css`)).catch(printErr);
 fs.readFile(`${__dirname}/src/pages/search-arguments/index.css`).then(outputCSS(`${__dirname}/dist/search-arguments.css`)).catch(printErr);
