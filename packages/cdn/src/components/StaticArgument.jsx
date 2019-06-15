@@ -50,8 +50,8 @@ StaticArgument.propTypes = {
 
 export function StaticArgument(props) {
   const next = props.onNext
-    ? <div tabIndex="0" className="search control conclusion" onClick={props.onNext}>s</div>
-    : null;
+    ? <button tabIndex="0" className="search control" onClick={props.onNext}>s</button>
+    : <button tabIndex="0" className="new control" type="button" onClick={props.onNew}>new</button>;
 
   return (
     <div className="argument-area">
@@ -60,9 +60,8 @@ export function StaticArgument(props) {
         {renderPremises(props)}
       </ul>
       <h1 className="then">Then you should agree that</h1>
-      {next}
       <div className="conclusion-area">
-        <button className="new control" type="button" onClick={props.onNew}>new</button>
+       {next}
         <p className="conclusion">{props.conclusion}</p>
       </div>
       <div className="control-panel">
