@@ -24,7 +24,7 @@ main {
 /* navbar/header styles */
 header {
   width: 100%;
-  background-color: #60daff;
+  border-bottom: 1px solid black;
 }
 
 .header-menu {
@@ -39,6 +39,8 @@ header {
   padding-left: 0.7em;
   padding-right: 0.7em;
   align-items: center;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
 }
 
 .nav-link:first-child {
