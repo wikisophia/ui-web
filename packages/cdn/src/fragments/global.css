@@ -1,6 +1,6 @@
 /* Global site styles */
-html, html button {
-  font: 24px/1.5 Cambria, Georgia, Times, 'Times New Roman', serif;
+html, input, html button {
+  font: 22px/1.5 'Open sans', sans-serif;
 }
 
 *, *::before, *::after {
@@ -8,7 +8,7 @@ html, html button {
 }
 
 h1 {
-  font: 32px/1.5 Futura, 'Trebuchet MS', Helvetica, Arial, sans-serif;
+  font: 28px/1.5 'Crimson Text', serif;
 }
 
 body {
@@ -27,15 +27,6 @@ header {
   background-color: #60daff;
 }
 
-.header-sizer {
-  display: flex;
-  flex-direction: row;
-  height: 7vh;
-  min-height: 47px;
-  max-height: 60px;
-  width: 20%;
-}
-
 .header-menu {
   display: flex;
 }
@@ -48,6 +39,10 @@ header {
   padding-left: 0.7em;
   padding-right: 0.7em;
   align-items: center;
+}
+
+.nav-link:first-child {
+  margin-right: auto;
 }
 
 .main-content {

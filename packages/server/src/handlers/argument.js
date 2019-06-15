@@ -22,7 +22,7 @@ export function newHandler(config) {
     argumentsClient.getOne(id, version).then((arg) => {
       if (arg) {
         const componentProps = {
-          apiurl: config.api.url,
+          apiUrl: config.api.url,
           initialEditing: false,
           initialArgument: {
             id: Number(id),

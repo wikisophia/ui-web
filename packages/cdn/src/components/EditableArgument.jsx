@@ -119,7 +119,7 @@ export function EditableArgument(props) {
 
   if (error) {
     return (
-      <div>ERROR: {error}</div>
+      <div>ERROR: {JSON.stringify(error)}</div>
     )
   }
   if (editing) {
