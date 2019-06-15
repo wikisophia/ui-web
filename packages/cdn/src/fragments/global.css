@@ -3,6 +3,10 @@
   box-sizing: border-box;
 }
 
+button {
+  border-radius: 7px;
+}
+
 html, input, html button {
   font: 22px/1.5 'Open sans', sans-serif;
 }
@@ -34,10 +38,6 @@ a {
 
 a:hover {
   text-decoration: underline;
-}
-
-button {
-  border-radius: 7px;
 }
 
 .header-menu {

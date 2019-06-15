@@ -1,7 +1,6 @@
 import { check, validationResult } from 'express-validator/check';
 import fetch from 'node-fetch';
 import newClient from '@wikisophia/api-arguments-client';
-import { request } from 'http';
 
 const paramValidation = [
   check('id').isInt({ min: 1 }),
