@@ -1,7 +1,6 @@
 import newNewArgumentHandler from './handlers/new-argument';
 import newArgumentHandler from './handlers/argument';
 import newSearchHandler from './handlers/search-arguments';
-import newContact from './handlers/contact';
 import newHomepage from './handlers/homepage';
 
 /**
