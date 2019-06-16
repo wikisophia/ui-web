@@ -54,6 +54,10 @@ EditableArgument.propTypes = {
     save: PropTypes.func.isRequired,
   }).isRequired,
 
+  // The base URL from which the page can load static assets.
+  // For example, http://127.0.0.1:4041
+  resourcesRoot: PropTypes.string.isRequired,
+
   // This is the argument the user will see initially.
   initialArgument: propTypeArgument.isRequired,
 
@@ -129,7 +133,7 @@ export function EditableArgument(props) {
   }
 
   return (
-    <StaticArgument {...staticArgumentProps(argument, argumentsForPremises, seenSoFar, nextForConclusion, navigate)} />
+    <StaticArgument {...staticArgumentProps(props.resourcesRoot, argument, argumentsForPremises, seenSoFar, nextForConclusion, navigate)} />
   );
 }
 
@@ -202,7 +206,7 @@ function editingArgumentProps(api, argument, seenSoFar, setError, navigate) {
   };
 }
 
-function staticArgumentProps(argument, argumentsForPremises, seenSoFar, nextForConclusion, navigate) {
+function staticArgumentProps(resourcesRoot, argument, argumentsForPremises, seenSoFar, nextForConclusion, navigate) {
   function newArgumentNavigator(conclusion) {
     return function() {
       navigate({
@@ -247,6 +251,7 @@ function staticArgumentProps(argument, argumentsForPremises, seenSoFar, nextForC
       };
     }),
 
+    resourcesRoot,
     conclusion: argument.conclusion,
     onNew: newArgumentNavigator(argument.conclusion),
     onNext: nextForConclusion && nextForConclusion.conclusion ? function() {

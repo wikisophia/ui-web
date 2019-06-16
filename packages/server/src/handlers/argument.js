@@ -23,6 +23,7 @@ export function newHandler(config) {
       if (arg) {
         const componentProps = {
           apiUrl: config.api.url,
+          resourcesRoot: config.staticResources.url,
           initialEditing: req.path.includes('edit'),
           initialArgument: {
             id: Number(id),

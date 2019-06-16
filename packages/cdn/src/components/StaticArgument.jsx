@@ -33,6 +33,10 @@ StaticArgument.propTypes = {
     }),
   })).isRequired,
 
+  // The base URL from which the page can load static assets.
+  // For example, http://127.0.0.1:4041
+  resourcesRoot: PropTypes.string.isRequired,
+
   // onNew will be called if the user wants to create a new argument for
   // this same conclusion.
   onNew: PropTypes.func.isRequired,
@@ -76,7 +80,7 @@ function renderPremises(props) {
   const searches = premises.map((premise, index) => {
     if (premise.support) {
       if (premise.support.exists) {
-        return (<div key={index + '-search'} tabIndex="0" className="search control" onClick={premise.support.onClick}>s</div>);
+        return (<img key={index + '-search'} tabIndex="0" className="search control" onClick={premise.support.onClick} src={`${props.resourcesRoot}/assets/book.jpg`} />);
       } else {
         return (<div key={index + '-new'} tabIndex="0" className="new control" onClick={premise.support.onClick}>n</div>);
       }
