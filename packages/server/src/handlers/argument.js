@@ -22,8 +22,9 @@ export function newHandler(config) {
     argumentsClient.getOne(id, version).then((arg) => {
       if (arg) {
         const componentProps = {
-          apiurl: config.api.url,
-          initialEditing: false,
+          apiUrl: config.api.url,
+          resourcesRoot: config.staticResources.url,
+          initialEditing: req.path.includes('edit'),
           initialArgument: {
             id: Number(id),
             conclusion: arg.argument.conclusion,

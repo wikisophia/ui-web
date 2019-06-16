@@ -29,14 +29,14 @@ export function EditingArgument(props) {
 
   const undoConclusion = props.initialArgument.conclusion !== '' && conclusion !== props.initialArgument.conclusion
     ? (<div tabIndex="0" className="undo control conclusion" onClick={() => setConclusion(props.initialArgument.conclusion)}>undo</div>)
-    : (<div className="spacer control conclusion">s</div>);
+    : null;
 
   const deleteNode = props.onDelete
-    ? (<button className="delete control footer" type="button" onClick={props.onDelete}>delete</button>)
+    ? (<button className="delete control" type="button" onClick={props.onDelete}>Delete</button>)
     : null;
 
   const cancelNode = props.onCancel
-    ? (<button className="cancel control footer" type="button" onClick={props.onCancel}>cancel</button>)
+    ? (<button className="cancel control" type="button" onClick={props.onCancel}>Cancel</button>)
     : null;
 
   return (
@@ -44,14 +44,17 @@ export function EditingArgument(props) {
       <h1 className="suppose">If someone believes that</h1>
       <ul className="premises">
         {renderPremises(props.initialArgument.premises, premises, setPremises)}
-        <div tabIndex="0" className="new control premise" onClick={() => setPremises(oldPremises => oldPremises.concat(['']))}>new</div>
+        <div tabIndex="0" className="new control" onClick={() => setPremises(oldPremises => oldPremises.concat(['']))}>new</div>
       </ul>
       <h1 className="then">Then they should agree that</h1>
-      {undoConclusion}
-      <input value={conclusion} onChange={(ev) => setConclusion(ev.target.value)} className="conclusion" />
-      <button className="save control footer" type="button" onClick={() => props.onSave({ premises, conclusion })}>save</button>
-      {cancelNode}
-      {deleteNode}
+      <div className="conclusion-area">
+        <input value={conclusion} onChange={(ev) => setConclusion(ev.target.value)} className="conclusion editing" />
+      </div>
+      <div className="control-panel">
+        <button className="save control" type="button" onClick={() => props.onSave({ premises, conclusion })}>Save</button>
+        {cancelNode}
+        {deleteNode}
+      </div>
     </div>
   )
 }
@@ -66,30 +69,22 @@ function renderPremises(initialPremises, premises, setPremises) {
     />
   ));
   const revertButtons = premises.map((premise, index) => {
-    if (index < initialPremises.length && initialPremises[index] !== '' && initialPremises[index] !== premises[index]) {
-      return (<div key={index + '-revert'} tabIndex="0" className="undo control" onClick={premiseUndoer(setPremises, index, initialPremises[index])}>u</div>);
-    } else if (premises.length > 2) {
+    if (premises.length > 2) {
       return (<div key={index + '-revert'} tabIndex="0" className="delete control" onClick={premiseDeleter(setPremises, index)}>d</div>)
     } else {
-      return (<div key={index + '-spacer'} className="spacer control">s</div>)
+      return null
     }
   });
 
   return revertButtons.map((revertNode, index) => {
     return [revertNode, nodes[index]];
-  }).reduce((prev, current) => prev.concat(current), []);
+  }).reduce((prev, current) => current === null ? prev : prev.concat(current), []);
 }
 
 function premiseChangeHandler(index, setPremises) {
   return function(ev) {
     const newPremise = ev.target.value;
     setPremises(oldPremises => copyWithElement(oldPremises, index, newPremise));
-  }
-}
-
-function premiseUndoer(setPremises, index, initialPremise) {
-  return function() {
-    setPremises(oldPremises => copyWithElement(oldPremises, index, initialPremise));
   }
 }
 

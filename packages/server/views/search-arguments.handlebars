@@ -3,6 +3,7 @@
   <head>
       <link rel="stylesheet" href="{{resourcesRoot}}/fragments/global.css" type="text/css">
       <link rel="stylesheet" href="{{resourcesRoot}}/search-arguments.css" type="text/css">
+      {{> fonts }}
       <title>Wikisophia - Search results - {{search}} </title>
   </head>
   <body>
@@ -20,8 +21,8 @@
             {{/each}}
         {{else}}
           <p class="contribute">
-            <span>We don't know of any beliefs that match your search.</span><br>
-            <span>Would you like to </span><a href="/new-argument">share some</a><span>?</span></p>
+            <span>No known beliefs match that search.</span><br>
+            <span>Would you like to </span><a href="/new-argument">share one</a><span>?</span></p>
         {{/if}}
       </section>
     </main>

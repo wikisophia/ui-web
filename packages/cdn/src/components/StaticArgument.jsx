@@ -33,6 +33,10 @@ StaticArgument.propTypes = {
     }),
   })).isRequired,
 
+  // The base URL from which the page can load static assets.
+  // For example, http://127.0.0.1:4041
+  resourcesRoot: PropTypes.string.isRequired,
+
   // onNew will be called if the user wants to create a new argument for
   // this same conclusion.
   onNew: PropTypes.func.isRequired,
@@ -50,22 +54,23 @@ StaticArgument.propTypes = {
 
 export function StaticArgument(props) {
   const next = props.onNext
-    ? <div tabIndex="0" className="search control conclusion" onClick={props.onNext}>s</div>
-    : null;
+    ? <img tabIndex="0" className="search control" onClick={props.onNext} src={`${props.resourcesRoot}/assets/book.jpg`} />
+    : <button tabIndex="0" className="new control" type="button" onClick={props.onNew}>new</button>;
 
   return (
     <div className="argument-area">
       <h1 className="suppose">If you believe that</h1>
       <ul className="premises">
         {renderPremises(props)}
-        {/* This dummy node adds space where the "add new premise" button appears in edit mode. */}
-        <div key={'add-new-premise-spacer'} tabIndex="0" className="control spacer">s</div>
       </ul>
       <h1 className="then">Then you should agree that</h1>
-      {next}
-      <p className="conclusion">{props.conclusion}</p>
-      <button className="new control footer" type="button" onClick={props.onNew}>new</button>
-      <button className="edit control footer" type="button" onClick={props.onEdit}>edit</button>
+      <div className="conclusion-area">
+       {next}
+        <p className="conclusion">{props.conclusion}</p>
+      </div>
+      <div className="control-panel">
+        <button className="edit" type="button" onClick={props.onEdit}>Edit</button>
+      </div>
     </div >
   )
 }
@@ -75,12 +80,12 @@ function renderPremises(props) {
   const searches = premises.map((premise, index) => {
     if (premise.support) {
       if (premise.support.exists) {
-        return (<div key={index + '-search'} tabIndex="0" className="search control" onClick={premise.support.onClick}>s</div>);
+        return (<img key={index + '-search'} tabIndex="0" className="search control" onClick={premise.support.onClick} src={`${props.resourcesRoot}/assets/book.jpg`} />);
       } else {
         return (<div key={index + '-new'} tabIndex="0" className="new control" onClick={premise.support.onClick}>n</div>);
       }
     } else {
-      return <div key={index + '-spacer'} className="control spacer">s</div>
+      return null
     }
   });
   const nodes = premises.map((premise, index) => (
@@ -88,5 +93,5 @@ function renderPremises(props) {
   ));
   return searches.map((searchNode, index) => {
     return [searchNode, nodes[index]];
-  }).reduce((prev, current) => prev.concat(current), []);
+  }).reduce((prev, current) => current === null ? prev : prev.concat(current), []);
 }
