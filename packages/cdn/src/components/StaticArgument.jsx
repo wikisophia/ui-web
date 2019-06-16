@@ -54,7 +54,7 @@ StaticArgument.propTypes = {
 
 export function StaticArgument(props) {
   const next = props.onNext
-    ? <button tabIndex="0" className="search control" onClick={props.onNext}>s</button>
+    ? <img tabIndex="0" className="search control" onClick={props.onNext} src={`${props.resourcesRoot}/assets/book.jpg`} />
     : <button tabIndex="0" className="new control" type="button" onClick={props.onNew}>new</button>;
 
   return (
