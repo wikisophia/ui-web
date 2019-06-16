@@ -27,6 +27,10 @@
   user-select: none;
 }
 
+.control-panel .control {
+  margin-right: 1rem;
+}
+
 .premises .control:hover, .conclusion-area .control:hover {
   cursor: pointer;
 }
@@ -71,10 +75,6 @@
 .control-panel .delete {
   color: #fff;
   background-color: #ff4242;
-}
-
-.control-panel .control {
-  margin-right: 1rem;
 }
 
 .new {
