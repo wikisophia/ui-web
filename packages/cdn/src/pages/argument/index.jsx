@@ -14,42 +14,42 @@ function buildURL({ argument, editing }) {
     }
     return '/new-argument';
   }
-  if (argument.id) {
-    if (argument.version) {
-      return `/arguments/${argument.id}/version/${argument.version}`;
-    }
-    return `/arguments/${argument.id}`;
+  if (argument.version) {
+    return `/arguments/${argument.id}/version/${argument.version}`;
   }
+  return `/arguments/${argument.id}`;
 }
 
 function navigate({ newArgument, newEditing, seenSoFar }) {
   const pageState = {
     argument: newArgument,
-    argumentsForPremises: newArgument.premises.map((premise) => null),
+    argumentsForPremises: newArgument.premises.map(() => null),
     editing: newEditing,
     nextForConclusion: null,
-    seenSoFar: newArgument.id ? Object.assign({}, seenSoFar, { [newArgument.id]: true }) : seenSoFar,
+    seenSoFar: newArgument.id
+      ? Object.assign({}, seenSoFar, { [newArgument.id]: true })
+      : seenSoFar,
   };
-  history.pushState(pageState, 'Wikisophia', buildURL(pageState));
+  window.history.pushState(pageState, 'Wikisophia', buildURL(pageState));
 }
 
-const initialProps = function() {
+const initialProps = (function readPropsFromPage() {
   const { apiUrl, ...props } = JSON.parse(document.getElementById('argument-props').innerHTML);
   props.api = newClient({
     url: apiUrl,
-    fetch: fetch,
+    fetch,
   });
   props.navigate = navigate;
   return props;
-}();
+}());
 
 function render(props) {
-  const anchor = document.getElementById("argument-anchor");
-  ReactDOM.unmountComponentAtNode(anchor)
+  const anchor = document.getElementById('argument-anchor');
+  ReactDOM.unmountComponentAtNode(anchor);
   ReactDOM.render(React.createElement(EditableArgument, props), anchor);
 }
 
-window.addEventListener('popstate', function onPopState(event) {
+window.addEventListener('popstate', (event) => {
   render({
     api: initialProps.api,
     navigate: initialProps.navigate,
@@ -60,7 +60,7 @@ window.addEventListener('popstate', function onPopState(event) {
     initialSeenSoFar: event.state.seenSoFar,
   });
 });
-history.replaceState({
+window.history.replaceState({
   argument: initialProps.initialArgument,
   argumentsForPremises: initialProps.initialArgumentsForPremises,
   editing: initialProps.initialEditing,

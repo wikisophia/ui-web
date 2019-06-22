@@ -1,5 +1,5 @@
 module.exports = {
-    extends: 'airbnb-base',
+    extends: 'airbnb',
     plugins: [
         'react-hooks'
     ],
@@ -9,8 +9,18 @@ module.exports = {
         "import/prefer-default-export": 'off',
         "no-console": ['error', {'allow': ['warn', 'error']}],
         "no-param-reassign": 'off',
-        "space-before-function-paren": 'off'
+        "no-use-before-define": 'off',
+        "space-before-function-paren": 'off',
+
+        // TODO: Fix these
+        "react/no-array-index-key": 'off',
+        "jsx-a11y/no-noninteractive-tabindex": 'off',
+        "jsx-a11y/no-noninteractive-element-interactions": 'off',
+        "jsx-a11y/alt-text": 'off',
+        "jsx-a11y/click-events-have-key-events": 'off',
+        "jsx-a11y/no-static-element-interactions": 'off',
     },
+    "parser": "babel-eslint",
     env: {
         browser: true
     },
