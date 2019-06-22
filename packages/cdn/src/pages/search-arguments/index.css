@@ -1,20 +1,16 @@
-.contribute {
-  font-style: italic;
-  margin-bottom: 2rem;
-  margin-left: 2rem;
+.learn {
+  margin: 0;
 }
 
 .search-results {
   list-style: none;
-  margin-top: 2rem;
-  margin-left: 2rem;
-  padding-left: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .conclusion {
-  margin-bottom: 2rem;
+  padding: 1rem 2rem;
   margin-left: 0;
-  padding-left: 0;
 }
 
 .conclusion a {
@@ -23,4 +19,17 @@
 
 .conclusion a:hover {
   text-decoration: underline;
+}
+
+.contribute {
+  margin-top: 2rem;
+}
+
+.search-results .conclusion:first-child {
+  margin-top: 1rem;
+}
+
+.search-results .conclusion:nth-child(odd) {
+  background-color: #e1e1e6;
+  border-radius: 0.25rem;
 }

@@ -18,7 +18,7 @@ function newHandler(config) {
       res.status(400).contentType('text/plain').send('request missing required query parameter: search');
       return;
     }
-    argumentsClient.getSome({ conclusion: search }).then((args) => {
+    argumentsClient.getSome({ search }).then((args) => {
       res.contentType('text/html').render('search-arguments', {
         resourcesRoot: config.staticResources.url,
         arguments: args.arguments,

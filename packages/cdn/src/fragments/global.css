@@ -4,7 +4,8 @@
 }
 
 button {
-  border-radius: 7px;
+  border-radius: 0.25rem;
+  cursor: pointer;
 }
 
 html, input, html button {
@@ -22,15 +23,6 @@ body {
   margin: 0.5rem;
 }
 
-main {
-  margin-top: 2rem;
-}
-
-/* navbar/header styles */
-header {
-  width: 100%;
-}
-
 a {
   color: #132cec;
   text-decoration: none;
@@ -40,33 +32,51 @@ a:hover {
   text-decoration: underline;
 }
 
-.header-menu {
+main {
+  margin-top: 2rem;
+}
+
+/* navbar/header styles */
+nav {
+  width: 100%;
+}
+
+.nav-links {
   display: flex;
   justify-content: flex-end;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-link {
   text-decoration: none;
-  font-size: 24px;
-  color: #fff;
-  padding-left: 0.7em;
-  padding-right: 0.7em;
   align-items: center;
-  border-radius: 7px;
 }
 
-a.nav-link:hover {
+.nav-link a {
+  padding: 0 0.75rem;
+}
+
+.nav-link.about {
+  background-color: #4056f4;
+  border-radius: 0.25rem;
+}
+
+.nav-link.about a {
+  color: #fff;
+}
+
+.nav-link a:hover {
   text-decoration: none;
 }
 
 .nav-link.home {
   margin-right: auto;
-  color: #000;
 }
 
-.nav-link.about {
-  color: #fff;
-  background-color: #4056f4;
+.nav-link.home a {
+  color: #000;
 }
 
 .main-content {

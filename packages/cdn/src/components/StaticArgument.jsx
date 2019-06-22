@@ -53,45 +53,49 @@ StaticArgument.propTypes = {
 };
 
 export function StaticArgument(props) {
-  const next = props.onNext
-    ? <img tabIndex="0" className="search control" onClick={props.onNext} src={`${props.resourcesRoot}/assets/book.jpg`} />
-    : <button tabIndex="0" className="new control" type="button" onClick={props.onNew}>new</button>;
+  const {
+    onNext, onNew, resourcesRoot, onEdit, premises, conclusion,
+  } = props;
+  const next = onNext
+    ? <img tabIndex="0" className="search control" onClick={onNext} src={`${resourcesRoot}/assets/book.jpg`} />
+    : <button tabIndex="0" className="new control" type="button" onClick={onNew}>new</button>;
 
   return (
     <div className="argument-area">
       <h1 className="suppose">If you believe that</h1>
       <ul className="premises">
-        {renderPremises(props)}
+        {renderPremises({ premises, resourcesRoot })}
       </ul>
       <h1 className="then">Then you should agree that</h1>
       <div className="conclusion-area">
-       {next}
-        <p className="conclusion">{props.conclusion}</p>
+        {next}
+        <p className="conclusion">{conclusion}</p>
       </div>
       <div className="control-panel">
-        <button className="edit" type="button" onClick={props.onEdit}>Edit</button>
+        <button className="edit" type="button" onClick={onEdit}>Edit</button>
       </div>
-    </div >
-  )
+    </div>
+  );
 }
 
+StaticArgument.defaultProps = {
+  onNext: null,
+};
+
 function renderPremises(props) {
-  const premises = props.premises;
+  const { premises, resourcesRoot } = props;
   const searches = premises.map((premise, index) => {
     if (premise.support) {
       if (premise.support.exists) {
-        return (<img key={index + '-search'} tabIndex="0" className="search control" onClick={premise.support.onClick} src={`${props.resourcesRoot}/assets/book.jpg`} />);
-      } else {
-        return (<div key={index + '-new'} tabIndex="0" className="new control" onClick={premise.support.onClick}>n</div>);
+        return (<img key={`${index}-search`} tabIndex="0" className="search control" onClick={premise.support.onClick} src={`${resourcesRoot}/assets/book.jpg`} />);
       }
-    } else {
-      return null
+      return (<div key={`${index}-new`} tabIndex="0" className="new control" onClick={premise.support.onClick}>n</div>);
     }
+    return null;
   });
   const nodes = premises.map((premise, index) => (
-    <p key={index + '-text'} className="premise">{premise.text}</p>
+    <p key={`${index}-text`} className="premise">{premise.text}</p>
   ));
-  return searches.map((searchNode, index) => {
-    return [searchNode, nodes[index]];
-  }).reduce((prev, current) => current === null ? prev : prev.concat(current), []);
+  return searches.map((searchNode, index) => [searchNode, nodes[index]])
+    .reduce((prev, current) => (current === null ? prev : prev.concat(current)), []);
 }

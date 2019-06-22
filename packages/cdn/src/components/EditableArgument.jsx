@@ -1,4 +1,3 @@
-import newClient from '@wikisophia/api-arguments-client';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
@@ -63,15 +62,18 @@ EditableArgument.propTypes = {
 
   // initialArgumentsForPremises seeds the component with arguments which support each premise.
   //
-  // This _must_ be the same length as initialArgument.premises. If you have an argument which supports
-  // each premise, include it at the same index. If not, send null.
+  // This _must_ be the same length as initialArgument.premises.
+  // If you have an argument which supports each premise, include it at the same index.
+  // If not, send null.
   //
   // Any null values will be populated by an API call post-render.
-  initialArgumentsForPremises: PropTypes.arrayOf(PropTypes.oneOfType([propTypeArgument, PropTypes.bool])).isRequired,
+  initialArgumentsForPremises: PropTypes.arrayOf(
+    PropTypes.oneOfType([propTypeArgument, PropTypes.bool]),
+  ).isRequired,
 
   // True if this component should start out in edit mode,
   // or false if it's just showing the static argument.
-  initialEditing: PropTypes.bool,
+  initialEditing: PropTypes.bool.isRequired,
 
   // initialNextForConclusion seeds the component with another argument for the same conclusion.
   //
@@ -86,6 +88,7 @@ EditableArgument.propTypes = {
   //
   // If defined, this component will not return arguments with these IDs as the user
   // asks for other arguments which support this conclusion.
+  // eslint-disable-next-line react/forbid-prop-types
   initialSeenSoFar: PropTypes.object,
 
   // navigate will be called whenever the user does something that changes the argument or
@@ -98,44 +101,95 @@ EditableArgument.propTypes = {
 };
 
 export function EditableArgument(props) {
-  const [argument, setArgument] = useState(props.initialArgument);
-  const [editing, setEditing] = useState(props.initialEditing);
+  const {
+    api,
+    resourcesRoot,
+    initialArgument,
+    initialEditing,
+    initialSeenSoFar,
+    initialNextForConclusion,
+    initialArgumentsForPremises,
+    navigate,
+  } = props;
+
+  const [argument, setArgument] = useState(initialArgument);
+  const [editing, setEditing] = useState(initialEditing);
   const [error, setError] = useState(null);
 
-  const [seenSoFar, setSeenSoFar] = useState(props.initialSeenSoFar);
-  const [nextForConclusion, setNextForConclusion] = useState(props.initialNextForConclusion)
-  const [argumentsForPremises, setArgumentsForPremises] = useState(props.initialArgumentsForPremises)
+  const [seenSoFar, setSeenSoFar] = useState(initialSeenSoFar);
+  const [nextForConclusion, setNextForConclusion] = useState(initialNextForConclusion);
+  const [argumentsForPremises, setArgumentsForPremises] = useState(initialArgumentsForPremises);
 
-  function navigate(args) {
-    const { newArgument, newEditing, seenSoFar } = args;
-    setArgument(newArgument),
-    setArgumentsForPremises(newArgument.premises.map((premise) => null)),
-    setEditing(newEditing),
-    setNextForConclusion(null),
-    setSeenSoFar(newArgument.id ? Object.assign({}, seenSoFar, { [newArgument.id]: true }) : seenSoFar),
-    props.navigate(args)
+  function setStateThenNavigate(args) {
+    const { newArgument, newEditing, seenSoFar: seenSoFarArgs } = args;
+    setArgument(newArgument);
+    setArgumentsForPremises(newArgument.premises.map(() => null));
+    setEditing(newEditing);
+    setNextForConclusion(null);
+    setSeenSoFar(newArgument.id
+      ? Object.assign({}, seenSoFarArgs, { [newArgument.id]: true })
+      : seenSoFarArgs);
+    navigate(args);
   }
 
   // These effects fetch other arguments which support these premises or conclusion.
-  // This controls which nav elements render, but also stores them in memory so we can load them immediately.
-  useEffect(nextForConclusionFetcher(props.api, argument.conclusion, seenSoFar, nextForConclusion, setNextForConclusion, editing))
-  useEffect(searchPremiseFetcher(props.api, argument.premises, argumentsForPremises, setArgumentsForPremises, editing))
+  // This controls which nav elements render, but also stores them in memory so we
+  // can load them immediately.
+  useEffect(nextForConclusionFetcher(
+    api,
+    argument.conclusion,
+    seenSoFar,
+    nextForConclusion,
+    setNextForConclusion,
+    editing,
+  ));
+  useEffect(searchPremiseFetcher(
+    api,
+    argument.premises,
+    argumentsForPremises,
+    setArgumentsForPremises,
+    editing,
+  ));
 
   if (error) {
     return (
-      <div>ERROR: {JSON.stringify(error)}</div>
-    )
+      <div>
+        ERROR:
+        {' '}
+        {JSON.stringify(error)}
+      </div>
+    );
   }
   if (editing) {
     return (
-      <EditingArgument { ...editingArgumentProps(props.api, argument, seenSoFar, setError, navigate) } />
+      <EditingArgument {...editingArgumentProps(
+        api,
+        argument,
+        seenSoFar,
+        setError,
+        setStateThenNavigate,
+      )}
+      />
     );
   }
 
   return (
-    <StaticArgument {...staticArgumentProps(props.resourcesRoot, argument, argumentsForPremises, seenSoFar, nextForConclusion, navigate)} />
+    <StaticArgument {...staticArgumentProps(
+      resourcesRoot,
+      argument,
+      argumentsForPremises,
+      seenSoFar,
+      nextForConclusion,
+      setStateThenNavigate,
+    )}
+    />
   );
 }
+
+EditableArgument.defaultProps = {
+  initialNextForConclusion: null,
+  initialSeenSoFar: {},
+};
 
 function nextForConclusionFetcher(api, conclusion, seenSoFar, next, setNext, editing) {
   return function fetchNext() {
@@ -143,7 +197,8 @@ function nextForConclusionFetcher(api, conclusion, seenSoFar, next, setNext, edi
       return;
     }
 
-    // render gets called a lot... so if we don't set this immediately, the page makes lots of API calls.
+    // render() gets called a lot... so if we don't set this immediately,
+    // the page makes lots of API calls.
     setNext({});
     api.getSome({
       conclusion,
@@ -153,14 +208,19 @@ function nextForConclusionFetcher(api, conclusion, seenSoFar, next, setNext, edi
       if (results.arguments.length > 0) {
         setNext(results.arguments[0]);
       }
-    }).catch((err) => {
+    }).catch(() => {
       // TODO: Log this somewhere the server can see it?
-      console.log(err);
-    })
-  }
+    });
+  };
 }
 
-function searchPremiseFetcher(api, premises, argumentsForPremises, setArgumentsForPremises, editing) {
+function searchPremiseFetcher(
+  api,
+  premises,
+  argumentsForPremises,
+  setArgumentsForPremises,
+  editing,
+) {
   return function fetchPremiseSupport() {
     if (editing) {
       return;
@@ -174,23 +234,24 @@ function searchPremiseFetcher(api, premises, argumentsForPremises, setArgumentsF
         const copy = oldArguments.slice();
         copy[index] = {};
         return copy;
-      })
+      });
 
       api.getSome({ conclusion: premise, count: 1 })
         .then((results) => {
-          if (results.arguments.length > 0) {
+          const { arguments: args } = results;
+          if (args.length > 0) {
             setArgumentsForPremises((oldArguments) => {
               const copy = oldArguments.slice();
-              copy[index] = results.arguments[0];
+              const [arg] = args;
+              copy[index] = arg;
               return copy;
             });
           }
-        }).catch((err) => {
+        }).catch(() => {
           // TODO: Log this somewhere the server can see it?
-          console.log(err);
-        })
-    })
-  }
+        });
+    });
+  };
 }
 
 function editingArgumentProps(api, argument, seenSoFar, setError, navigate) {
@@ -202,13 +263,20 @@ function editingArgumentProps(api, argument, seenSoFar, setError, navigate) {
       newEditing: false,
       seenSoFar,
     }) : null,
-    onDelete: argument.id ? function() { } : null, // TODO: Implement deletions
+    onDelete: argument.id ? function noOp() { } : null, // TODO: Implement deletions
   };
 }
 
-function staticArgumentProps(resourcesRoot, argument, argumentsForPremises, seenSoFar, nextForConclusion, navigate) {
+function staticArgumentProps(
+  resourcesRoot,
+  argument,
+  argumentsForPremises,
+  seenSoFar,
+  nextForConclusion,
+  navigate,
+) {
   function newArgumentNavigator(conclusion) {
-    return function() {
+    return function navigateToNewArgument() {
       navigate({
         newArgument: { premises: ['', ''], conclusion },
         newEditing: true,
@@ -218,32 +286,33 @@ function staticArgumentProps(resourcesRoot, argument, argumentsForPremises, seen
   }
 
   return {
-    premises: argument.premises.map(function(premise, index) {
+    premises: argument.premises.map((premise, index) => {
       let support;
-      if (argumentsForPremises && argumentsForPremises[index] !== undefined && argumentsForPremises[index] !== null) {
+      if (argumentsForPremises
+        && argumentsForPremises[index] !== undefined
+        && argumentsForPremises[index] !== null) {
         if (argumentsForPremises[index].conclusion) {
           return {
             text: premise,
             support: {
               exists: true,
-              onClick: function() {
+              onClick() {
                 navigate({
                   newArgument: argumentsForPremises[index],
                   newEditing: false,
-                  seenSoFar
+                  seenSoFar,
                 });
-              }
-            }
-          };
-        } else {
-          return {
-            text: premise,
-            support: {
-              exists: false,
-              onClick: newArgumentNavigator(premise)
-            }
+              },
+            },
           };
         }
+        return {
+          text: premise,
+          support: {
+            exists: false,
+            onClick: newArgumentNavigator(premise),
+          },
+        };
       }
       return {
         text: premise,
@@ -254,7 +323,7 @@ function staticArgumentProps(resourcesRoot, argument, argumentsForPremises, seen
     resourcesRoot,
     conclusion: argument.conclusion,
     onNew: newArgumentNavigator(argument.conclusion),
-    onNext: nextForConclusion && nextForConclusion.conclusion ? function() {
+    onNext: nextForConclusion && nextForConclusion.conclusion ? function navigateToNextArgument() {
       navigate({
         newArgument: nextForConclusion,
         newEditing: false,
@@ -273,13 +342,13 @@ function staticArgumentProps(resourcesRoot, argument, argumentsForPremises, seen
  * Make a handler which saves the argument.
  */
 function saver(api, oldArgument, seenSoFar, setError, navigate) {
-  return function(newArgumentData) {
+  return function save(newArgumentData) {
     if (hasEdits(oldArgument, newArgumentData)) {
       const call = oldArgument.id
         ? api.update(oldArgument.id, newArgumentData)
         : api.save(newArgumentData);
 
-      call.then((response) => navigate({
+      call.then(response => navigate({
         newArgument: response.argument,
         newEditing: false,
         seenSoFar,
@@ -291,7 +360,7 @@ function saver(api, oldArgument, seenSoFar, setError, navigate) {
         seenSoFar,
       });
     }
-  }
+  };
 }
 
 function hasEdits(oldArgument, newArgument) {
@@ -301,10 +370,8 @@ function hasEdits(oldArgument, newArgument) {
   if (oldArgument.premises.length !== newArgument.premises.length) {
     return true;
   }
-  for (let i = 0; i < oldArgument.premises.length; i++) {
-    if (oldArgument.premises[i] !== newArgument.premises[i]) {
-      return true;
-    }
-  }
-  return false;
+  const changedPremise = oldArgument.premises.find(
+    (oldPremise, index) => oldPremise !== newArgument.premises[index],
+  );
+  return changedPremise !== undefined;
 }
