@@ -13,15 +13,16 @@
     <main>
       <section class="main-content">
         {{#if arguments}}
-          <p class="contribute"><span>Don't see what you're looking for? Come </span><a href="/new-argument">share your own thoughts</a><span>.</span></p>
-          <h1>Show me why I might believe that...</h1>
+          <h1 class="learn">See why...</h1>
           <ul class="search-results">
             {{#each arguments}}
               <li class="conclusion"><a href="/arguments/{{id}}">{{conclusion}}</a></li>
             {{/each}}
+          </ul>
+          <h1 class="contribute">Or <a class="teach" href="/new-argument">Share Something New</a></h1>
         {{else}}
           <p class="contribute">
-            <span>No known beliefs match that search.</span><br>
+            <span>No beliefs match that search yet.</span><br>
             <span>Would you like to </span><a href="/new-argument">share one</a><span>?</span></p>
         {{/if}}
       </section>

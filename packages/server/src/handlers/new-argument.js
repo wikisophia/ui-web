@@ -11,6 +11,7 @@ function newHandler(config) {
   return function handler(req, res) {
     const componentProps = {
       apiUrl: config.api.url,
+      resourcesRoot: config.staticResources.url,
       initialEditing: true,
       initialArgument: {
         conclusion: req.query.conclusion || '',

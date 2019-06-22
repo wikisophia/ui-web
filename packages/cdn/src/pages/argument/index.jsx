@@ -67,4 +67,5 @@ history.replaceState({
   nextForConclusion: initialProps.initialNextForConclusion,
   seenSoFar: initialProps.initialSeenSoFar,
 }, 'Wikisophia', window.location);
+
 render(initialProps);

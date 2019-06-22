@@ -3,7 +3,6 @@ const path = require('path');
 module.exports = {
   entry: {
     argument: './src/pages/argument/index.jsx',
-    homepage: './src/pages/homepage/index.js',
   },
   output: {
     filename: '[name].js',

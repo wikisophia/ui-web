@@ -4,14 +4,6 @@
       <link rel="stylesheet" href="{{resourcesRoot}}/fragments/global.css" type="text/css">
       <link rel="stylesheet" href="{{resourcesRoot}}/homepage.css" type="text/css">
       {{> fonts }}
-      <script src="{{resourcesRoot}}/homepage.js" defer></script>
-      <script id="homepage-props" type="application/json">
-        {
-          "apiUrl": "{{apiUrl}}",
-          "inputId": "search",
-          "suggestionsId": "suggestions"
-        }
-      </script>
       <title>Wikisophia</title>
   </head>
   <body>
@@ -19,15 +11,9 @@
     <main>
       <h1 class="title">Wikisophia</h1>
       <h2 class="tagline">Reason Together</h2>
-      <div>
-        <input autofocus autocomplete="off" id="search" class="main-search" type="text">
-      </div>
-      <div>
-        <ul id="suggestions" class="dropdown"></ul>
-      </div>
-      <noscript>
-        <span>Enable javascript to receive dynamic search suggestions</span>
-      </noscript>
+      <form id="search-form" action="/arguments" method="get">
+        <input autofocus autocomplete="off" id="search" name="search" class="main-search" type="text" />
+      </form>
     </main>
   </body>
 </html>
