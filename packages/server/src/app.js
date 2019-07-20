@@ -1,7 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import exphbs from 'express-handlebars';
-import handlebars from 'handlebars';
 import { join } from 'path';
 import { setRoutes } from './routes';
 
