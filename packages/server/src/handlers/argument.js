@@ -35,9 +35,7 @@ export function newHandler(config) {
           initialArgumentsForPremises: arg.argument.premises.map(() => null),
         };
         res.contentType('text/html').render('argument', {
-          componentProps: JSON.stringify(componentProps),
-          resourcesRoot: config.staticResources.url,
-          argument: arg.argument,
+          componentProps,
         });
       } else {
         res.status(404).contentType('text/plain').send(makeErrorMessage(id, version));

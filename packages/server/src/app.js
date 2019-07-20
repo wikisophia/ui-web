@@ -12,6 +12,9 @@ import { setRoutes } from './routes';
 export default function newApp(config) {
   const app = express();
   app.engine('handlebars', exphbs({
+    helpers: {
+      json: JSON.stringify,
+    },
     partialsDir: join(__dirname, '..', 'views', 'partials'),
     compilerOptions: {
       strict: true,

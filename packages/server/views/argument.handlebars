@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <link rel="stylesheet" href="{{resourcesRoot}}/fragments/global.css" type="text/css">
-      <link rel="stylesheet" href="{{resourcesRoot}}/argument.css" type="text/css">
-      {{> fonts }}
-      <script src="{{resourcesRoot}}/argument.js" defer></script>
-      <script id="argument-props" type="application/json">
-        {{{ componentProps }}}
-      </script>
-      <title>Wikisophia - {{ argument.conclusion }}</title>
+    <link rel="stylesheet" href="{{componentProps.resourcesRoot}}/fragments/global.css" type="text/css">
+    <link rel="stylesheet" href="{{componentProps.resourcesRoot}}/argument.css" type="text/css">
+    {{> fonts }}
+    <script src="{{componentProps.resourcesRoot}}/argument.js" defer></script>
+    <script id="argument-props" type="application/json">
+      {{{json componentProps }}}
+    </script>
+    <title>{{ componentProps.initialArgument.conclusion }} - Wikisophia</title>
+    <meta charset="UTF-8"/>
   </head>
   <body>
     <header>
@@ -26,13 +27,13 @@
         <div class="argument-area">
           <h1 class="suppose">If you believe that</h1>
           <ul class="premises">
-            {{#each argument.premises}}
+            {{#each componentProps.initialArgument.premises}}
               <div tabIndex="0" class="search control">s</div>
               <p class="premise">{{this}}</p>
             {{/each}}
           </ul>
           <h1 class="then">Then you should agree that</h1>
-          <p class="conclusion">{{argument.conclusion}}</p>
+          <p class="conclusion">{{componentProps.initialArgument.conclusion}}</p>
         </div >
       </section>
     </main>
