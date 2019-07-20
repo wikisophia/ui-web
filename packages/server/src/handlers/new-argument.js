@@ -43,12 +43,7 @@ function newHandler(config) {
     };
 
     res.contentType('text/html').render('argument', {
-      argument: {
-        premises,
-        conclusion,
-      },
-      componentProps: JSON.stringify(componentProps),
-      resourcesRoot,
+      componentProps,
     });
   };
 }
