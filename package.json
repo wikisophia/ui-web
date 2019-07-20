@@ -16,6 +16,6 @@
     "test-coverage": "cd packages/cdn && npm run test-coverage"
   },
   "devDependencies": {
-    "concurrently": "^4.1.0"
+    "concurrently": "^4.1.1"
   }
 }
