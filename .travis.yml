@@ -6,4 +6,4 @@ branches:
 script:
   - npm run lint:nofix
   - npm run build
-  # - npm run test-coverage
+  - npm run test-coverage

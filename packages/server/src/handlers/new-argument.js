@@ -1,7 +1,12 @@
-import { sanitizeQuery } from 'express-validator/filter';
+import { sanitizeQuery } from 'express-validator';
+
+const defaultTo = value => input => (typeof input === 'undefined' ? value : input);
+const toArray = value => (Array.isArray(value) ? value : [value]);
+const sanitizePremises = premises => toArray(defaultTo(['', ''])(premises));
 
 const newArgumentValidation = [
-  sanitizeQuery('premise').customSanitizer(toArray),
+  sanitizeQuery('premise').customSanitizer(sanitizePremises),
+  sanitizeQuery('conclusion').customSanitizer(defaultTo('')),
 ];
 
 /**
@@ -9,26 +14,41 @@ const newArgumentValidation = [
  */
 function newHandler(config) {
   return function handler(req, res) {
+    const {
+      query: {
+        premise: premises,
+        conclusion,
+      },
+    } = req;
+    const {
+      api: {
+        url: apiUrl,
+      },
+      staticResources: {
+        url: resourcesRoot,
+      },
+    } = config;
+
     const componentProps = {
-      apiUrl: config.api.url,
-      resourcesRoot: config.staticResources.url,
+      apiUrl,
+      resourcesRoot,
       initialEditing: true,
       initialArgument: {
-        conclusion: req.query.conclusion || '',
-        premises: req.query.premise || ['', ''],
+        conclusion,
+        premises,
         deleted: false,
       },
       initialSeenSoFar: {},
-      initialArgumentsForPremises: [null, null],
+      initialArgumentsForPremises: Array(premises.length).fill(null),
     };
 
     res.contentType('text/html').render('argument', {
       argument: {
-        premises: ['', ''],
-        conclusion: '',
+        premises,
+        conclusion,
       },
       componentProps: JSON.stringify(componentProps),
-      resourcesRoot: config.staticResources.url,
+      resourcesRoot,
     });
   };
 }
@@ -38,11 +58,4 @@ export default function newNewArgumentHandler(config) {
     ...newArgumentValidation,
     newHandler(config),
   ];
-}
-
-function toArray(value) {
-  if (Array.isArray(value)) {
-    return value;
-  }
-  return [value];
 }

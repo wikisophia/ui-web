@@ -4,17 +4,17 @@
   "description": "A UI server which powers Wikisophia",
   "scripts": {
     "build": "babel src -d build",
-    "serve:dev": "nodemon --exec babel-node src/server.js",
-    "serve:prod": "npm run build && node build/server.js",
+    "dev": "nodemon --exec babel-node src/server.js",
     "lint": "eslint src --fix",
-    "lint:nofix": "eslint src"
+    "lint:nofix": "eslint src",
+    "prod": "npm run build && node build/server.js"
   },
   "dependencies": {
     "@wikisophia/api-arguments-client": "^0.7.0",
     "body-parser": "^1.18.3",
     "express": "^4.17.1",
     "express-handlebars": "^3.0.2",
-    "express-validator": "^5.3.1",
+    "express-validator": "^6.1.1",
     "node-fetch": "^2.3.0",
     "moment": "^2.24.0",
     "validator": "^11.0.0"

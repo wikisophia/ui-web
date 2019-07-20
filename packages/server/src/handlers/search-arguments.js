@@ -1,4 +1,4 @@
-import { query, validationResult } from 'express-validator/check';
+import { query, validationResult } from 'express-validator';
 import fetch from 'node-fetch';
 import newClient from '@wikisophia/api-arguments-client';
 
@@ -7,20 +7,28 @@ const paramValidation = [
 ];
 
 function newHandler(config) {
+  const {
+    api: {
+      url,
+    },
+    staticResources: {
+      url: resourcesRoot,
+    },
+  } = config;
   const argumentsClient = newClient({
-    url: config.api.url,
+    url,
     fetch,
   });
 
   return function handler(req, res) {
-    const { search } = req.query;
+    const { query: { search } } = req;
     if (!validationResult(req).isEmpty()) {
       res.status(400).contentType('text/plain').send('request missing required query parameter: search');
       return;
     }
     argumentsClient.getSome({ search }).then((args) => {
       res.contentType('text/html').render('search-arguments', {
-        resourcesRoot: config.staticResources.url,
+        resourcesRoot,
         arguments: args.arguments,
         search,
       });
