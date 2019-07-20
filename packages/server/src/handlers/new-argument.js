@@ -1,4 +1,4 @@
-import { sanitizeQuery } from 'express-validator/filter';
+import { sanitizeQuery } from 'express-validator';
 
 const newArgumentValidation = [
   sanitizeQuery('premise').customSanitizer(toArray),
@@ -41,6 +41,9 @@ export default function newNewArgumentHandler(config) {
 }
 
 function toArray(value) {
+  if (typeof value === 'undefined') {
+    return;
+  }
   if (Array.isArray(value)) {
     return value;
   }

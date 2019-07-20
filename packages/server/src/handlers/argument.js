@@ -1,4 +1,4 @@
-import { check, validationResult } from 'express-validator/check';
+import { check, validationResult } from 'express-validator';
 import fetch from 'node-fetch';
 import newClient from '@wikisophia/api-arguments-client';
 

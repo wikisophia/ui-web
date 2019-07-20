@@ -4,14 +4,14 @@
   "browser": "dist",
   "description": "Wikisophia API javascript client",
   "scripts": {
-    "clean": "rm -rf dist",
     "build:css": "node bundle-css.js",
     "build:dev": "webpack --config=./webpack.dev.js",
     "build:prod": "webpack --config=./webpack.prod.js",
+    "clean": "rm -rf dist",
+    "dev": "concurrently \"webpack-dev-server --config=./webpack.dev.js\" \"npm run watch:css\"",
     "lint": "eslint src --ext js,jsx --fix && stylelint \"src/**/*.css\"",
     "lint:nofix": "eslint src --ext js,jsx && stylelint \"src/**/*.css\"",
-    "serve:dev": "concurrently \"webpack-dev-server --config=./webpack.dev.js\" \"npm run watch:css\"",
-    "serve:prod": "concurrently \"webpack-dev-server --config=./webpack.prod.server.js\" \"npm run watch:css\"",
+    "prod": "concurrently \"webpack-dev-server --config=./webpack.prod.server.js\" \"npm run watch:css\"",
     "test": "BABEL_ENV=test jest --passWithNoTests",
     "test-coverage": "BABEL_ENV=test jest -c jest.config.coverage.js --passWithNoTests",
     "watch:css": "nodemon -e css --watch src -x \"npm run build:css\""
