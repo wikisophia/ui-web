@@ -21,8 +21,8 @@ function newHandler(config) {
       },
     } = req;
     const {
-      api: {
-        url: apiUrl,
+      apiArguments: {
+        clientUrl: apiArgumentsUrl,
       },
       staticResources: {
         url: resourcesRoot,
@@ -30,7 +30,7 @@ function newHandler(config) {
     } = config;
 
     const componentProps = {
-      apiUrl,
+      apiArgumentsUrl,
       resourcesRoot,
       initialEditing: true,
       initialArgument: {

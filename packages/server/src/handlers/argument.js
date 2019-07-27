@@ -8,8 +8,18 @@ const paramValidation = [
 ];
 
 export function newHandler(config) {
+  const {
+    apiArguments: {
+      serverUrl: url,
+      clientUrl: apiArgumentsUrl,
+    },
+    staticResources: {
+      url: resourcesRoot,
+    },
+  } = config;
+
   const argumentsClient = newClient({
-    url: config.api.url,
+    url,
     fetch,
   });
   return function handler(req, res) {
@@ -22,8 +32,8 @@ export function newHandler(config) {
     argumentsClient.getOne(id, version).then((arg) => {
       if (arg) {
         const componentProps = {
-          apiUrl: config.api.url,
-          resourcesRoot: config.staticResources.url,
+          apiArgumentsUrl,
+          resourcesRoot,
           initialEditing: req.path.includes('edit'),
           initialArgument: {
             id: Number(id),

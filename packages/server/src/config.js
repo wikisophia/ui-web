@@ -13,11 +13,18 @@ import { log } from './log';
  */
 export function load() {
   return Object.freeze({
-    api: Object.freeze({
-      url: logAndLoad('WKSPH_UI_API_URL', 'http://127.0.0.1:8001'),
+    // These API URLs are split into client and server so that the server can use internal
+    // routes (e.g. "localhost" or a service discovery tool) to bypass DNS/network.
+    //
+    // The clientUrls will, of course, need to use a public endpoint like "api.wikisophia.net".
+    apiArguments: Object.freeze({
+      clientUrl: logAndLoad('WKSPH_UI_API_ARGUMENTS_CLIENT_URL', 'http://127.0.0.1:8001'),
+      serverUrl: logAndLoad('WKSPH_UI_API_ARGUMENTS_SERVER_URL', 'http://127.0.0.1:8001'),
     }),
+    // This URL is where the client code should go to fetch scripts from packages/cdn.
+    // For example: https://cdn.jsdelivr.net/npm/@wikisophia/api-client@{sem.ver.here}/dist
     staticResources: Object.freeze({
-      // For prod, see: https://cdn.jsdelivr.net/npm/@wikisophia/api-client/dist
+      // For prod, see: https://cdn.jsdelivr.net/npm/@wikisophia/api-client@{sem.ver.here}/dist
       url: logAndLoad('WKSPH_UI_STATIC_RESOURCES_URL', 'http://127.0.0.1:4041'),
     }),
     server: Object.freeze({
