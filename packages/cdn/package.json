@@ -1,8 +1,8 @@
 {
-  "name": "@wikisophia/api-client",
-  "version": "0.7.0",
+  "name": "@wikisophia/ui-web",
+  "version": "0.8.0",
   "browser": "dist",
-  "description": "Wikisophia API javascript client",
+  "description": "Static resources used on Wikisophia",
   "scripts": {
     "build:css": "node bundle-css.js",
     "build:dev": "webpack --config=./webpack.dev.js",

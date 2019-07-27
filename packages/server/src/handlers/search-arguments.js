@@ -8,8 +8,8 @@ const paramValidation = [
 
 function newHandler(config) {
   const {
-    api: {
-      url,
+    apiArguments: {
+      serverUrl: url,
     },
     staticResources: {
       url: resourcesRoot,

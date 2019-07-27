@@ -3,8 +3,8 @@
  */
 function newHandler(config) {
   const {
-    api: {
-      url: apiUrl,
+    apiArguments: {
+      clientUrl: apiArgumentsUrl,
     },
     staticResources: {
       url: resourcesRoot,
@@ -13,7 +13,7 @@ function newHandler(config) {
 
   return function handler(req, res) {
     res.contentType('text/html').render('homepage', {
-      apiUrl,
+      apiArgumentsUrl,
       resourcesRoot,
     });
   };
