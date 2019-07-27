@@ -7,7 +7,7 @@ COPY . ./
 RUN npm run build
 
 FROM node:12.7.0 AS prod
-WORKDIR /usr/src/path
+WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/build ./build
 COPY --from=builder /usr/src/app/views ./views
 COPY --from=builder /usr/src/app/package.json ./package.json
