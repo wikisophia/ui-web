@@ -23,4 +23,4 @@ rm -f ~/.npmrc
 echo "@wikisophia:registry=https://registry.npmjs.org/" >> ~/.npmrc
 echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
 npm run build:prod
-# npm publish
+npm publish

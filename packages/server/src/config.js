@@ -17,6 +17,7 @@ export function load() {
       url: logAndLoad('WKSPH_UI_API_URL', 'http://127.0.0.1:8001'),
     }),
     staticResources: Object.freeze({
+      // For prod, see: https://cdn.jsdelivr.net/npm/@wikisophia/api-client/dist
       url: logAndLoad('WKSPH_UI_STATIC_RESOURCES_URL', 'http://127.0.0.1:4041'),
     }),
     server: Object.freeze({
