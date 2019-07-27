@@ -1,6 +1,6 @@
 {
   "name": "@wikisophia/api-client",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "browser": "dist",
   "description": "Wikisophia API javascript client",
   "scripts": {
