@@ -35,7 +35,7 @@ export function newHandler(config) {
           id: Number(id),
           version: arg.argument.version ? Number(arg.argument.version) : undefined,
           apiArguments,
-          premises: arg.argument.premises.map(premise => ({
+          premises: arg.argument.premises.map((premise) => ({
             text: premise,
             supported: 'unknown', // TODO: Fetch these too
           })),
