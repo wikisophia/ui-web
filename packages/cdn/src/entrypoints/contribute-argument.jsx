@@ -10,7 +10,7 @@ const {
   id,
   apiArguments,
   initialPremises,
-  initialConclusion
+  initialConclusion,
 } = JSON.parse(document.getElementById('argument-props').innerHTML);
 
 const onCancel = id ? () => {
@@ -26,12 +26,13 @@ ReactDOM.render(
         fetch,
       });
       const call = id ? api.update(id, argument) : api.save(argument);
-      call.then(response => {
-        window.location = response.location
-      }).catch(err => {
+      call.then((response) => {
+        window.location = response.location;
+      }).catch((err) => {
         console.error(err);
-      })
+      });
     }}
     onCancel={onCancel}
   />,
-  document.getElementById('argument-anchor'));
+  document.getElementById('argument-anchor'),
+);

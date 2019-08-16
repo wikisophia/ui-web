@@ -1,4 +1,3 @@
-import newClient from '@wikisophia/api-arguments-client';
 import React, { useState, useReducer } from 'react';
 import PropTypes from 'prop-types';
 
@@ -42,12 +41,13 @@ function updatePremises(oldPremises, action) {
       return oldPremises.concat(['']);
     case 'delete':
       return oldPremises.slice(0, action.index).concat(oldPremises.slice(action.index + 1));
-    case 'update':
-        const copy = oldPremises.slice();
-        copy[action.index] = action.update;
-        return copy;
+    case 'update': {
+      const copy = oldPremises.slice();
+      copy[action.index] = action.update;
+      return copy;
+    }
     default:
-      throw new Error('unrecognized premise action: ' + JSON.stringify(action));
+      throw new Error(`unrecognized premise action: ${JSON.stringify(action)}`);
   }
 }
 
@@ -111,7 +111,7 @@ function renderPremises(initialPremises, premises, changePremise) {
     <input
       type="text"
       value={premise}
-      onChange={(ev) => changePremise({ type: 'update', index, update: ev.target.value })}
+      onChange={ev => changePremise({ type: 'update', index, update: ev.target.value })}
       key={`${index}-text`}
       className="premise"
     />

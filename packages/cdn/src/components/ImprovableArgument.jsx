@@ -1,3 +1,6 @@
+/* eslint react/prop-types: 0 */
+// False positives from https://github.com/yannickcr/eslint-plugin-react/issues/2350 ... I think
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useRoutes, navigate } from 'hookrouter';
@@ -7,22 +10,22 @@ import ImprovingArgument from './ImprovingArgument';
 // These routes handle argument editing to make the UX snappy (like a single-page app).
 // Their only goal is to make sure the "/improve" link goes quickly.
 const routes = {
-  '/arguments/:id/improve': ({id}) => ({ premises, conclusion, onSave }) => {
-    return <ImprovingArgument
+  '/arguments/:id/improve': ({ id }) => ({ premises, conclusion, onSave }) => (
+    <ImprovingArgument
       initialPremises={premises.map(premise => premise.text)}
       initialConclusion={conclusion}
       onCancel={() => navigate(`/arguments/${id}`)}
       onSave={onSave}
-    />;
-  },
+    />
+  ),
 
-  '/arguments/:id': ({id}) => ({ premises, conclusion }) => {
-    return <StaticArgument
+  '/arguments/:id': ({ id }) => ({ premises, conclusion }) => (
+    <StaticArgument
       premises={premises}
       conclusion={conclusion}
       onEdit={() => navigate(`/arguments/${id}/improve`)}
     />
-  },
+  ),
 };
 
 ImprovableArgument.propTypes = {
@@ -51,10 +54,5 @@ ImprovableArgument.propTypes = {
 };
 
 export default function ImprovableArgument(props) {
-  const {
-    premises,
-    conclusion,
-    onSave,
-  } = props;
   return useRoutes(routes)(props) || <span>404 Page Not Found</span>;
 }

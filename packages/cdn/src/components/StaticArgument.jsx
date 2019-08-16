@@ -1,5 +1,4 @@
-import newClient from '@wikisophia/api-arguments-client';
-import React, { useEffect, useState, useReducer } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 export const YES = 'yes';
@@ -52,23 +51,29 @@ export default function StaticArgument(props) {
   );
 }
 
-function renderPremise(premise, index) {
+function renderPremise(premise) {
   switch (premise.supported) {
     case YES:
-      return <a href={`/arguments?conclusion=${encodeURIComponent(premise.text)}`}
-        key={premise.text}
-        className="premise justified"
-      >
-        {premise.text}
-      </a>;
+      return (
+        <a
+          href={`/arguments?conclusion=${encodeURIComponent(premise.text)}`}
+          key={premise.text}
+          className="premise justified"
+        >
+          {premise.text}
+        </a>
+      );
     case NO:
-      return <a href={`/new-argument?conclusion=${encodeURIComponent(premise.text)}`}
-        key={premise.text}
-        className="premise unjustified"
-      >
-        {premise.text}
-      </a>;
+      return (
+        <a
+          href={`/new-argument?conclusion=${encodeURIComponent(premise.text)}`}
+          key={premise.text}
+          className="premise unjustified"
+        >
+          {premise.text}
+        </a>
+      );
     default:
-      throw new Error('Unexpected premise.supported value: ' + premise.supported);
+      throw new Error(`Unexpected premise.supported value: ${premise.supported}`);
   }
 }

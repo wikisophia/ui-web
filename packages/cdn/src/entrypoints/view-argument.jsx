@@ -8,7 +8,7 @@ const {
   id,
   apiArguments,
   premises,
-  conclusion
+  conclusion,
 } = JSON.parse(document.getElementById('argument-props').innerHTML);
 
 ReactDOM.render(
@@ -20,11 +20,12 @@ ReactDOM.render(
         url: apiArguments,
         fetch,
       });
-      api.update(id, argument).then(response => {
-        window.location = response.location
-      }).catch(err => {
+      api.update(id, argument).then((response) => {
+        window.location = response.location;
+      }).catch((err) => {
         console.error(err);
-      })
+      });
     }}
   />,
-  document.getElementById('argument-anchor'));
+  document.getElementById('argument-anchor'),
+);

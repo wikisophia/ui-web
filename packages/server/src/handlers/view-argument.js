@@ -33,13 +33,13 @@ export function newHandler(config) {
         const {
           argument: {
             conclusion,
-            premises
-          }
+            premises,
+          },
         } = arg;
         if (version) {
           res.contentType('text/html').render('view-versioned-argument', {
             id,
-            premises: premises.map((premise) => ({
+            premises: premises.map(premise => ({
               text: premise,
               supported: true, // TODO: Fetch these too
             })),
@@ -50,7 +50,7 @@ export function newHandler(config) {
           const componentProps = {
             id,
             apiArguments,
-            premises: premises.map((premise) => ({
+            premises: premises.map(premise => ({
               text: premise,
               supported: 'yes', // TODO: Fetch these too
             })),
