@@ -13,6 +13,9 @@ const {
   initialConclusion
 } = JSON.parse(document.getElementById('argument-props').innerHTML);
 
+const onCancel = id ? () => {
+  window.location = window.location.href.replace('/improve', '');
+} : null;
 ReactDOM.render(
   <ImprovingArgument
     initialPremises={initialPremises}
@@ -29,5 +32,6 @@ ReactDOM.render(
         console.error(err);
       })
     }}
+    onCancel={onCancel}
   />,
   document.getElementById('argument-anchor'));
