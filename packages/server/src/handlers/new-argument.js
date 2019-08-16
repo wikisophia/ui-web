@@ -1,8 +1,8 @@
 import { sanitizeQuery } from 'express-validator';
 
-const defaultTo = value => input => (typeof input === 'undefined' ? value : input);
-const toArray = value => (Array.isArray(value) ? value : [value]);
-const sanitizePremises = premises => toArray(defaultTo(['', ''])(premises));
+const defaultTo = (value) => (input) => (typeof input === 'undefined' ? value : input);
+const toArray = (value) => (Array.isArray(value) ? value : [value]);
+const sanitizePremises = (premises) => toArray(defaultTo(['', ''])(premises));
 
 const newArgumentValidation = [
   sanitizeQuery('premise').customSanitizer(sanitizePremises),

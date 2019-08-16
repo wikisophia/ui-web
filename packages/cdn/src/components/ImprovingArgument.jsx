@@ -83,7 +83,7 @@ export default function ImprovingArgument(props) {
     <div className="argument-area">
       <h1 className="suppose">The belief that</h1>
       <div className="conclusion-area">
-        <input value={conclusion} onChange={ev => setConclusion(ev.target.value)} className="conclusion editing" />
+        <input value={conclusion} onChange={(ev) => setConclusion(ev.target.value)} className="conclusion editing" />
       </div>
       <h1 className="then">Is reasonable if</h1>
       <ul className="premises">
@@ -111,7 +111,7 @@ function renderPremises(initialPremises, premises, changePremise) {
     <input
       type="text"
       value={premise}
-      onChange={ev => changePremise({ type: 'update', index, update: ev.target.value })}
+      onChange={(ev) => changePremise({ type: 'update', index, update: ev.target.value })}
       key={`${index}-text`}
       className="premise"
     />

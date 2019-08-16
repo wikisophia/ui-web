@@ -12,7 +12,7 @@ import ImprovingArgument from './ImprovingArgument';
 const routes = {
   '/arguments/:id/improve': ({ id }) => ({ premises, conclusion, onSave }) => (
     <ImprovingArgument
-      initialPremises={premises.map(premise => premise.text)}
+      initialPremises={premises.map((premise) => premise.text)}
       initialConclusion={conclusion}
       onCancel={() => navigate(`/arguments/${id}`)}
       onSave={onSave}

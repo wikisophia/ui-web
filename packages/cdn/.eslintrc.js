@@ -24,12 +24,14 @@ module.exports = {
     env: {
         browser: true
     },
-    overrides: {
-        files: [
-            '**/*.test.js'
-        ],
-        env: {
-            jest: true
+    overrides: [
+        {
+            files: [
+                '**/*.test.js'
+            ],
+            env: {
+                jest: true
+            }
         }
-    }
+    ]
 }
