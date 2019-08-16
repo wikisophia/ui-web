@@ -46,7 +46,7 @@ export default function StaticArgument(props) {
         {premises.map(renderPremise)}
       </ul>
       <div className="control-panel">
-        <button className="edit" onClick={() => onEdit()} type="button">Improve</button>
+        <button className="edit" onClick={() => onEdit()} type="button">Improve it!</button>
       </div>
     </div>
   );
