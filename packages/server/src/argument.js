@@ -11,7 +11,7 @@ export function newHandler(config) {
   const {
     apiArguments: {
       serverUrl: url,
-      clientUrl: apiArgumentsUrl,
+      clientUrl: apiArguments,
     },
     staticResources: {
       url: resourcesRoot,
@@ -32,20 +32,19 @@ export function newHandler(config) {
     argumentsClient.getOne(id, version).then((arg) => {
       if (arg) {
         const componentProps = {
-          apiArgumentsUrl,
-          resourcesRoot,
-          initialEditing: req.path.includes('edit'),
-          initialArgument: {
-            id: Number(id),
-            conclusion: arg.argument.conclusion,
-            premises: arg.argument.premises,
-            deleted: false,
-          },
-          initialSeenSoFar: { [id]: true },
-          initialArgumentsForPremises: arg.argument.premises.map(() => null),
+          id: Number(id),
+          version: arg.argument.version ? Number(arg.argument.version) : undefined,
+          apiArguments,
+          premises: arg.argument.premises.map(premise => ({
+            text: premise,
+            supported: 'unknown', // TODO: Fetch these too
+          })),
+          conclusion: arg.argument.conclusion,
         };
         res.contentType('text/html').render('argument', {
           componentProps,
+          initialEditing: req.path.includes('edit'),
+          resourcesRoot,
         });
       } else {
         res.status(404).contentType('text/plain').send(makeErrorMessage(id, version));

@@ -1,101 +1,79 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+export const YES = 'yes';
+export const NO = 'no';
+
 /**
  * A StaticArgument renders the argument as plain text.
  *
- * For an argument which is being edited, see ./EditableArgument.jsx.
+ * For an argument which is being edited, see ./ImprovingArgument.jsx.
  *
- * The HTML of this component must be kept in sync with
- * <project-root>/server/src/views/argument.handlebars
- *
- * If the user disables javascript, they'll see that static HTML.
- * If javascript is available, this Component will replace it and
- * add interactive controls.
- *
- * Keeping the two in sync will make sure users with javascript don't
- * see the screen "flicker" on load.
  */
 StaticArgument.propTypes = {
-  // premises make an argument for the conclusion
-  premises: PropTypes.arrayOf(PropTypes.shape({
-    // text is the actual text of the premise
+  // premises make an argument for the conclusion.
+  premises: PropTypes.arrayOf(PropTypes.exact({
+    // the premise in plain text.
     text: PropTypes.string.isRequired,
 
-    // support has info about arguments which support this premise.
-    // This doesn't need to be defined if that info isn't available.
-    support: PropTypes.shape({
-      // exists is true iff at least one argument exists which supports this conclusion,
-      exists: PropTypes.bool.isRequired,
-      // onClick will be called if the user clicks the "search" or "new" icon next to
-      // this premise.
-      onClick: PropTypes.func.isRequired,
-    }),
+    // does at least one argument exist which supports this premise?
+    supported: PropTypes.oneOf([YES, NO]).isRequired,
   })).isRequired,
 
-  // The base URL from which the page can load static assets.
-  // For example, http://127.0.0.1:4041
-  resourcesRoot: PropTypes.string.isRequired,
-
-  // onNew will be called if the user wants to create a new argument for
-  // this same conclusion.
-  onNew: PropTypes.func.isRequired,
-
-  // The argument's conclusion
+  // the argument's conclusion
   conclusion: PropTypes.string.isRequired,
 
-  // onNext will be called if the user wants to see another argument.
-  // If undefined, this component won't give them the option of seeing a next.
-  onNext: PropTypes.func,
-
-  // onEdit will be called if the user wants to edit this argument.
-  onEdit: PropTypes.func.isRequired,
+  // Function called if the user starts to edit the argument.
+  onEdit: PropTypes.func,
 };
 
-export function StaticArgument(props) {
-  const {
-    onNext, onNew, resourcesRoot, onEdit, premises, conclusion,
-  } = props;
-  const next = onNext
-    ? <img tabIndex="0" className="search control" onClick={onNext} src={`${resourcesRoot}/assets/book.jpg`} />
-    : <button tabIndex="0" className="new control" type="button" onClick={onNew}>new</button>;
+StaticArgument.defaultProps = {
+  onEdit: null,
+};
+
+export default function StaticArgument(props) {
+  const { premises, conclusion, onEdit } = props;
 
   return (
     <div className="argument-area">
-      <h1 className="suppose">If you believe that</h1>
-      <ul className="premises">
-        {renderPremises({ premises, resourcesRoot })}
-      </ul>
-      <h1 className="then">Then you should agree that</h1>
+      <h1 className="then">The belief that</h1>
       <div className="conclusion-area">
-        {next}
         <p className="conclusion">{conclusion}</p>
       </div>
+      <h1 className="suppose">Is reasonable if</h1>
+      <ul className="premises">
+        {premises.map(renderPremise)}
+      </ul>
       <div className="control-panel">
-        <button className="edit" type="button" onClick={onEdit}>Edit</button>
+        <button className="edit" onClick={() => onEdit()} type="button">Improve it!</button>
       </div>
     </div>
   );
 }
 
-StaticArgument.defaultProps = {
-  onNext: null,
-};
-
-function renderPremises(props) {
-  const { premises, resourcesRoot } = props;
-  const searches = premises.map((premise, index) => {
-    if (premise.support) {
-      if (premise.support.exists) {
-        return (<img key={`${index}-search`} tabIndex="0" className="search control" onClick={premise.support.onClick} src={`${resourcesRoot}/assets/book.jpg`} />);
-      }
-      return (<div key={`${index}-new`} tabIndex="0" className="new control" onClick={premise.support.onClick}>n</div>);
-    }
-    return null;
-  });
-  const nodes = premises.map((premise, index) => (
-    <p key={`${index}-text`} className="premise">{premise.text}</p>
-  ));
-  return searches.map((searchNode, index) => [searchNode, nodes[index]])
-    .reduce((prev, current) => (current === null ? prev : prev.concat(current)), []);
+function renderPremise(premise) {
+  switch (premise.supported) {
+    case YES:
+      return (
+        <a
+          href={`/arguments?conclusion=${encodeURIComponent(premise.text)}`}
+          key={premise.text}
+          className="premise justified"
+        >
+          {premise.text}
+        </a>
+      );
+    case NO:
+      return (
+        <a
+          href={`/new-argument?conclusion=${encodeURIComponent(premise.text)}`}
+          key={premise.text}
+          className="premise unjustified"
+        >
+          {premise.text}
+        </a>
+      );
+    default:
+      throw new Error(`Unexpected premise.supported value: ${premise.supported}`);
+  }
 }

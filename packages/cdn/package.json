@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@wikisophia/api-arguments-client": "^0.7.0",
+    "hookrouter": "^1.2.3",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"

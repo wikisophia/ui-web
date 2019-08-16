@@ -16,13 +16,13 @@ function newHandler(config) {
   return function handler(req, res) {
     const {
       query: {
-        premise: premises,
-        conclusion,
+        premise: initialPremises,
+        conclusion: initialConclusion,
       },
     } = req;
     const {
       apiArguments: {
-        clientUrl: apiArgumentsUrl,
+        clientUrl: apiArguments,
       },
       staticResources: {
         url: resourcesRoot,
@@ -30,20 +30,15 @@ function newHandler(config) {
     } = config;
 
     const componentProps = {
-      apiArgumentsUrl,
-      resourcesRoot,
-      initialEditing: true,
-      initialArgument: {
-        conclusion,
-        premises,
-        deleted: false,
-      },
-      initialSeenSoFar: {},
-      initialArgumentsForPremises: Array(premises.length).fill(null),
+      apiArguments,
+      initialPremises,
+      initialConclusion,
+      deleted: false,
     };
 
-    res.contentType('text/html').render('argument', {
+    res.contentType('text/html').render('contribute-argument', {
       componentProps,
+      resourcesRoot,
     });
   };
 }

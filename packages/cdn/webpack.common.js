@@ -2,7 +2,8 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    argument: './src/pages/argument/index.jsx',
+    'contribute-argument': './src/entrypoints/contribute-argument.jsx',
+    'view-argument': './src/entrypoints/view-argument.jsx',
   },
   output: {
     filename: '[name].js',
