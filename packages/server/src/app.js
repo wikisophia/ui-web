@@ -19,6 +19,7 @@ export default function newApp(config) {
     compilerOptions: {
       strict: true,
     },
+    defaultLayout: null,
   }));
   app.set('views', join(__dirname, '..', 'views'));
   app.set('view engine', 'handlebars');

@@ -27,7 +27,7 @@ ReactDOM.render(
       });
       const call = id ? api.update(id, argument) : api.save(argument);
       call.then((response) => {
-        window.location = response.location;
+        window.location = `/arguments/${response.argument.id}`;
       }).catch((err) => {
         console.error(err);
       });
