@@ -35,7 +35,6 @@ function newHandler(config) {
       initialConclusion,
       deleted: false,
     };
-
     res.contentType('text/html').render('contribute-argument', {
       componentProps,
       resourcesRoot,

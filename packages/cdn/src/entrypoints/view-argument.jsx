@@ -21,7 +21,7 @@ ReactDOM.render(
         fetch,
       });
       api.update(id, argument).then((response) => {
-        window.location = response.location;
+        window.location = `/arguments/${response.argument.id}`;
       }).catch((err) => {
         console.error(err);
       });
