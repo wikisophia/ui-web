@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="{{componentProps.resourcesRoot}}/fragments/global.css" type="text/css">
-    <link rel="stylesheet" href="{{componentProps.resourcesRoot}}/argument.css" type="text/css">
+    <link rel="stylesheet" href="{{resourcesRoot}}/global.css" type="text/css">
+    <link rel="stylesheet" href="{{resourcesRoot}}/argument-area.css" type="text/css">
     {{> fonts }}
-    <script src="{{componentProps.resourcesRoot}}/argument.js" defer></script>
+    <script src="{{resourcesRoot}}/contribute-argument.js" defer></script>
     <script id="argument-props" type="application/json">
       {{{json componentProps }}}
     </script>
-    <title>{{ componentProps.initialArgument.conclusion }} - Wikisophia</title>
+    <title>{{ componentProps.initialConclusion }} - Wikisophia</title>
     <meta charset="UTF-8"/>
   </head>
   <body>
@@ -25,15 +25,17 @@
       -->
       <section id="argument-anchor" class="main-content">
         <div class="argument-area">
-          <h1 class="suppose">If you believe that</h1>
+          <h1 class="suppose">The belief that</h1>
+          <div class="conclusion-area">
+            <input class="conclusion editing" type="text" value="{{componentProps.initialConclusion}}">
+          </div>
+          <h1 class="then">Is reasonable if</h1>
           <ul class="premises">
-            {{#each componentProps.initialArgument.premises}}
-              <div tabIndex="0" class="search control">s</div>
-              <p class="premise">{{this}}</p>
+            {{#each componentProps.initialPremises}}
+              <input class="premise" type="text" value="{{this}}">
             {{/each}}
+            <div class="new control" tabindex="0">new</div>
           </ul>
-          <h1 class="then">Then you should agree that</h1>
-          <p class="conclusion">{{componentProps.initialArgument.conclusion}}</p>
         </div >
       </section>
     </main>

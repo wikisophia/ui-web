@@ -1,6 +1,9 @@
 const CssBuilder = require('clean-css');
 const fs = require('fs-extra');
 
+// Take all the .css files from src/entrypoints, minify them, and write them
+// to dist/ with the same filenames.
+
 function printErr(reason) {
   console.log(reason);
 }
@@ -40,9 +43,16 @@ function outputCSS(file) {
   }
 }
 
-fs.readFile(`${__dirname}/src/fragments/global.css`).then(outputCSS(`${__dirname}/dist/fragments/global.css`)).catch(printErr);
-fs.readFile(`${__dirname}/src/pages/homepage/index.css`).then(outputCSS(`${__dirname}/dist/homepage.css`)).catch(printErr);
-fs.readFile(`${__dirname}/src/pages/argument/index.css`).then(outputCSS(`${__dirname}/dist/argument.css`)).catch(printErr);
-fs.readFile(`${__dirname}/src/pages/search-arguments/index.css`).then(outputCSS(`${__dirname}/dist/search-arguments.css`)).catch(printErr);
+const entrypoints = `${__dirname}/src/entrypoints`;
 
-fs.copy('./src/assets', 'dist/assets');
+function buildCSS(file) {
+  if (file.endsWith('.css')) {
+    fs.readFile(`${entrypoints}/${file}`).then(outputCSS(`${__dirname}/dist/${file}`)).catch(printErr);
+  }
+}
+
+function buildAllCSS(files) {
+  files.forEach(buildCSS);
+}
+
+fs.readdir(entrypoints).then(buildAllCSS);

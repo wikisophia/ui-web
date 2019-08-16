@@ -11,7 +11,7 @@ export function newHandler(config) {
   const {
     apiArguments: {
       serverUrl: url,
-      clientUrl: apiArgumentsUrl,
+      clientUrl: apiArguments,
     },
     staticResources: {
       url: resourcesRoot,
@@ -23,30 +23,44 @@ export function newHandler(config) {
     fetch,
   });
   return function handler(req, res) {
-    const { id } = req.params;
-    const { version } = req.params;
+    const { id, version } = req.params;
     if (!validationResult(req).isEmpty()) {
       res.status(404).contentType('text/plain').send(makeErrorMessage(id, version));
       return;
     }
     argumentsClient.getOne(id, version).then((arg) => {
       if (arg) {
-        const componentProps = {
-          apiArgumentsUrl,
-          resourcesRoot,
-          initialEditing: req.path.includes('edit'),
-          initialArgument: {
-            id: Number(id),
-            conclusion: arg.argument.conclusion,
-            premises: arg.argument.premises,
-            deleted: false,
-          },
-          initialSeenSoFar: { [id]: true },
-          initialArgumentsForPremises: arg.argument.premises.map(() => null),
-        };
-        res.contentType('text/html').render('argument', {
-          componentProps,
-        });
+        const {
+          argument: {
+            conclusion,
+            premises
+          }
+        } = arg;
+        if (version) {
+          res.contentType('text/html').render('view-versioned-argument', {
+            id,
+            premises: premises.map((premise) => ({
+              text: premise,
+              supported: true, // TODO: Fetch these too
+            })),
+            conclusion,
+            resourcesRoot,
+          });
+        } else {
+          const componentProps = {
+            id,
+            apiArguments,
+            premises: premises.map((premise) => ({
+              text: premise,
+              supported: 'yes', // TODO: Fetch these too
+            })),
+            conclusion,
+          };
+          res.contentType('text/html').render('view-argument', {
+            componentProps,
+            resourcesRoot,
+          });
+        }
       } else {
         res.status(404).contentType('text/plain').send(makeErrorMessage(id, version));
       }
