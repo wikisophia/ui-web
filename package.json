@@ -2,18 +2,20 @@
   "name": "@wikisophia/ui-monorepo",
   "private": true,
   "scripts": {
-    "build:cdn": "cd packages/cdn && npm run build:dev",
-    "build:server": "cd packages/server && npm run build",
-    "build": "concurrently \"npm run build:cdn\" \"npm run build:server\"",
-    "dev": "concurrently \"cd packages/cdn && npm run dev\" \"cd packages/server && npm run dev\"",
-    "install:cdn": "cd packages/cdn && npm install",
-    "install:server": "cd packages/server && npm install",
-    "install": "concurrently \"npm run install:cdn\" \"npm run install:server\"",
+    "build": "next build",
+    "dev": "next",
+    "prod": "next start",
     "lint": "concurrently \"cd packages/cdn && npm run lint\" \"cd packages/server && npm run lint\"",
     "lint:nofix": "concurrently \"cd packages/cdn && npm run lint:nofix\" \"cd packages/server && npm run lint:nofix\"",
-    "prod": "concurrently \"cd packages/cdn && npm run prod\" \"cd packages/server && npm run prod\"",
     "test": "cd packages/cdn && npm run test",
     "test-coverage": "cd packages/cdn && npm run test-coverage"
+  },
+  "dependencies": {
+    "@wikisophia/api-arguments-client": "^0.7.0",
+    "next": "^9.0.3",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {
     "concurrently": "^4.1.1"
