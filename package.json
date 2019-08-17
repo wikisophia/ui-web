@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next",
-    "prod": "next start",
+    "dev": "node server.js",
+    "prod": "NODE_ENV=production node server.js",
     "lint": "concurrently \"cd packages/cdn && npm run lint\" \"cd packages/server && npm run lint\"",
     "lint:nofix": "concurrently \"cd packages/cdn && npm run lint:nofix\" \"cd packages/server && npm run lint:nofix\"",
     "test": "cd packages/cdn && npm run test",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@wikisophia/api-arguments-client": "^0.7.0",
+    "moment": "^2.24.0",
     "next": "^9.0.3",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
