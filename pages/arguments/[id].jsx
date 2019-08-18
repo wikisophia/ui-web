@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ErrorPage from 'next/error';
 import Head from 'next/head';
 import Router from 'next/router';
-import getConfig from 'next/config'
+import getConfig from 'next/config';
 
 import newClient from '@wikisophia/api-arguments-client';
 import 'isomorphic-fetch';
@@ -54,9 +54,15 @@ LatestArgument.propTypes = {
   conclusion: PropTypes.string,
 };
 
+LatestArgument.defaultProps = {
+  id: null,
+  premises: null,
+  conclusion: null,
+};
+
 LatestArgument.getInitialProps = async ({ query: { id: idString } }) => {
   const id = parseInt(idString, 10);
-  if (isNaN(id)) {
+  if (Number.isNaN(id)) {
     return {};
   }
   const api = newClient({

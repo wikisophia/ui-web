@@ -69,8 +69,7 @@ function EditArgument(props) {
 // turn up blank.
 EditArgument.getInitialProps = async ({ query: { id: idString }}) => {
   const id = parseInt(idString, 10);
-  if (isNaN(id)) {
-    console.log('id isNaN');
+  if (Number.isNaN(id)) {
     return {};
   }
   const api = newClient({
