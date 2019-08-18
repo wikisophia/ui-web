@@ -1,2 +1,3 @@
 node_modules/
-packages/server/config.env
+config.env
+.next

@@ -2,20 +2,28 @@
   "name": "@wikisophia/ui-monorepo",
   "private": true,
   "scripts": {
-    "build:cdn": "cd packages/cdn && npm run build:dev",
-    "build:server": "cd packages/server && npm run build",
-    "build": "concurrently \"npm run build:cdn\" \"npm run build:server\"",
-    "dev": "concurrently \"cd packages/cdn && npm run dev\" \"cd packages/server && npm run dev\"",
-    "install:cdn": "cd packages/cdn && npm install",
-    "install:server": "cd packages/server && npm install",
-    "install": "concurrently \"npm run install:cdn\" \"npm run install:server\"",
-    "lint": "concurrently \"cd packages/cdn && npm run lint\" \"cd packages/server && npm run lint\"",
-    "lint:nofix": "concurrently \"cd packages/cdn && npm run lint:nofix\" \"cd packages/server && npm run lint:nofix\"",
-    "prod": "concurrently \"cd packages/cdn && npm run prod\" \"cd packages/server && npm run prod\"",
-    "test": "cd packages/cdn && npm run test",
-    "test-coverage": "cd packages/cdn && npm run test-coverage"
+    "build": "next build",
+    "dev": "node server.js",
+    "prod": "NODE_ENV=production node server.js",
+    "lint": "eslint pages/**/*.jsx components/**/*.jsx --fix",
+    "lint:nofix": "eslint pages/**/*.jsx components/**/*.jsx"
+  },
+  "dependencies": {
+    "@wikisophia/api-arguments-client": "^0.7.0",
+    "moment": "^2.24.0",
+    "next": "^9.0.3",
+    "prop-types": "^15.7.2",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {
-    "concurrently": "^4.1.1"
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^1.7.0"
   }
 }

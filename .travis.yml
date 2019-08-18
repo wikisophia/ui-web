@@ -3,15 +3,6 @@ node_js: node
 branches:
   only:
     - master
-    - /^\d+\.\d+\.\d+$/
 script:
   - npm run lint:nofix
   - npm run build
-  - npm run test-coverage
-deploy:
-  - provider: script
-    skip_cleanup: true
-    script: bash scripts/publish.sh
-    on:
-      tags: true
-      branch: master
