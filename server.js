@@ -9,14 +9,11 @@ const next = require('next');
 
 const dev = process.env.NODE_ENV !== 'production';
 
-const host = logAndLoad('WKSPH_UI_SERVER_HOSTNAME', '127.0.0.1');
+const host = logAndLoad('WKSPH_UI_SERVER_HOSTNAME', '0.0.0.0');
 const port = logAndLoad('WKSPH_UI_SERVER_PORT', 4040);
 const useSSL = logAndLoad('WKSPH_UI_SERVER_USE_SSL', false);
 const keyPath = logAndLoad('WKSPH_UI_SERVER_KEY_PATH', path.resolve(__dirname, 'certificates', 'key.pem'));
 const certPath = logAndLoad('WKSPH_UI_SERVER_CERT_PATH', path.resolve(__dirname, 'certificates', 'cert.pem'));
-
-const key = fs.readFileSync(keyPath);
-const cert = fs.readFileSync(certPath);
 
 const app = next({
   dev,
@@ -27,13 +24,20 @@ const app = next({
 });
 const handler = app.getRequestHandler();
 
+function newServer() {
+  if (useSSL) {
+    const key = fs.readFileSync(keyPath);
+    const cert = fs.readFileSync(certPath);
+    return http2.createSecureServer({ key, cert });
+  } else {
+    return http.createServer();
+  }
+}
+
 app.prepare().then(() => {
-  const server = useSSL
-    ? http2.createSecureServer({ key, cert })
-    : http.createServer();
 
+  const server = newServer();
   server.on('request', handler);
-
   server.listen(port, host, (err) => {
     if (err) {
       throw err;
