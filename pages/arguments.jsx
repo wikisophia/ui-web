@@ -1,12 +1,16 @@
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import getConfig from 'next/config'
 
 import newClient from '@wikisophia/api-arguments-client';
 import 'isomorphic-fetch';
 
 import NavBar from '../components/nav-bar';
 import GlobalStyles from '../components/global-styles';
+
+const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
+const apiUrl = serverRuntimeConfig.serverUrl || publicRuntimeConfig.clientUrl;
 
 function ArgumentsPage(props) {
   const {
@@ -100,7 +104,7 @@ function renderMainContent(args) {
 
 ArgumentsPage.getInitialProps = async ({ query: { search } }) => {
   const api = newClient({
-    url: 'http://localhost:8001',
+    url: apiUrl,
     fetch,
   });
 

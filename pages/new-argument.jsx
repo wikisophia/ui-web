@@ -1,4 +1,6 @@
 import React from 'react';
+
+import getConfig from 'next/config';
 import Head from 'next/head';
 import Router from 'next/router';
 
@@ -7,6 +9,10 @@ import newClient from '@wikisophia/api-arguments-client';
 import ImprovingArgument from '../components/improving-argument';
 import NavBar from '../components/nav-bar';
 import GlobalStyles from '../components/global-styles';
+
+
+const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
+const apiUrl = serverRuntimeConfig.serverUrl || publicRuntimeConfig.clientUrl;
 
 function NewArgument(props) {
   const {
@@ -29,7 +35,7 @@ function NewArgument(props) {
             initialConclusion={initialConclusion}
             onSave={(arg) => {
               const client = newClient({
-                url: 'http://localhost:8001',
+                url: apiUrl,
                 fetch,
               });
               client.save(arg).then((response) => {

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import getConfig from 'next/config';
 import ErrorPage from 'next/error';
 import Link from 'next/link';
 import Head from 'next/head';
@@ -11,6 +12,10 @@ import 'isomorphic-fetch';
 import NavBar from '../../../../components/nav-bar';
 import GlobalStyles from '../../../../components/global-styles';
 import StaticArgument from '../../../../components/static-argument';
+
+
+const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
+const apiUrl = serverRuntimeConfig.serverUrl || publicRuntimeConfig.clientUrl;
 
 function VersionedArgument({ id, premises, conclusion, outdated }) {
   if (!conclusion) {
@@ -56,7 +61,7 @@ function VersionedArgument({ id, premises, conclusion, outdated }) {
 
 VersionedArgument.getInitialProps = async ({ query: { id, version }}) => {
   const api = newClient({
-    url: 'http://localhost:8001',
+    url: apiUrl,
     fetch,
   });
 

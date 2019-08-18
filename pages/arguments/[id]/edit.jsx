@@ -2,6 +2,7 @@ import React from 'react';
 import ErrorPage from 'next/error';
 import Head from 'next/head';
 import Router from 'next/router';
+import getConfig from 'next/config';
 
 import newClient from '@wikisophia/api-arguments-client';
 import 'isomorphic-fetch';
@@ -9,6 +10,10 @@ import 'isomorphic-fetch';
 import ImprovingArgument from '../../../components/improving-argument';
 import NavBar from '../../../components/nav-bar';
 import GlobalStyles from '../../../components/global-styles';
+
+
+const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
+const apiUrl = serverRuntimeConfig.serverUrl || publicRuntimeConfig.clientUrl;
 
 function EditArgument(props) {
   const {
@@ -36,7 +41,7 @@ function EditArgument(props) {
             onCancel={() => Router.push(`/arguments/${id}`)}
             onSave={(arg) => {
               const client = newClient({
-                url: 'http://localhost:8001',
+                url: apiUrl,
                 fetch,
               });
               client.update(id, arg).then((response) => {
@@ -69,7 +74,7 @@ EditArgument.getInitialProps = async ({ query: { id: idString }}) => {
     return {};
   }
   const api = newClient({
-    url: 'http://localhost:8001',
+    url: apiUrl,
     fetch,
   });
 

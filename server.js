@@ -20,6 +20,12 @@ const app = next({
   conf: {
     compress: false,
     poweredByHeader: false,
+    publicRuntimeConfig: {
+      clientUrl: logAndLoad('WKSPH_UI_API_ARGUMENTS_CLIENT_URL', 'http://127.0.0.1:8001'),
+    },
+    serverRuntimeConfig: {
+      serverUrl: logAndLoad('WKSPH_UI_API_ARGUMENTS_SERVER_URL', 'http://127.0.0.1:8001'),
+    }
   }
 });
 const handler = app.getRequestHandler();

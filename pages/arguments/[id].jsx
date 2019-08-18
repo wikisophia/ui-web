@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import ErrorPage from 'next/error';
 import Head from 'next/head';
 import Router from 'next/router';
+import getConfig from 'next/config'
 
 import newClient from '@wikisophia/api-arguments-client';
 import 'isomorphic-fetch';
@@ -11,6 +12,9 @@ import 'isomorphic-fetch';
 import NavBar from '../../components/nav-bar';
 import GlobalStyles from '../../components/global-styles';
 import StaticArgument from '../../components/static-argument';
+
+const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
+const apiUrl = serverRuntimeConfig.serverUrl || publicRuntimeConfig.clientUrl;
 
 function LatestArgument({ id, premises, conclusion }) {
   if (!conclusion) {
@@ -42,17 +46,21 @@ function LatestArgument({ id, premises, conclusion }) {
 }
 
 LatestArgument.propTypes = {
-  id: PropTypes.number.isRequired,
-  premises: PropTypes.exact({
+  id: PropTypes.number,
+  premises: PropTypes.arrayOf(PropTypes.exact({
     text: PropTypes.string.isRequired,
     supported: PropTypes.bool.isRequired,
-  }).isRequired,
-  conclusion: PropTypes.string.isRequired,
+  })),
+  conclusion: PropTypes.string,
 };
 
-LatestArgument.getInitialProps = async ({ query: { id } }) => {
+LatestArgument.getInitialProps = async ({ query: { id: idString } }) => {
+  const id = parseInt(idString, 10);
+  if (isNaN(id)) {
+    return {};
+  }
   const api = newClient({
-    url: 'http://localhost:8001',
+    url: apiUrl,
     fetch,
   });
 
