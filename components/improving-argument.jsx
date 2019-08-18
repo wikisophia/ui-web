@@ -99,7 +99,8 @@ export default function ImprovingArgument(props) {
         {cancelNode}
         {/* {deleteNode} */}
       </div>
-      <style jsx>{`
+      <style jsx>
+        {`
       .premises, .conclusion-area, .outdated {
         background-color: #e1e1e6;
         border: 1px solid #bcbcbc;
@@ -200,7 +201,8 @@ export default function ImprovingArgument(props) {
       .delete-notice {
         padding-bottom: 2rem;
       }
-      `}</style>
+      `}
+      </style>
     </div>
   );
 }

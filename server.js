@@ -1,3 +1,4 @@
+const fs = require('fs');
 const http = require('http');
 const http2 = require('http2');
 const moment = require('moment');
@@ -14,19 +15,31 @@ const useSSL = logAndLoad('WKSPH_UI_SERVER_USE_SSL', false);
 const keyPath = logAndLoad('WKSPH_UI_SERVER_KEY_PATH', path.resolve(__dirname, 'certificates', 'key.pem'));
 const certPath = logAndLoad('WKSPH_UI_SERVER_CERT_PATH', path.resolve(__dirname, 'certificates', 'cert.pem'));
 
-const app = next({ dev });
+const key = fs.readFileSync(keyPath);
+const cert = fs.readFileSync(certPath);
+
+const app = next({
+  dev,
+  conf: {
+    compress: false,
+    poweredByHeader: false,
+  }
+});
 const handler = app.getRequestHandler();
 
 app.prepare().then(() => {
   const server = useSSL
-    ? http2.createSecureServer({ keyPath, certPath }, handler)
-    : http.createServer(handler);
-    server.listen(port, host, (err) => {
-      if (err) {
-        throw err;
-      }
-      log(`Server listening on ${useSSL ? 'https' : 'http'}://${host}:${port}.`);
-    })
+    ? http2.createSecureServer({ key, cert })
+    : http.createServer();
+
+  server.on('request', handler);
+
+  server.listen(port, host, (err) => {
+    if (err) {
+      throw err;
+    }
+    log(`Server listening on ${useSSL ? 'https' : 'http'}://${host}:${port}.`);
+  });
 });
 
 function logAndLoad(env, theDefault) {

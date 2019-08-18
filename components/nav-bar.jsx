@@ -1,3 +1,4 @@
+import React from 'react';
 import Link from 'next/link';
 
 export default () => (
@@ -7,7 +8,8 @@ export default () => (
       <li className="nav-link about"><Link href="/about"><a>About</a></Link></li>
     </ul>
 
-    <style jsx="true">{`
+    <style jsx="true">
+      {`
       nav {
         width: 100%;
       }
@@ -49,6 +51,7 @@ export default () => (
       .nav-link.home a {
         color: #000;
       }
-    `}</style>
+    `}
+    </style>
   </nav>
 );

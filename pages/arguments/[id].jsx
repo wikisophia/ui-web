@@ -1,5 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
+import ErrorPage from 'next/error';
 import Head from 'next/head';
 import Router from 'next/router';
 
@@ -11,9 +13,17 @@ import GlobalStyles from '../../components/global-styles';
 import StaticArgument from '../../components/static-argument';
 
 function LatestArgument({ id, premises, conclusion }) {
-  return <div>
+  if (!conclusion) {
+    return <ErrorPage statusCode={404} />;
+  }
+  return (
+    <div>
       <Head>
-        <title>{conclusion} - Wikisophia</title>
+        <title>
+          {conclusion}
+          {' '}
+- Wikisophia
+        </title>
         <link href="https://fonts.googleapis.com/css?family=Crimson+Text|Open+Sans&display=swap" rel="stylesheet" />
       </Head>
       <GlobalStyles />
@@ -27,10 +37,20 @@ function LatestArgument({ id, premises, conclusion }) {
           />
         </section>
       </main>
-  </div>;
+    </div>
+  );
 }
 
-LatestArgument.getInitialProps = async ({ query: { id }}) => {
+LatestArgument.propTypes = {
+  id: PropTypes.number.isRequired,
+  premises: PropTypes.exact({
+    text: PropTypes.string.isRequired,
+    supported: PropTypes.bool.isRequired,
+  }).isRequired,
+  conclusion: PropTypes.string.isRequired,
+};
+
+LatestArgument.getInitialProps = async ({ query: { id } }) => {
   const api = newClient({
     url: 'http://localhost:8001',
     fetch,
@@ -40,12 +60,12 @@ LatestArgument.getInitialProps = async ({ query: { id }}) => {
   if (!argument) {
     return {};
   }
-  const { argument: { premises, conclusion }} = argument;
+  const { argument: { premises, conclusion } } = argument;
   const support = await Promise.all(premises.map(async (premise) => {
     const { arguments: args } = await api.getSome({
       conclusion: premise,
       count: 1,
-    })
+    });
     return args.length > 0;
   }));
 
@@ -56,7 +76,7 @@ LatestArgument.getInitialProps = async ({ query: { id }}) => {
       supported: support[index],
     })),
     conclusion,
-  }
-}
+  };
+};
 
 export default LatestArgument;

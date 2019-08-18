@@ -1,5 +1,8 @@
+import React from 'react';
+
 export default () => (
-  <style jsx="true" global>{`
+  <style jsx="true" global>
+    {`
   *, *::before, *::after {
     box-sizing: border-box;
   }
@@ -44,4 +47,4 @@ export default () => (
   }
   `}
   </style>
-)
+);

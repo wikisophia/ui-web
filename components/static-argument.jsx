@@ -44,12 +44,14 @@ export default function StaticArgument(props) {
         {premises.map(renderPremise)}
       </ul>
       {onEdit
-        ? <div className="control-panel">
+        ? (
+          <div className="control-panel">
             <button className="edit" onClick={() => onEdit()} type="button">Improve it!</button>
           </div>
-        : null
-      }
-      <style jsx>{`
+        )
+        : null}
+      <style jsx>
+        {`
       .premises, .conclusion-area, .outdated {
         background-color: #e1e1e6;
         border: 1px solid #bcbcbc;
@@ -110,7 +112,8 @@ export default function StaticArgument(props) {
       .argument-area p {
         margin: 0;
       }
-      `}</style>
+      `}
+      </style>
     </div>
   );
 }
