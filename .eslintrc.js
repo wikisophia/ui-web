@@ -4,7 +4,7 @@ module.exports = {
       'react-hooks'
   ],
   globals: {
-    fetch: true,
+    fetch: 'readonly',
   },
   rules: {
       'react-hooks/rules-of-hooks': 'error',
