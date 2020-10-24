@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import NavBar from '../components/nav-bar';
 import GlobalStyles from '../components/global-styles';
 
-export default () => {
+const index = () => {
   const [input, setInput] = useState('');
 
   return (
@@ -103,3 +103,5 @@ export default () => {
     </div>
   );
 }
+
+export default index;

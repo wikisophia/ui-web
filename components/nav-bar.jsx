@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-export default () => (
+const navBar = () => (
   <nav className="menu">
     <ul className="nav-links">
       <li className="nav-link home"><Link href="/"><a>Wikisophia</a></Link></li>
@@ -55,3 +55,5 @@ export default () => (
     </style>
   </nav>
 );
+
+export default navBar;
