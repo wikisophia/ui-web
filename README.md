@@ -1,13 +1,10 @@
 # Wikisophia UI
 
-This monorepo powers the web front-end for Wikisophia.
+The Web UI for Wikisophia, running on [Next.js](https://nextjs.org/).
 
-The code is divided up into [server](./packages/server) and [cdn](./packages/pages) so
-that the CDN content can be packaged for [JsDelivr](https://www.jsdelivr.com/).
+## Running Locally
 
-## Installation
-
-Downlaod and install [Node](https://nodejs.org/en/download/).
+Download and install [Node](https://nodejs.org/en/download/).
 
 From the project root, run:
 
@@ -15,18 +12,19 @@ From the project root, run:
 npm install
 ```
 
-Start the server with:
+Build & run with:
 
 ```sh
-npm run serve
+npm run build
+npm run dev
 ```
 
 Open a browser and go to `http://localhost:4040` for the homepage.
-The full API can be found [in the code](./packages/server/src/routes.ts).
 
-## Running API Servers
+## Running the API Server
 
-Wikisophia is run by microservices. The UI generally works, but you'll also
-need to run the API servers if you want to run the site as a whole.
+The UI and API run on separate servers. You'll need to run the API at the same time
+to get things working.
 
-The API servers can be found [on GitHub](https://github.com/wikisophia?utf8=%E2%9C%93&q=api&type=&language=).
+Docs for running API server can be found
+[here](https://github.com/wikisophia/api/blob/master/server/docs/installation.md)
