@@ -12,6 +12,7 @@ module.exports = {
       "no-console": ['error', {'allow': ['warn', 'error']}],
       "no-use-before-define": 'off',
       "space-before-function-paren": 'off',
+      'react/no-unused-prop-types': 'off', // This is buggy
 
       "jsx-a11y/anchor-is-valid": 'off', // Next.js Link tags propagate href
 

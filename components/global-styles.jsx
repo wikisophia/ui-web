@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default () => (
+const globalStyles = () => (
   <style jsx="true" global>
     {`
   *, *::before, *::after {
@@ -48,3 +48,5 @@ export default () => (
   `}
   </style>
 );
+
+export default globalStyles;

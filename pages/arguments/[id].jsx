@@ -26,7 +26,7 @@ function LatestArgument({ id, premises, conclusion }) {
         <title>
           {conclusion}
           {' '}
-- Wikisophia
+          - Wikisophia
         </title>
         <link href="https://fonts.googleapis.com/css?family=Crimson+Text|Open+Sans&display=swap" rel="stylesheet" />
       </Head>
