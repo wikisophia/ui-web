@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@wikisophia/api-arguments-client": "^0.7.0",
-    "moment": "^2.29.0",
+    "moment": "^2.29.4",
     "next": "^9.5.5",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
